@@ -346,6 +346,8 @@ svg text{font-family:var(--f-body)}
 .passo .mono{color:var(--t); font-weight:600}
 .seta-f{color:var(--t); font-weight:700; font-size:1.2rem}
 
+.chip:disabled{cursor:default}
+.chip:disabled[aria-pressed="false"]{opacity:.55}
 @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important} }
 </style>
 </head>
@@ -954,11 +956,15 @@ svg text{font-family:var(--f-body)}
   </section>
   <section class="secao" id="i-polar">
     <header><span class="eyebrow">Ferramenta 1</span><h3>Simulador de polarização</h3><p class="muted read">Ajuste os sinais que chegam ao linfócito T CD4⁺ virgem e veja para onde a resposta se inclina e quais efetores aparecem.</p></header>
+    <div class="painel stack" style="margin-bottom:14px">
+      <span class="eyebrow">Escolha um cenário ou ajuste os controles</span>
+      <div class="chips" id="pol-cen"><button class="chip" aria-pressed="true" data-cen="helminto">Helminto intestinal</button><button class="chip" aria-pressed="false" data-cen="ameba">Amebíase invasiva</button><button class="chip" aria-pressed="false" data-cen="cronico">Helmintíase crônica</button><button class="chip" aria-pressed="false" data-cen="livre" disabled>Personalizado</button></div>
+      <p class="small" id="pol-cen-txt"></p>
+    </div>
     <div class="grid-tool">
       <div class="painel stack" id="pol-ctrl"></div>
       <div class="painel stack"><svg id="pol-graf" class="svgbox" viewBox="0 0 380 190" role="img" aria-label="Perfis de resposta"></svg><div id="pol-txt" class="small stack"></div><p class="aviso">Modelo didático e qualitativo: as respostas reais são contínuas e mistas.</p></div>
     </div>
-    <div class="row" style="margin-top:10px"><span class="small muted">Cenários:</span><button class="btn sec" data-cen="helminto">Helminto intestinal</button><button class="btn sec" data-cen="ameba">Amebíase invasiva</button><button class="btn sec" data-cen="cronico">Helmintíase crônica</button></div>
   </section>
   <section class="secao" id="i-expulsao">
     <header><span class="eyebrow">Ferramenta 2</span><h3>Weep and sweep: como o intestino expulsa um verme</h3></header>
@@ -3200,13 +3206,17 @@ function ktRender(){
 
 /* ============ M6: polarização ============ */
 const POL_S = [['alarm','Alarminas epiteliais (IL-25, IL-33, TSLP)'],['il4','IL-4 inicial'],['il12','IL-12 (células dendríticas, macrófagos)'],['ifn','IFN-γ'],['il10','IL-10 e TGF-β (regulação)']];
-const pol = {alarm:7, il4:5, il12:1, ifn:1, il10:2};
+const pol = {alarm:8, il4:6, il12:1, ifn:1, il10:2};
+let polCen = 'helminto';
+const POL_CEN_TXT = {helminto:'Infecção recente por nematoide intestinal: lesão epitelial e produtos do verme liberam alarminas; a IL-4 inicial vem de ILC2, basófilos e mastócitos.', ameba:'Trofozoítos de Entamoeba histolytica invadindo a mucosa do cólon: dano tecidual, neutrófilos e macrófagos produzem IL-12; o IFN-γ ativa macrófagos.', cronico:'Infecção por helmintos que dura anos: linfócitos T reguladores, IL-10 e TGF-β contêm a inflamação e permitem a persistência do parasito.', livre:'Valores ajustados por você.'};
 const POL_CEN = {helminto:{alarm:8,il4:6,il12:1,ifn:1,il10:2}, ameba:{alarm:2,il4:1,il12:7,ifn:7,il10:2}, cronico:{alarm:4,il4:4,il12:1,ifn:1,il10:8}};
 function polCtrl(){
   $('#pol-ctrl').innerHTML = POL_S.map(([k,t])=>`<div class="slider"><label for="pol-${k}">${t}</label><output id="polo-${k}">${pol[k]}</output><input type="range" id="pol-${k}" min="0" max="10" step="1" value="${pol[k]}"></div>`).join('');
-  POL_S.forEach(([k])=>$('#pol-'+k).addEventListener('input', e=>{ pol[k] = +e.target.value; polRender(); }));
+  POL_S.forEach(([k])=>$('#pol-'+k).addEventListener('input', e=>{ pol[k] = +e.target.value; polCen = 'livre'; polRender(); }));
 }
 function polRender(){
+  $$('#pol-cen .chip').forEach(c=>c.setAttribute('aria-pressed', String(c.dataset.cen===polCen)));
+  $('#pol-cen-txt').textContent = POL_CEN_TXT[polCen];
   POL_S.forEach(([k])=>{ $('#pol-'+k).value = pol[k]; $('#polo-'+k).textContent = pol[k]; });
   const amort = 1 - .06*pol.il10;
   const th2 = Math.max(0,(pol.alarm + .8*pol.il4 - .5*pol.il12 - .4*pol.ifn))*amort, th1 = Math.max(0,(pol.il12 + .8*pol.ifn - .4*pol.il4 - .2*pol.alarm))*amort, treg = pol.il10;
@@ -3347,7 +3357,7 @@ function initMod3467(){
   tbRender(); grRender(); ktRender();
   $$('#gr-cond button').forEach(b=>b.onclick = () => { grCond = b.dataset.c; $$('#gr-cond button').forEach(x=>x.setAttribute('aria-pressed', x===b)); grRender(); });
   $('#gr-sem').addEventListener('input', grRender); ['#kt-opg','#kt-l'].forEach(s=>$(s).addEventListener('input', ktRender));
-  polCtrl(); polRender(); $$('[data-cen]').forEach(b=>b.onclick = () => { Object.assign(pol, POL_CEN[b.dataset.cen]); polRender(); });
+  polCtrl(); polRender(); $$('#pol-cen [data-cen]').forEach(b=>b.onclick = () => { if(!POL_CEN[b.dataset.cen]) return; polCen = b.dataset.cen; Object.assign(pol, POL_CEN[polCen]); polRender(); });
   exRender(); $('#ex-ant').onclick = () => { exI = Math.max(0,exI-1); exRender(); }; $('#ex-prox').onclick = () => { exI = Math.min(EXP.length-1,exI+1); exRender(); };
   evRender(); agRender(); ['#ag-k','#ag-m'].forEach(s=>$(s).addEventListener('input', agRender)); $('#ag-novo').onclick = () => { agSeed = Math.floor(Math.random()*1e9); agRender(); };
   $$('#rf-sp button').forEach(b=>b.onclick = () => { rfSp = b.dataset.sp; $$('#rf-sp button').forEach(x=>x.setAttribute('aria-pressed', x===b)); rfRender(); });
