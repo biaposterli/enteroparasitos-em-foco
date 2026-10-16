@@ -1129,29 +1129,29 @@ svg text{font-family:var(--f-body)}
 
   <section class="secao" id="d-kk">
     <header><span class="eyebrow">Ferramenta 2</span><h3>Lâmina de Kato-Katz: conte e calcule o OPG</h3>
-      <p class="muted read">No Kato-Katz, a placa perfurada padroniza a quantidade de fezes (41,7 mg na placa usual). Contam-se todos os ovos da lâmina e multiplica-se pelo fator da placa: com 41,7 mg, OPG = ovos × 24. Escolha a espécie e toque em cada ovo para marcá-lo.</p></header>
+      <p class="muted read">O Kato-Katz é o método recomendado pela OMS para o diagnóstico e a vigilância da esquistossomose mansoni, e também é usado para os geo-helmintos. A placa perfurada padroniza a quantidade de fezes (41,7 mg na placa usual); contam-se todos os ovos da lâmina e multiplica-se pelo fator da placa: com 41,7 mg, OPG = ovos × 24. Escolha a espécie e toque em cada ovo para marcá-lo.</p></header>
     <div class="grid-tool">
       <div class="painel">
         <div class="row" style="justify-content:space-between">
-          <div class="seg" id="kk-sp"><button aria-pressed="true" data-sp="asc">Marcar <i>Ascaris</i></button><button aria-pressed="false" data-sp="tri">Marcar <i>Trichuris</i></button><button aria-pressed="false" data-sp="x">Desmarcar</button></div>
+          <div class="seg" id="kk-sp"><button aria-pressed="true" data-sp="sch">Marcar <i>S. mansoni</i></button><button aria-pressed="false" data-sp="tri">Marcar <i>Trichuris</i></button><button aria-pressed="false" data-sp="x">Desmarcar</button></div>
           <button class="btn sec" id="kk-novo">Nova lâmina</button>
         </div>
         <div class="scroll-x" style="margin-top:12px"><svg id="kk-svg" class="svgbox" viewBox="0 0 640 360" style="min-width:520px; cursor:crosshair" role="img" aria-label="Esfregaço espesso de Kato-Katz com ovos para contar"></svg></div>
-        <p class="small muted" style="margin-top:6px">Ovos ampliados em relação ao tamanho real da lâmina para permitir a contagem. Em salina não há verde de malaquita; aqui o fundo verde-claro representa o celofane embebido em glicerina e verde de malaquita.</p>
+        <p class="small muted" style="margin-top:6px">Ovos ampliados em relação à lâmina inteira, para permitir a contagem. O fundo verde-claro representa o celofane embebido em glicerina com verde de malaquita.</p>
       </div>
       <div class="stack">
         <div class="painel">
           <h4>Sua contagem</h4>
-          <div class="kk-cont" style="margin-top:8px"><span><i>Ascaris</i>: <b id="kk-na">0</b></span><span><i>Trichuris</i>: <b id="kk-nt">0</b></span></div>
+          <div class="kk-cont" style="margin-top:8px"><span><i>S. mansoni</i>: <b id="kk-na">0</b></span><span><i>Trichuris</i>: <b id="kk-nt">0</b></span></div>
           <div class="row" style="margin-top:12px"><button class="btn" id="kk-conf">Conferir contagem</button></div>
           <div id="kk-res" class="stack" style="margin-top:12px"></div>
         </div>
         <div class="painel">
           <h4>Calculadora de OPG</h4>
           <div class="grid2" style="margin-top:10px; gap:10px">
-            <label class="campo">Espécie<select id="c-sp"><option value="asc">Ascaris lumbricoides</option><option value="tri">Trichuris trichiura</option><option value="anc">Ancilostomídeos</option><option value="sch">Schistosoma mansoni</option></select></label>
+            <label class="campo">Espécie<select id="c-sp"><option value="sch">Schistosoma mansoni</option><option value="asc">Ascaris lumbricoides</option><option value="tri">Trichuris trichiura</option><option value="anc">Ancilostomídeos</option></select></label>
             <label class="campo">Placa<select id="c-pl"><option value="41.7">41,7 mg (fator 24)</option><option value="20">20 mg (fator 50)</option><option value="50">50 mg (fator 20)</option></select></label>
-            <label class="campo">Ovos contados<input type="number" id="c-n" min="0" step="1" value="12"></label>
+            <label class="campo">Ovos contados<input type="number" id="c-n" min="0" step="1" value="6"></label>
             <label class="campo">Nº de lâminas<input type="number" id="c-l" min="1" max="6" step="1" value="1"></label>
           </div>
           <div id="c-out" style="margin-top:12px"></div>
@@ -1445,7 +1445,7 @@ const TEC = {
   hpj:{n:'Sedimentação espontânea (Hoffman, Pons e Janer / Lutz)', p:'Ovos, larvas e cistos se depositam no fundo do cálice por gravidade, em água.', r:'Ampla gama de formas, inclusive ovos pesados (Schistosoma mansoni, Taenia spp., ovos inférteis de Ascaris) e larvas.', l:'Qualitativo; demorado; sedimento com muitos detritos; cistos menos concentrados que no Faust.'},
   faust:{n:'Centrífugo-flutuação em sulfato de zinco (Faust)', p:'Após centrifugação e lavagem, cistos e ovos leves flutuam em solução de sulfato de zinco a 33% (densidade ≈ 1,18).', r:'Cistos de protozoários (Giardia, Entamoeba) e ovos leves.', l:'Ovos pesados e operculados não flutuam; cistos se deformam se a leitura demorar.'},
   willis:{n:'Flutuação espontânea em salina saturada (Willis)', p:'Ovos leves sobem em solução saturada de cloreto de sódio (densidade ≈ 1,20) e aderem à lâmina colocada sobre o frasco.', r:'Ovos de ancilostomídeos, em especial; também Ascaris férteis e Trichuris.', l:'Não serve para ovos pesados, larvas nem cistos de protozoários.'},
-  kk:{n:'Kato-Katz', p:'Esfregaço espesso de massa padronizada de fezes (41,7 mg), clarificado por glicerina com verde de malaquita sob celofane. Quantitativo.', r:'Ovos de Ascaris, Trichuris e Schistosoma mansoni; estima OPG.', l:'Ovos de ancilostomídeos clarificam e somem se a leitura demorar; não serve para larvas nem cistos; baixa sensibilidade em infecções leves.'},
+  kk:{n:'Kato-Katz', p:'Esfregaço espesso de massa padronizada de fezes (41,7 mg), clarificado por glicerina com verde de malaquita sob celofane. Quantitativo.', r:'Ovos de Schistosoma mansoni (método recomendado pela OMS para diagnóstico e inquéritos), Ascaris e Trichuris; estima OPG.', l:'Ovos de ancilostomídeos clarificam e somem se a leitura demorar; não serve para larvas nem cistos; baixa sensibilidade em infecções leves.'},
   baer:{n:'Baermann-Moraes / Rugai', p:'Termo-hidrotropismo: larvas vivas migram das fezes para a água morna e se acumulam no fundo.', r:'Larvas de Strongyloides stercoralis.', l:'Exige fezes frescas, sem conservante nem refrigeração (larvas precisam estar vivas).'},
   graham:{n:'Fita adesiva (Graham)', p:'Fita gomada transparente aplicada na pele perianal pela manhã, antes da higiene, recolhe os ovos ali depositados.', r:'Ovos de Enterobius vermicularis; às vezes ovos de Taenia.', l:'Ovos raramente aparecem nas fezes; pode ser preciso repetir em dias seguidos.'},
   zn:{n:'Ziehl-Neelsen modificado', p:'Coloração em que os oocistos álcool-ácido resistentes retêm a fucsina e ficam vermelho-rosados.', r:'Cryptosporidium spp. (4–6 µm), Cyclospora cayetanensis (8–10 µm), Cystoisospora belli.', l:'Coloração variável entre oocistos; Cyclospora cora de forma irregular.'},
@@ -2036,38 +2036,39 @@ function qualRender(){
 }
 
 /* ============ Diagnóstico: Kato-Katz ============ */
-const kk = { ovos:[], modo:'asc', marcas:{}, seed:5 };
+const kk = { ovos:[], modo:'sch', marcas:{}, seed:5 };
 function kkNovo(){
   kk.seed = Math.floor(Math.random()*1e9); const r = rng(kk.seed);
-  const na = 8 + Math.floor(r()*14), nt = 3 + Math.floor(r()*8), ovos = [];
+  const ns = 3 + Math.floor(r()*12), nt = 2 + Math.floor(r()*7), ovos = [];
   const livre = (x,y,d) => ovos.every(o=>Math.hypot(o.x-x,o.y-y) > d) && Math.pow((x-320)/292,2)+Math.pow((y-180)/158,2) < 1;
-  const add = (sp, n) => { let t=0; while(n>0 && t<4000){ t++; const x = 40+r()*560, y = 30+r()*300; if(livre(x,y,40)){ ovos.push({sp, x, y, rot:r()*360, s:Math.floor(r()*1e6)}); n--; } } };
-  add('asc', na); add('tri', nt); kk.ovos = ovos; kk.marcas = {}; kkDesenha(); $('#kk-res').innerHTML = ''; kkConta();
+  const add = (sp, n) => { let t=0; while(n>0 && t<6000){ t++; const x = 70+r()*500, y = 45+r()*270; if(livre(x,y, sp==='sch' ? 78 : 44)){ ovos.push({sp, x, y, rot:r()*360, s:Math.floor(r()*1e6)}); n--; } } };
+  add('sch', ns); add('tri', nt); kk.ovos = ovos; kk.marcas = {}; kkDesenha(); $('#kk-res').innerHTML = ''; kkConta();
 }
 function kkDesenha(){
-  const r = rng(kk.seed+99), k = 0.55;
+  const r = rng(kk.seed+99), k = 0.5;
   let s = `<ellipse cx="320" cy="180" rx="305" ry="170" fill="#D8ECE2" stroke="#9CC3AE" stroke-width="2"/>`;
   for(let i=0;i<60;i++){ const a=r()*2*Math.PI, q=Math.sqrt(r()); const x=320+Math.cos(a)*q*290, y=180+Math.sin(a)*q*158, l=6+r()*30; s += `<path d="M ${-l/2} 0 Q 0 ${(r()-.5)*l} ${l/2} 0" transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${(r()*360).toFixed(0)})" fill="none" stroke="#9DB8A8" stroke-width="${(1+r()*2.5).toFixed(1)}" stroke-linecap="round"/>`; }
   for(let i=0;i<120;i++){ const a=r()*2*Math.PI, q=Math.sqrt(r()); s += `<circle cx="${(320+Math.cos(a)*q*295).toFixed(1)}" cy="${(180+Math.sin(a)*q*162).toFixed(1)}" r="${(0.8+r()*2.2).toFixed(1)}" fill="#A8C4B4"/>`; }
   kk.ovos.forEach((o,i)=>{
-    s += `<g data-i="${i}" style="cursor:pointer">${pos(DES[o.sp==='asc'?'asc_f':'tri']('sal', rng(o.s)), o.x, o.y, k, o.rot)}<circle cx="${o.x.toFixed(1)}" cy="${o.y.toFixed(1)}" r="22" fill="transparent"/></g>`;
+    const rr = o.sp==='sch' ? 42 : 22;
+    s += `<g data-i="${i}" style="cursor:pointer">${pos(o.sp==='sch' ? PRO.schisto('sal', rng(o.s)) : DES.tri('sal', rng(o.s)), o.x, o.y, k, o.rot)}<circle cx="${o.x.toFixed(1)}" cy="${o.y.toFixed(1)}" r="${rr}" fill="transparent"/></g>`;
     const m = kk.marcas[i];
-    if(m) s += `<circle cx="${o.x.toFixed(1)}" cy="${o.y.toFixed(1)}" r="21" fill="none" stroke="${m==='asc'?'#A5243A':'#2A5A9E'}" stroke-width="3" pointer-events="none"/><text x="${(o.x+18).toFixed(1)}" y="${(o.y-16).toFixed(1)}" font-size="12" font-weight="700" fill="${m==='asc'?'#A5243A':'#2A5A9E'}" pointer-events="none">${m==='asc'?'A':'T'}</text>`;
+    if(m) s += `<circle cx="${o.x.toFixed(1)}" cy="${o.y.toFixed(1)}" r="${rr-1}" fill="none" stroke="${m==='sch'?'#A5243A':'#2A5A9E'}" stroke-width="3" pointer-events="none"/><text x="${(o.x+rr*.8).toFixed(1)}" y="${(o.y-rr*.75).toFixed(1)}" font-size="12" font-weight="700" fill="${m==='sch'?'#A5243A':'#2A5A9E'}" pointer-events="none">${m==='sch'?'S':'T'}</text>`;
   });
   const svg = $('#kk-svg'); svg.innerHTML = s;
   $$('g[data-i]', svg).forEach(g=>g.onclick = () => { const i = g.dataset.i; if(kk.modo==='x') delete kk.marcas[i]; else kk.marcas[i] = kk.modo; kkDesenha(); kkConta(); });
 }
-function kkConta(){ const v = Object.values(kk.marcas); $('#kk-na').textContent = v.filter(x=>x==='asc').length; $('#kk-nt').textContent = v.filter(x=>x==='tri').length; }
+function kkConta(){ const v = Object.values(kk.marcas); $('#kk-na').textContent = v.filter(x=>x==='sch').length; $('#kk-nt').textContent = v.filter(x=>x==='tri').length; }
 $$('#kk-sp button').forEach(b=>b.onclick = () => { kk.modo = b.dataset.sp; $$('#kk-sp button').forEach(x=>x.setAttribute('aria-pressed', x===b)); });
 $('#kk-novo').onclick = kkNovo;
 $('#kk-conf').onclick = () => {
-  const real = {asc:0, tri:0}, cert = {asc:0, tri:0}; let trocados = 0;
+  const real = {sch:0, tri:0}, cert = {sch:0, tri:0}; let trocados = 0;
   kk.ovos.forEach((o,i)=>{ real[o.sp]++; const m = kk.marcas[i]; if(m===o.sp) cert[o.sp]++; else if(m) trocados++; });
-  const falt = (real.asc-cert.asc)+(real.tri-cert.tri)-trocados;
+  const falt = (real.sch-cert.sch)+(real.tri-cert.tri)-trocados;
   const linha = sp => { const n = real[sp], opg = n*24, c = classe(sp, opg); return `<tr><td><i>${INT[sp].n}</i></td><td class="mono">${n}</td><td class="mono">${n} × 24 = ${fmt(opg)}</td><td>${c}</td></tr>`; };
-  $('#kk-res').innerHTML = `<div class="fb ${(trocados+Math.max(0,falt))===0?'ok':'mais'}">Você marcou corretamente ${cert.asc+cert.tri} de ${real.asc+real.tri} ovos${trocados?`; ${trocados} com a espécie trocada`:''}${falt>0?`; ${falt} ficaram sem marcar`:''}.</div>
-   <div class="tab-wrap"><table><thead><tr><th>Espécie</th><th>Ovos</th><th>OPG</th><th>Intensidade</th></tr></thead><tbody>${linha('asc')}${linha('tri')}</tbody></table></div>
-   <p class="small muted">Diferencie pelo formato: <i>Ascaris</i> é oval com camada mamilonada; <i>Trichuris</i> tem forma de barril com tampões polares. Com tão poucos ovos numa lâmina, a intensidade fica leve: as classes moderada e alta exigem centenas ou milhares de ovos por lâmina.</p>`;
+  $('#kk-res').innerHTML = `<div class="fb ${(trocados+Math.max(0,falt))===0?'ok':'mais'}">Você marcou corretamente ${cert.sch+cert.tri} de ${real.sch+real.tri} ovos${trocados?`; ${trocados} com a espécie trocada`:''}${falt>0?`; ${falt} ficaram sem marcar`:''}.</div>
+   <div class="tab-wrap"><table><thead><tr><th>Espécie</th><th>Ovos</th><th>OPG</th><th>Intensidade</th></tr></thead><tbody>${linha('sch')}${linha('tri')}</tbody></table></div>
+   <p class="small muted">Diferencie pelo formato: o ovo de <i>S. mansoni</i> é grande (cerca de 115–180 × 45–70 µm), alongado, com espículo lateral e miracídio no interior; o de <i>Trichuris</i> tem forma de barril, com tampões polares. Para <i>S. mansoni</i>, cada ovo na lâmina vale 24 OPG: com 5 ovos a infecção já é moderada (≥ 100 OPG) e com 17 ovos, intensa (≥ 400 OPG). Para <i>Trichuris</i>, a classe moderada começa em 1.000 OPG.</p>`;
 };
 function calcOPG(){
   const sp = $('#c-sp').value, pl = parseFloat($('#c-pl').value), n = Math.max(0, parseFloat($('#c-n').value)||0), l = Math.max(1, parseInt($('#c-l').value)||1);
@@ -2684,13 +2685,14 @@ const ID_GRUPOS = [
   ['Outros', ['art']]
 ];
 const AMOSTRAS = [
-  {t:'Criança, 4 anos', p:'Frequenta creche. Diarreia intermitente há um mês, distensão abdominal e perda de peso. Fezes pastosas.', it:{giardia_c:40, ecoli_c:10, asc_f:8}},
-  {t:'Agricultor, 52 anos', p:'Zona rural, trabalha descalço. Cansaço e palidez; anemia microcítica no hemograma. Fezes formadas.', it:{anc:14, tri:7, enana_c:16}},
-  {t:'Adolescente, 15 anos', p:'Toma banho em rio de área endêmica para esquistossomose. Dor abdominal discreta. Fezes formadas.', it:{schisto:6, asc_i:6, asc_f:3, iod_c:10}},
+  {t:'Criança, 4 anos', p:'Frequenta creche. Diarreia intermitente há um mês, distensão abdominal e perda de peso. Fezes pastosas.', it:{giardia_c:40, ecoli_c:10, asc_f:8}, opg:{asc_f:1920}},
+  {t:'Agricultor, 52 anos', p:'Zona rural, trabalha descalço. Cansaço e palidez; anemia microcítica no hemograma. Fezes formadas.', it:{anc:14, tri:7, enana_c:16}, opg:{anc:480, tri:240}},
+  {t:'Adolescente, 15 anos', p:'Toma banho em rio de área endêmica para esquistossomose. Dor abdominal discreta. Fezes formadas.', it:{schisto:6, asc_i:6, asc_f:3, iod_c:10}, opg:{schisto:168, asc_i:720, asc_f:480}},
   {t:'Adulto, 30 anos · diarreia aguda', p:'Diarreia aquosa há três dias, depois de uma viagem. Amostra fresca, entregue ao laboratório 20 minutos após a emissão.', it:{giardia_t:24, giardia_c:8, blasto:12}, liq:true},
   {t:'Adulta, 41 anos · admissional', p:'Sem queixas. Exame de rotina para admissão no emprego. Fezes formadas.', it:{eh_c:12, ecoli_c:16, enana_c:10}, pol:40},
-  {t:'Idoso, 68 anos', p:'Dor epigástrica, tosse crônica e eosinofilia de 14%. Viveu na zona rural na juventude. Fezes formadas, frescas.', it:{str:8, asc_f:5, hnana:4}},
-  {t:'Criança, 7 anos · inquérito escolar', p:'Sem queixas. Coleta feita durante inquérito numa escola.', it:{hnana:9, taenia:4, ecoli_c:8, tri:5}},
+  {t:'Idoso, 68 anos', p:'Dor epigástrica, tosse crônica e eosinofilia de 14%. Viveu na zona rural na juventude. Fezes formadas, frescas.', it:{str:8, asc_f:5, hnana:4}, opg:{asc_f:480, hnana:240}},
+  {t:'Criança, 7 anos · inquérito escolar', p:'Sem queixas. Coleta feita durante inquérito numa escola.', it:{hnana:9, taenia:4, ecoli_c:8, tri:5}, opg:{hnana:360, taenia:96, tri:480}},
+  {t:'Pescador, 41 anos · área endêmica', p:'Mora perto de um açude em área endêmica para esquistossomose, onde pesca e lava roupa. Diarreia com muco às vezes e fígado aumentado. O médico pede exame quantitativo para avaliar a intensidade.', it:{schisto:12, tri:3, ecoli_c:6}, opg:{schisto:552, tri:168}},
   {t:'Criança, 6 anos · prurido anal', p:'Prurido anal noturno, sono agitado e irritabilidade. O irmão tem queixa parecida. Um exame de fezes anterior foi negativo.', it:{ecoli_c:6}, peri:{ent:22}},
   {t:'Adulto, 34 anos · "pedacinhos brancos"', p:'Encontra pedaços brancos, achatados e móveis na roupa íntima, às vezes fora das evacuações. Come carne bovina malpassada.', it:{taenia:3, enana_c:8}, peri:{taenia:16}},
   {t:'Amostra-surpresa', p:'Sem dados clínicos. A composição é sorteada a cada vez.', surpresa:true}
@@ -2701,8 +2703,11 @@ const TEC_B = {
   hpj:{n:'Sedimentação espontânea (HPJ/Lutz) + lugol', prep:'lug', f:{cisto:.6, trofo:0, ovo_l:1, ovo_p:1, larva:.7}, deb:1.2, d:'Recupera ovos leves e pesados, larvas e cistos. Sedimento com bastante detrito.'},
   faust:{n:'Faust (centrífugo-flutuação em ZnSO₄) + lugol', prep:'lug', f:{cisto:1, trofo:0, ovo_l:.8, ovo_p:.04, larva:.25}, deb:.5, d:'Concentra muito bem cistos e ovos leves; ovos pesados não flutuam. Preparação mais limpa.'},
   baer:{n:'Baermann-Moraes', prep:'sal', f:{cisto:0, trofo:0, ovo_l:0, ovo_p:0, larva:2.5}, deb:.25, d:'Só larvas vivas migram para a água morna. Os ovos e cistos ficam retidos na gaze.'},
-  graham:{n:'Fita adesiva (Graham)', prep:'sal', f:{cisto:0, trofo:0, ovo_l:0, ovo_p:0, larva:0}, fid:{ent:1, taenia:1}, peri:true, deb:.45, d:'Fita adesiva transparente aplicada na pele perianal pela manhã e colada na lâmina. Recupera os ovos depositados na pele: os de Enterobius, que raramente aparecem nas fezes, e os de Taenia liberados por proglotes que passam pelo ânus.'}
+  kk:{n:'Kato-Katz', tag:'Glicerina e verde de malaquita', prep:'kk', f:{cisto:0, trofo:0, ovo_l:.9, ovo_p:1, larva:.05}, kk:true, deb:.9, d:'Esfregaço espesso de 41,7 mg de fezes, clarificado por glicerina com verde de malaquita sob celofane. Quantitativo: ovos × 24 = OPG. Método recomendado pela OMS para a esquistossomose mansoni; também usado para geo-helmintos.'},
+  graham:{n:'Fita adesiva (Graham)', tag:'Pele perianal', prep:'sal', f:{cisto:0, trofo:0, ovo_l:0, ovo_p:0, larva:0}, fid:{ent:1, taenia:1}, peri:true, deb:.45, d:'Fita adesiva transparente aplicada na pele perianal pela manhã e colada na lâmina. Recupera os ovos depositados na pele: os de Enterobius, que raramente aparecem nas fezes, e os de Taenia liberados por proglotes que passam pelo ânus.'}
 };
+const FUNDO_PREP = {sal:'#F3EFDF', lug:'#F0DDAE', kk:'#D5E8DC'};
+const INTMAP = {schisto:'sch', asc_f:'asc', asc_i:'asc', tri:'tri', anc:'anc'};
 const MULT = {cisto:30, trofo:30, ovo_l:3, ovo_p:3, larva:3, art:1};
 const bc = {foco:0, alvo:8, amostra:null, tec:null, it:{}, objs:[], buckets:{}, x:LAM/2, y:LAM/2, obj:10, z:1, vis:new Set(), marcas:{}, gab:false, seed:1, menuK:null};
 
@@ -2723,7 +2728,7 @@ function bcAmostras(){
   });
 }
 function bcTecnicas(){
-  $('#bc-tecnicas').innerHTML = Object.entries(TEC_B).map(([k,T])=>`<div class="card-mod mod-diag tec-card" data-t="${k}"><span class="tag">${T.prep==='lug'?'Lugol':'Salina'}</span><h3>${esc(T.n)}</h3><p>${esc(T.d)}</p><div class="row" style="margin-top:auto"><button class="btn" data-exec="${k}">Executar a técnica →</button><button class="btn sec" data-direto="${k}">Ir direto para a lâmina</button></div></div>`).join('');
+  $('#bc-tecnicas').innerHTML = Object.entries(TEC_B).map(([k,T])=>`<div class="card-mod mod-diag tec-card" data-t="${k}"><span class="tag">${T.tag || (T.prep==='lug'?'Lugol':'Salina')}</span><h3>${esc(T.n)}</h3><p>${esc(T.d)}</p><div class="row" style="margin-top:auto"><button class="btn" data-exec="${k}">Executar a técnica →</button><button class="btn sec" data-direto="${k}">Ir direto para a lâmina</button></div></div>`).join('');
   $$('#bc-tecnicas [data-exec]').forEach(b=>b.onclick = () => procIniciar(b.dataset.exec));
   $$('#bc-tecnicas [data-direto]').forEach(b=>b.onclick = () => bcPrepara(b.dataset.direto));
 }
@@ -2737,13 +2742,15 @@ function bcPrepara(tec, proc){
     const cat = CAT[id]; let n, f;
     if(T.peri){ n = (bc.peri||{})[id] || 0; f = ((T.fid||{})[id] || 0) * (EF[cat] ?? 1) * (EF.peri ?? 1); }
     else { n = bc.it[id] || 0; f = (T.f[cat] || 0) * (EF[cat] ?? 1) * (id==='ent' ? .15 : 1); }
+    f *= (EF[id] ?? 1);
     if(cat==='trofo' && !bc.amostra.liq) f = 0;
-    const qtd = Math.round(n * MULT[cat] * f * (0.85 + r()*0.3));
+    let qtd = Math.round(n * MULT[cat] * f * (0.85 + r()*0.3));
+    if(T.kk && n && (cat==='ovo_l' || cat==='ovo_p')){ const opg = (bc.amostra.opg||{})[id] ?? n*60; qtd = poisson(opg/24 * f, r); }
     bc.recup[id] = qtd; add(id, qtd);
   });
   add('pol', Math.round((bc.amostra.pol || 12) * Math.min(2.5, T.deb*bc.debMult+.3)));
-  add('levedura', Math.round(260 * Math.min(2.5, T.deb*bc.debMult)));
-  $('#bc-area-t').textContent = T.peri ? 'Fita adesiva sobre a lâmina' : 'Lamínula 22 × 22 mm';
+  add('levedura', Math.round(260 * Math.min(2.5, T.deb*bc.debMult) * (T.kk ? .2 : 1)));
+  $('#bc-area-t').textContent = T.peri ? 'Fita adesiva sobre a lâmina' : T.kk ? 'Esfregaço espesso sob celofane' : 'Lamínula 22 × 22 mm';
   bc.buckets = {}; bc.objs.forEach((o,i)=>{ const key = Math.floor(o.x/1000)+','+Math.floor(o.y/1000); (bc.buckets[key] = bc.buckets[key] || []).push(i); });
   $('#bc-resumo').innerHTML = `${esc(bc.amostra.t)} · ${esc(T.n)} · ${proc ? `técnica executada (${proc.ac} de ${proc.n} passos certos de primeira)` : 'lâmina pronta, sem executar a técnica'}`;
   bcEtapa(4); bcObj(10); $('#bc-passo3').scrollIntoView(); bcAchados();
@@ -2808,7 +2815,7 @@ function bcDesenha(){
       ov += `<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="${(hit+4).toFixed(1)}" fill="none" stroke="${cor_}" stroke-width="2.5" pointer-events="none"/><text x="${(X+hit+4).toFixed(1)}" y="${(Y-hit).toFixed(1)}" font-size="12" font-weight="700" fill="${cor_}" pointer-events="none" font-family="JetBrains Mono, monospace">${Object.keys(bc.marcas).indexOf(String(i))+1}</text>`; }
     else if(bc.gab && CAT[o.id]!=='art'){ ov += `<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="${(hit+4).toFixed(1)}" fill="none" stroke="#B02234" stroke-width="2" stroke-dasharray="4 3" pointer-events="none"/>`; }
   });
-  $('#bc-svg').innerHTML = ocularSVG('bc', prep==='lug'?'#F0DDAE':'#F3EFDF', s, ov, ocBlur(bc), k);
+  $('#bc-svg').innerHTML = ocularSVG('bc', FUNDO_PREP[prep]||'#F3EFDF', s, ov, ocBlur(bc), k);
   $('#bc-prep-tag').textContent = T.n; ocLeitura($('#bc-read'), bc.obj);
   /* cobertura */
   const cel = 500, r2 = Rum*.9;
@@ -2821,7 +2828,7 @@ function bcDesenha(){
   bcMapa();
 }
 function bcMapa(){
-  const e = 220/LAM, cel = 500; let s = `<rect x="0" y="0" width="220" height="220" rx="3" fill="${TEC_B[bc.tec]?.prep==='lug'?'#F0DDAE':'#F3EFDF'}" stroke="#8E8B76"/>`;
+  const e = 220/LAM, cel = 500; let s = `<rect x="0" y="0" width="220" height="220" rx="3" fill="${FUNDO_PREP[TEC_B[bc.tec]?.prep]||'#F3EFDF'}" stroke="#8E8B76"/>`;
   bc.vis.forEach(k=>{ const [gx,gy] = k.split(',').map(Number); s += `<rect x="${(gx*cel*e).toFixed(2)}" y="${(gy*cel*e).toFixed(2)}" width="${(cel*e+.3).toFixed(2)}" height="${(cel*e+.3).toFixed(2)}" fill="#343B8A" opacity=".28"/>`; });
   if(bc.gab) bc.objs.forEach(o=>{ if(CAT[o.id]!=='art' && CAT[o.id]!=='cisto' && CAT[o.id]!=='trofo') s += `<circle cx="${(o.x*e).toFixed(1)}" cy="${(o.y*e).toFixed(1)}" r="2" fill="#B02234"/>`; });
   Object.keys(bc.marcas).forEach(i=>{ const o = bc.objs[i]; s += `<circle cx="${(o.x*e).toFixed(1)}" cy="${(o.y*e).toFixed(1)}" r="2.4" fill="#1D7745"/>`; });
@@ -2850,6 +2857,8 @@ function bcAchados(){
     return `<div class="achado"><span class="mono">${n+1}</span><span style="flex:1">${esc(NOME[id])}${est?` <b style="color:${ok?'var(--ok)':'var(--bad)'}">${ok?'✓':'✗'}</b>`:''}</span><button class="btn-ic" data-ir-k="${k}">Ver</button></div>`; }).join('') : '<p class="muted">Nada marcado ainda. Toque num objeto no campo para identificá-lo.</p>';
   $$('#bc-achados [data-ir-k]').forEach(b=>b.onclick = () => { const o = bc.objs[b.dataset.irK]; bc.x = o.x; bc.y = o.y; if(bc.obj===10 && TAM[o.id] < 25){ bcObj(40); } else bcDesenha(); });
 }
+function kkGrupo(m){ const g = {}; Object.entries(m).forEach(([id,n])=>{ const k = INTMAP[id]; if(k) g[k] = (g[k]||0) + n; }); return g; }
+function kkOPGtxt(rel){ const g = kkGrupo(rel); const ks = Object.keys(g); if(!ks.length) return ''; return '\nContagem (Kato-Katz, placa de 41,7 mg):\n' + ks.map(k=>`• ${INT[k].n}: ${g[k]} ovos × 24 = ${fmt(g[k]*24)} OPG\n  (intensidade ${classe(k, g[k]*24)})`).join('\n') + '\n'; }
 function bcLaudo(){
   const T = TEC_B[bc.tec], ks = Object.keys(bc.marcas), rel = {};
   ks.forEach(k=>{ const id = bc.marcas[k]; if(id!=='art') rel[id] = (rel[id]||0)+1; });
@@ -2860,8 +2869,8 @@ Método: ${T.n}
 
 Resultado:
 ${ids.length ? ids.map(id=>'• '+NOME[id]).join('\n') : (T.peri ? 'Não foram encontrados ovos de helmintos\nna fita examinada.' : 'Não foram encontrados ovos, larvas ou cistos\nde parasitos na amostra examinada.')}
-${ids.some(id=>COMENSAL.has(id)) ? '\nObs.: protozoários comensais, sem\nsignificado patogênico.' : ''}${ids.includes('eh_c') ? '\nObs.: a microscopia não diferencia\nE. histolytica de E. dispar.' : ''}${!ids.length ? (T.peri ? '\nObs.: recomenda-se repetir a coleta em\nmanhãs consecutivas.' : '\nObs.: um resultado negativo em amostra\núnica não exclui parasitose.') : ''}</div>
-<p class="small muted">Área ${T.peri ? 'da fita' : 'da lamínula'} examinada: ${fmt(bc.vis.size/(LAM/500)**2*100)}%. ${ks.length} ${ks.length===1?'objeto marcado':'objetos marcados'}.</p>`;
+${T.kk ? kkOPGtxt(rel) : ''}${ids.some(id=>COMENSAL.has(id)) ? '\nObs.: protozoários comensais, sem\nsignificado patogênico.' : ''}${ids.includes('eh_c') ? '\nObs.: a microscopia não diferencia\nE. histolytica de E. dispar.' : ''}${!ids.length ? (T.peri ? '\nObs.: recomenda-se repetir a coleta em\nmanhãs consecutivas.' : '\nObs.: um resultado negativo em amostra\núnica não exclui parasitose.') : ''}</div>
+<p class="small muted">Área ${T.peri ? 'da fita' : T.kk ? 'do esfregaço' : 'da lamínula'} examinada: ${fmt(bc.vis.size/(LAM/500)**2*100)}%. ${ks.length} ${ks.length===1?'objeto marcado':'objetos marcados'}.</p>`;
   /* correção */
   const presentes = [...new Set([...Object.keys(bc.it), ...Object.keys(bc.peri||{})])], linhas = [], todos = new Set([...presentes, ...ids]);
   let acertos = 0, falsos = 0, perdidos = 0, tecnica = 0;
@@ -2888,10 +2897,18 @@ ${ids.some(id=>COMENSAL.has(id)) ? '\nObs.: protozoários comensais, sem\nsignif
   if(bc.tec==='graham' && presentes.some(id=>!['ent','taenia'].includes(id))) notas.push('A fita adesiva só recupera o que está na pele perianal. Os demais parasitos desta pessoa exigem exame de fezes.');
   if(bc.tec==='graham' && (bc.peri||{}).taenia) notas.push('Ovos de Taenia na fita confirmam teníase, mas não identificam a espécie: T. solium e T. saginata têm ovos iguais. A espécie se define pelas proglotes (tamização e contagem das ramificações uterinas, Módulo 3).');
   if(bc.tec==='graham' && presentes.includes('ent')) notas.push('Um único Graham negativo não exclui enterobíase: repita em manhãs consecutivas e examine também os contactantes.');
+  if(bc.tec==='kk'){
+    const gR = kkGrupo(bc.recup), gV = kkGrupo(rel);
+    const linhasOPG = Object.keys(gR).filter(k=>gR[k]>0).map(k=>`${INT[k].n}: OPG da lâmina ${fmt(gR[k]*24)} (${classe(k, gR[k]*24)}); pela sua contagem ${fmt((gV[k]||0)*24)}`);
+    if(linhasOPG.length) notas.push('Quantificação. ' + linhasOPG.join('. ') + '. Cada ovo que escapa da contagem subtrai 24 OPG.');
+    if(presentes.some(id=>['cisto','trofo','larva'].includes(CAT[id]))) notas.push('O Kato-Katz não recupera cistos de protozoários nem larvas: a glicerina clarifica e destrói essas formas. Para elas, use sedimentação, Faust ou Baermann-Moraes.');
+    if(presentes.includes('schisto')) notas.push('Uma única lâmina de Kato-Katz é pouco sensível nas infecções leves. Em inquéritos e no controle de cura, examinam-se duas lâminas e, se possível, mais de uma amostra (Módulo 4, sensibilidade do Kato-Katz).');
+  }
+  if(presentes.includes('schisto') && bc.tec==='hpj') notas.push('A sedimentação detecta ovos de S. mansoni, mas não quantifica. Para estimar a intensidade e acompanhar o tratamento, use o Kato-Katz.');
   if(bc.proc){ if(bc.proc.cons.length) notas.push(`Execução da técnica: ${bc.proc.cons.map(c=>c.t.toLowerCase()).join('; ')}. Essas escolhas reduziram o que chegou à lâmina ou aumentaram os detritos.`); else notas.push(`Técnica executada corretamente (${bc.proc.ac} de ${bc.proc.n} passos certos na primeira tentativa).`); }
   else notas.push('A lâmina foi preparada sem a etapa de execução da técnica, como numa execução correta.');
   if(errArt) notas.push(`${errArt} artefato${errArt>1?'s':''} (pólen, leveduras) ${errArt>1?'foram identificados':'foi identificado'} como parasito.`);
-  if(bc.vis.size/(LAM/500)**2 < .5) notas.push((bc.tec==='graham' ? 'Menos da metade da fita foi examinada.' : 'Menos da metade da lamínula foi examinada.') + ' Ovos raros podem estar justamente nas faixas não percorridas.');
+  if(bc.vis.size/(LAM/500)**2 < .5) notas.push((bc.tec==='graham' ? 'Menos da metade da fita foi examinada.' : bc.tec==='kk' ? 'Menos da metade do esfregaço foi examinada; no Kato-Katz a lâmina inteira precisa ser contada.' : 'Menos da metade da lamínula foi examinada.') + ' Ovos raros podem estar justamente nas faixas não percorridas.');
   $('#bc-correcao').innerHTML = `<h4>Correção</h4><div class="fb ${perdidos+falsos===0?'ok':'mais'}"><b>${acertos} de ${presentes.length - tecnica} formas recuperáveis encontradas</b>${falsos?` · ${falsos} falso${falsos>1?'s':''} positivo${falsos>1?'s':''}`:''}${tecnica?` · ${tecnica} não recuperada${tecnica>1?'s':''} pela técnica`:''}.</div>
     <div class="tab-wrap"><table><thead><tr><th>Forma</th><th>Na lâmina</th><th>Você marcou</th><th>Situação</th></tr></thead><tbody>${linhas.join('')}</tbody></table></div>
     ${notas.length ? `<ul class="small" style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:4px">${notas.map(n=>`<li>${esc(n)}</li>`).join('')}</ul>` : ''}`;
@@ -3460,6 +3477,13 @@ K.abaixador = (x, y, fita, ang=0) => `<g transform="translate(${x} ${y}) rotate(
 K.laminaFita = (x, y, o={}) => { let s = K.lamina(x, y, {k:o.k||1.6}); const k = o.k||1.6; s += `<g transform="translate(${x} ${y}) scale(${k})"><rect x="-60" y="-20" width="146" height="40" rx="2" fill="#FFFFFF" fill-opacity=".38" stroke="#8FA9B4" stroke-width="1.2"/>`; if(o.dobras) s += `<path d="M-20 -20 L-12 20 M30 -20 L40 20" stroke="#8FA9B4" stroke-width="1.6"/><circle cx="10" cy="-4" r="5" fill="none" stroke="#8FA9B4"/><circle cx="56" cy="6" r="4" fill="none" stroke="#8FA9B4"/>`; if(o.ovos) [[-30,-6],[-8,8],[20,-8],[48,4],[70,-6]].forEach(([a,b])=>{ s += `<ellipse cx="${a}" cy="${b}" rx="3" ry="1.6" fill="#F4F1E2" stroke="#7E7C6A" stroke-width=".6"/>`; }); return s + `</g>`; };
 K.sol = (x, y, t) => `<g transform="translate(${x} ${y})"><circle r="16" fill="#F2B640"/>${[...Array(8)].map((_,i)=>`<line x1="0" y1="-22" x2="0" y2="-29" stroke="#F2B640" stroke-width="3" stroke-linecap="round" transform="rotate(${i*45})"/>`).join('')}</g>` + K.txt(x, y+50, t, {w:700});
 K.cal = (x, y, dias) => `<g transform="translate(${x} ${y})">${dias.map((d,i)=>`<g transform="translate(${i*62} 0)"><rect x="-26" y="-30" width="52" height="56" rx="6" fill="#FFFFFF" stroke="#4A5A62" stroke-width="2"/><rect x="-26" y="-30" width="52" height="14" rx="6" fill="#C2483A"/><text x="0" y="12" text-anchor="middle" font-size="16" font-weight="700" fill="#2A3238">${d[0]}</text>${d[1] ? `<path d="M-12 18 l8 7 l16 -18" stroke="var(--ok)" stroke-width="4" fill="none" stroke-linecap="round"/>` : ''}</g>`).join('')}</g>`;
+
+K.papelAbs = (x, y, w=200) => `<rect x="${x-w/2}" y="${y-30}" width="${w}" height="60" rx="3" fill="#FFFFFF" stroke="#D2CDBE" stroke-width="1.4"/>`;
+K.tela = (x, y, cheia) => { let s = `<g transform="translate(${x} ${y})"><rect x="-46" y="-26" width="92" height="52" rx="4" fill="#E8EEF0" fill-opacity=".6" stroke="#7E8B91" stroke-width="2"/>`; for(let i=-40;i<=40;i+=6) s += `<line x1="${i}" y1="-24" x2="${i}" y2="24" stroke="#9AA6AB" stroke-width=".8"/>`; for(let j=-22;j<=22;j+=6) s += `<line x1="-44" y1="${j}" x2="44" y2="${j}" stroke="#9AA6AB" stroke-width=".8"/>`; if(cheia) s += `<ellipse cx="0" cy="0" rx="18" ry="8" fill="#7A5230"/>`; return s + `</g>`; };
+K.espatula = (x, y, ang=-20, ponta) => `<g transform="translate(${x} ${y}) rotate(${ang})"><rect x="0" y="-5" width="120" height="10" rx="4" fill="#D9C79A" stroke="#A8935F"/><rect x="-26" y="-9" width="30" height="18" rx="4" fill="#D9C79A" stroke="#A8935F"/>${ponta ? `<ellipse cx="-14" cy="0" rx="10" ry="6" fill="#7A5230"/>` : ''}</g>`;
+K.placa = (x, y, cheia) => `<g transform="translate(${x} ${y})"><rect x="-60" y="-20" width="120" height="40" rx="4" fill="#5B8FC9" fill-opacity=".85" stroke="#2F5A86" stroke-width="1.6"/><circle r="11" fill="${cheia ? '#7A5230' : '#EEF6F9'}" stroke="#2F5A86" stroke-width="1.6"/></g>` + K.txt(x, y+38, 'placa perfurada (41,7 mg)', {s:10.5});
+K.celofanes = (x, y, verde) => { let s = `<g transform="translate(${x} ${y})"><ellipse cx="0" cy="10" rx="70" ry="18" fill="#E8EEF0" stroke="#7E8B91" stroke-width="2"/>`; for(let i=0;i<4;i++) s += `<rect x="${-46+i*24}" y="-6" width="20" height="26" rx="2" fill="${verde ? '#7CC59A' : '#F2F6F7'}" fill-opacity="${verde ? .8 : .9}" stroke="${verde ? '#3E8A5E' : '#B8C3C7'}" transform="rotate(${-8+i*5} ${-36+i*24} 7)"/>`; return s + `</g>`; };
+K.laminaKK = (x, y, est) => { let s = K.lamina(x, y, {k:1.6}); s += `<g transform="translate(${x} ${y}) scale(1.6)">`; if(est==='cil') s += `<circle cx="18" cy="0" r="7" fill="#7A5230"/>`; if(est==='cel') s += `<circle cx="18" cy="0" r="7" fill="#7A5230"/><rect x="-6" y="-21" width="50" height="42" rx="2" fill="#7CC59A" fill-opacity=".55" stroke="#3E8A5E"/>`; if(est==='esp' || est==='clar') s += `<rect x="-6" y="-21" width="50" height="42" rx="2" fill="#7CC59A" fill-opacity="${est==='clar' ? .35 : .55}" stroke="#3E8A5E"/><ellipse cx="18" cy="0" rx="18" ry="13" fill="#7A5230" fill-opacity="${est==='clar' ? .25 : .7}"/>`; return s + `</g>`; };
 const COR = {sal:'#BFE3F2', lug:'#C98A2A'};
 
 function passosDireto(prep){
@@ -3603,6 +3627,43 @@ const PROC = {
         ['Uma gota do sedimento sem lamínula','err','Sem lamínula a preparação seca e a objetiva pode tocar o material.']],
      c: f => K.lamina(230, 190, {gota: f ? '#B07A30' : '#BFE3F2', lam:f}) + K.reag(430, 'Lugol', '#C98A2A')}
   ],
+  kk: [
+    {t:'Preparar o celofane', ctx:'Lamínulas de papel celofane cortadas no tamanho da lâmina.', q:'Como o celofane deve estar no momento do uso?',
+     o:[['Embebido por pelo menos 24 horas na solução de glicerina com verde de malaquita','ok','A glicerina clarifica o esfregaço espesso e o verde de malaquita dá contraste e reduz o brilho da luz.'],
+        ['Seco, recém-cortado','err','O celofane seco não clarifica as fezes nem adere à lâmina: a preparação fica opaca.'],
+        ['Embebido em água','err','A água não clarifica o material; a clarificação depende da glicerina.']],
+     c: f => K.celofanes(220, 190, f) + K.reag(420, 'Glicerina + v. malaquita', '#7CC59A') + (f ? K.relogio(420, 90, '≥ 24 h') : '')},
+    {t:'Tamisar as fezes', ctx:'Uma porção de fezes sobre papel absorvente, uma tela de náilon e uma espátula.', q:'Como você obtém o material para a placa?',
+     o:[['Pressiono a tela sobre as fezes e raspo com a espátula o material que passa pela malha','ok','A tela retém fibras e restos grosseiros; o material fino que atravessa contém os ovos.'],
+        ['Pego as fezes direto do frasco, sem tela','parc','Fibras e restos grosseiros entram no esfregaço, que fica irregular e esconde ovos.',{deb:1.8, ovo_l:.85, ovo_p:.85}],
+        ['Dissolvo as fezes em água e uso a suspensão','err','O Kato-Katz usa fezes sem diluição: é isso que permite relacionar o número de ovos a uma massa conhecida.']],
+     c: f => K.papelAbs(260, 200, 240) + `<ellipse cx="230" cy="200" rx="40" ry="16" fill="#7A5230"/>` + K.tela(f ? 240 : 360, f ? 196 : 120, f) + (f ? K.espatula(300, 170, -25, true) : K.espatula(380, 230, -10))},
+    {t:'Encher a placa', ctx:'A placa perfurada está sobre a lâmina.', q:'Como você usa a placa?',
+     o:[['Encho completamente o orifício com o material tamisado e retiro o excesso com a espátula, rente à placa','ok','O orifício cheio e nivelado contém 41,7 mg de fezes: é isso que permite multiplicar os ovos por 24.'],
+        ['Encho só metade do orifício','parc','A lâmina terá cerca de metade das fezes previstas, mas o cálculo continuará multiplicando por 24: o OPG sai subestimado.',{ovo_l:.5, ovo_p:.5}],
+        ['Dispenso a placa e coloco uma porção a olho','err','Sem a placa a massa de fezes é desconhecida e não se pode calcular o OPG.']],
+     c: f => K.lamina(260, 200, {k:1.6}) + K.placa(290, 200, f) + K.espatula(390, 150, -25, !f)},
+    {t:'Cobrir com celofane', ctx:'A placa foi retirada: sobre a lâmina ficou um pequeno cilindro de fezes.', q:'Com o que você cobre o cilindro?',
+     o:[['Com uma lamínula de celofane embebida na solução de glicerina','ok','O celofane úmido espalha o material e mantém a glicerina em contato com ele para clarificar.'],
+        ['Com uma lamínula de vidro comum','err','O vidro não clarifica nem permite espalhar o cilindro: a preparação fica espessa e opaca.'],
+        ['Deixo descoberto para secar','err','Sem cobertura o material seca e racha; nada é clarificado.']],
+     c: f => K.laminaKK(260, 200, f ? 'cel' : 'cil')},
+    {t:'Espalhar', ctx:'O celofane está sobre o cilindro de fezes.', q:'Como você espalha o material?',
+     o:[['Inverto a lâmina sobre papel absorvente e pressiono até o material formar uma camada uniforme sob o celofane','ok','A pressão espalha o material numa área regular, fina o suficiente para a glicerina clarificar.'],
+        ['Não pressiono: deixo o cilindro como está','parc','O cilindro espesso não clarifica no centro: os ovos ficam escondidos.',{deb:1.6, ovo_l:.7, ovo_p:.7}],
+        ['Esfrego o celofane com o dedo até rasgar','err','O celofane rasgado deixa o material secar e escorrer; refaça a lâmina.']],
+     c: f => K.laminaKK(260, 200, f ? 'esp' : 'cel') + (f ? K.txt(260, 270, 'camada uniforme sob o celofane', {s:11}) : '')},
+    {t:'Clarificar e ler', ctx:'A lâmina está pronta. A glicerina começa a clarificar o material.', q:'Quando você lê a lâmina?',
+     o:[['Depois de cerca de 30 minutos a 1 hora à temperatura ambiente; mais cedo se houver suspeita de ancilostomídeo','ok','É o tempo para clarificar o material. Ovos de ancilostomídeo, de casca fina, clarificam demais e desaparecem se a leitura demorar; ovos de S. mansoni e de Ascaris continuam visíveis por mais tempo.'],
+        ['No dia seguinte','parc','Os ovos de ancilostomídeo clarificaram e já não são vistos. Ovos de casca espessa continuam visíveis.',{anc:0}],
+        ['Imediatamente, sem esperar','parc','O material ainda está opaco: parte dos ovos fica escondida.',{deb:1.4, ovo_l:.7, ovo_p:.7}]],
+     c: f => K.laminaKK(220, 200, f ? 'clar' : 'esp') + K.relogio(420, 150, f ? '30 min a 1 h' : '?')},
+    {t:'Contar e calcular', ctx:'A lâmina vai ao microscópio.', q:'Como você obtém o resultado?',
+     o:[['Conto todos os ovos da lâmina inteira, por espécie, e multiplico por 24 para obter o OPG','ok','O Kato-Katz é quantitativo: a contagem completa vezes o fator da placa dá os ovos por grama de fezes.'],
+        ['Conto alguns campos e estimo o total','err','Os ovos não se distribuem por igual no esfregaço: é preciso contar a lâmina inteira.'],
+        ['Só registro se há ou não ovos','parc','Perde-se a informação de intensidade, que é o motivo de usar o Kato-Katz.',{}]],
+     c: f => K.microscopio(240, f) + K.laminaKK(420, 240, 'clar').replace('scale(1.6)','scale(.8)').replace('scale(1.6)','scale(.8)') + (f ? K.txt(130, 110, 'ovos × 24 = OPG', {s:15, w:700}) : '')}
+  ],
   graham: [
     {t:'Momento da coleta', ctx:'O paciente vai colher o material em casa ou no laboratório.', q:'Quando a fita deve ser aplicada?',
      o:[['Pela manhã, ao acordar, antes do banho, da higiene íntima e de evacuar','ok','A fêmea de Enterobius migra à noite e deposita os ovos na pele perianal; o banho e a higiene os removem.'],
@@ -3669,7 +3730,7 @@ function procRender(){
 function procResumo(){
   const P = PROC[pr.tec], ac = pr.primeira.filter(Boolean).length;
   $('#pr-prog').innerHTML = P.map((p,i)=>`<span class="feito">${i+1}. ${esc(p.t)}</span>`).join('');
-  const svg = $('#pr-svg'); svg.innerHTML = K.fundo() + (pr.tec==='graham' ? K.laminaFita(260, 190, {}) : K.lamina(260, 190, {gota: TEC_B[pr.tec].prep==='lug' ? '#B07A30' : '#BFE3F2', esf:'#8A5E34', opac:.3, lam:true})) + K.txt(260, 120, 'Lâmina pronta', {s:18, w:700});
+  const svg = $('#pr-svg'); svg.innerHTML = K.fundo() + (pr.tec==='graham' ? K.laminaFita(260, 190, {}) : pr.tec==='kk' ? K.laminaKK(260, 190, 'clar') : K.lamina(260, 190, {gota: TEC_B[pr.tec].prep==='lug' ? '#B07A30' : '#BFE3F2', esf:'#8A5E34', opac:.3, lam:true})) + K.txt(260, 120, 'Lâmina pronta', {s:18, w:700});
   $('#pr-passo').innerHTML = `<span class="eyebrow">Técnica concluída</span><h4>${esc(TEC_B[pr.tec].n)}</h4>
     <div class="fb ${ac===P.length ? 'ok' : 'mais'}"><b>${ac} de ${P.length} passos certos na primeira tentativa.</b></div>
     ${pr.cons.length ? `<p style="margin-top:6px"><b>Escolhas que vão afetar a lâmina:</b></p><ul class="small" style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:4px">${pr.cons.map(c=>`<li><b>${esc(c.t)}:</b> ${esc(c.x)}</li>`).join('')}</ul>` : '<p class="small">Nenhuma escolha comprometeu a preparação: a lâmina sai como numa execução correta.</p>'}
