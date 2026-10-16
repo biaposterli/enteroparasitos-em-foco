@@ -310,7 +310,7 @@ svg text{font-family:var(--f-body)}
 .bc-charriot{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
 .bc-charriot .btn{min-width:46px; font-size:1.1rem}
 .achado{display:flex; gap:8px; align-items:center; border-bottom:1px solid var(--line); padding-block:4px}
-.pill{display:inline-block; font-size:.78rem; font-weight:700; padding:2px 8px; border-radius:999px}
+.pill{display:inline-block; font-size:.78rem; font-weight:700; padding:2px 8px; border-radius:8px; line-height:1.35}
 .pill.ok{background:var(--ok-soft); color:var(--ok)}
 .pill.err{background:var(--bad-soft); color:var(--bad)}
 .pill.mais{background:var(--warn-soft); color:var(--warn)}
@@ -758,9 +758,9 @@ svg text{font-family:var(--f-body)}
       </div>
       <div class="stack">
         <div class="painel stack">
-          <div class="row" style="justify-content:space-between"><h4>Lamínula 22 × 22 mm</h4><span class="small mono" id="bc-cob"></span></div>
+          <div class="row" style="justify-content:space-between"><h4 id="bc-area-t">Lamínula 22 × 22 mm</h4><span class="small mono" id="bc-cob"></span></div>
           <svg id="bc-mapa" viewBox="0 0 220 220" class="svgbox" style="max-width:240px; margin-inline:auto; cursor:pointer" role="img" aria-label="Mapa da lamínula com as áreas já examinadas. Toque para ir a um ponto."></svg>
-          <p class="small muted">Áreas já vistas ficam sombreadas. Uma varredura em zigue-zague, sem pular faixas, é o que garante que a lamínula inteira foi examinada.</p>
+          <p class="small muted">Áreas já vistas ficam sombreadas. Uma varredura em zigue-zague, sem pular faixas, é o que garante que toda a área foi examinada.</p>
         </div>
         <div class="painel stack">
           <div class="row" style="justify-content:space-between"><h4>Achados marcados</h4><label class="small row" style="gap:6px"><input type="checkbox" id="bc-estudo"> Modo estudo (mostrar se acertei)</label></div>
@@ -2691,6 +2691,8 @@ const AMOSTRAS = [
   {t:'Adulta, 41 anos · admissional', p:'Sem queixas. Exame de rotina para admissão no emprego. Fezes formadas.', it:{eh_c:12, ecoli_c:16, enana_c:10}, pol:40},
   {t:'Idoso, 68 anos', p:'Dor epigástrica, tosse crônica e eosinofilia de 14%. Viveu na zona rural na juventude. Fezes formadas, frescas.', it:{str:8, asc_f:5, hnana:4}},
   {t:'Criança, 7 anos · inquérito escolar', p:'Sem queixas. Coleta feita durante inquérito numa escola.', it:{hnana:9, taenia:4, ecoli_c:8, tri:5}},
+  {t:'Criança, 6 anos · prurido anal', p:'Prurido anal noturno, sono agitado e irritabilidade. O irmão tem queixa parecida. Um exame de fezes anterior foi negativo.', it:{ecoli_c:6}, peri:{ent:22}},
+  {t:'Adulto, 34 anos · "pedacinhos brancos"', p:'Encontra pedaços brancos, achatados e móveis na roupa íntima, às vezes fora das evacuações. Come carne bovina malpassada.', it:{taenia:3, enana_c:8}, peri:{taenia:16}},
   {t:'Amostra-surpresa', p:'Sem dados clínicos. A composição é sorteada a cada vez.', surpresa:true}
 ];
 const TEC_B = {
@@ -2698,7 +2700,8 @@ const TEC_B = {
   dir_lug:{n:'Exame direto com lugol', prep:'lug', f:{cisto:.3, trofo:.8, ovo_l:.3, ovo_p:.3, larva:.3}, deb:1.5, d:'O lugol cora núcleos e glicogênio dos cistos. Trofozoítos morrem e param de se mover.'},
   hpj:{n:'Sedimentação espontânea (HPJ/Lutz) + lugol', prep:'lug', f:{cisto:.6, trofo:0, ovo_l:1, ovo_p:1, larva:.7}, deb:1.2, d:'Recupera ovos leves e pesados, larvas e cistos. Sedimento com bastante detrito.'},
   faust:{n:'Faust (centrífugo-flutuação em ZnSO₄) + lugol', prep:'lug', f:{cisto:1, trofo:0, ovo_l:.8, ovo_p:.04, larva:.25}, deb:.5, d:'Concentra muito bem cistos e ovos leves; ovos pesados não flutuam. Preparação mais limpa.'},
-  baer:{n:'Baermann-Moraes', prep:'sal', f:{cisto:0, trofo:0, ovo_l:0, ovo_p:0, larva:2.5}, deb:.25, d:'Só larvas vivas migram para a água morna. Os ovos e cistos ficam retidos na gaze.'}
+  baer:{n:'Baermann-Moraes', prep:'sal', f:{cisto:0, trofo:0, ovo_l:0, ovo_p:0, larva:2.5}, deb:.25, d:'Só larvas vivas migram para a água morna. Os ovos e cistos ficam retidos na gaze.'},
+  graham:{n:'Fita adesiva (Graham)', prep:'sal', f:{cisto:0, trofo:0, ovo_l:0, ovo_p:0, larva:0}, fid:{ent:1, taenia:1}, peri:true, deb:.45, d:'Fita adesiva transparente aplicada na pele perianal pela manhã e colada na lâmina. Recupera os ovos depositados na pele: os de Enterobius, que raramente aparecem nas fezes, e os de Taenia liberados por proglotes que passam pelo ânus.'}
 };
 const MULT = {cisto:30, trofo:30, ovo_l:3, ovo_p:3, larva:3, art:1};
 const bc = {foco:0, alvo:8, amostra:null, tec:null, it:{}, objs:[], buckets:{}, x:LAM/2, y:LAM/2, obj:10, z:1, vis:new Set(), marcas:{}, gab:false, seed:1, menuK:null};
@@ -2713,6 +2716,8 @@ function bcAmostras(){
     const A = AMOSTRAS[+b.dataset.a]; bc.amostra = A;
     if(A.surpresa){ const r = Math.random, pool = ['giardia_c','eh_c','ecoli_c','enana_c','iod_c','blasto','asc_f','asc_i','tri','anc','hnana','taenia','schisto','str','ent'], esc_ = shuffle(pool).slice(0, 2 + Math.floor(r()*3)); bc.it = {}; esc_.forEach(id=>{ bc.it[id] = 4 + Math.floor(r()*14); }); if(bc.it.asc_i) bc.it.asc_f = bc.it.asc_f || 2; }
     else bc.it = Object.assign({}, A.it);
+    bc.peri = Object.assign({}, A.peri || {});
+    if(A.surpresa){ if(bc.it.ent){ bc.peri.ent = bc.it.ent + 8; } if(bc.it.taenia){ bc.peri.taenia = bc.it.taenia; } }
     $('#bc-pedido').innerHTML = `<b>${esc(A.t)}.</b> ${esc(A.p)}`;
     bcTecnicas(); bcEtapa(2); $('#bc-passo2').scrollIntoView();
   });
@@ -2727,14 +2732,18 @@ function bcPrepara(tec, proc){
   bc.tec = tec; const T = TEC_B[tec]; bc.seed = Math.floor(Math.random()*1e9); const r = rng(bc.seed);
   bc.objs = []; bc.marcas = {}; bc.vis = new Set(); bc.gab = false; bc.x = 2600; bc.y = 2600; bc.recup = {};
   const add = (id, n) => { for(let i=0;i<n;i++) bc.objs.push({id, x:600 + r()*(LAM-1200), y:600 + r()*(LAM-1200), rot:r()*360, s:Math.floor(r()*1e6)}); };
-  Object.entries(bc.it).forEach(([id,n])=>{
-    const cat = CAT[id]; let f = (T.f[cat] || 0) * (EF[cat] ?? 1);
+  const ids_ = [...new Set([...Object.keys(bc.it), ...Object.keys(bc.peri||{})])];
+  ids_.forEach(id=>{
+    const cat = CAT[id]; let n, f;
+    if(T.peri){ n = (bc.peri||{})[id] || 0; f = ((T.fid||{})[id] || 0) * (EF[cat] ?? 1) * (EF.peri ?? 1); }
+    else { n = bc.it[id] || 0; f = (T.f[cat] || 0) * (EF[cat] ?? 1) * (id==='ent' ? .15 : 1); }
     if(cat==='trofo' && !bc.amostra.liq) f = 0;
     const qtd = Math.round(n * MULT[cat] * f * (0.85 + r()*0.3));
     bc.recup[id] = qtd; add(id, qtd);
   });
   add('pol', Math.round((bc.amostra.pol || 12) * Math.min(2.5, T.deb*bc.debMult+.3)));
   add('levedura', Math.round(260 * Math.min(2.5, T.deb*bc.debMult)));
+  $('#bc-area-t').textContent = T.peri ? 'Fita adesiva sobre a lâmina' : 'Lamínula 22 × 22 mm';
   bc.buckets = {}; bc.objs.forEach((o,i)=>{ const key = Math.floor(o.x/1000)+','+Math.floor(o.y/1000); (bc.buckets[key] = bc.buckets[key] || []).push(i); });
   $('#bc-resumo').innerHTML = `${esc(bc.amostra.t)} · ${esc(T.n)} · ${proc ? `técnica executada (${proc.ac} de ${proc.n} passos certos de primeira)` : 'lâmina pronta, sem executar a técnica'}`;
   bcEtapa(4); bcObj(10); $('#bc-passo3').scrollIntoView(); bcAchados();
@@ -2845,16 +2854,16 @@ function bcLaudo(){
   const T = TEC_B[bc.tec], ks = Object.keys(bc.marcas), rel = {};
   ks.forEach(k=>{ const id = bc.marcas[k]; if(id!=='art') rel[id] = (rel[id]||0)+1; });
   const ids = Object.keys(rel);
-  $('#bc-laudo').innerHTML = `<h4>Seu laudo</h4><div class="ficha-lab">EXAME PARASITOLÓGICO DE FEZES
+  $('#bc-laudo').innerHTML = `<h4>Seu laudo</h4><div class="ficha-lab">${T.peri ? 'PESQUISA DE OVOS NA REGIÃO PERIANAL\n(FITA ADESIVA, MÉTODO DE GRAHAM)' : 'EXAME PARASITOLÓGICO DE FEZES'}
 Amostra: ${bc.amostra.t}
 Método: ${T.n}
 
 Resultado:
-${ids.length ? ids.map(id=>'• '+NOME[id]).join('\n') : 'Não foram encontrados ovos, larvas ou cistos\nde parasitos na amostra examinada.'}
-${ids.some(id=>COMENSAL.has(id)) ? '\nObs.: protozoários comensais, sem\nsignificado patogênico.' : ''}${ids.includes('eh_c') ? '\nObs.: a microscopia não diferencia\nE. histolytica de E. dispar.' : ''}${!ids.length ? '\nObs.: um resultado negativo em amostra\núnica não exclui parasitose.' : ''}</div>
-<p class="small muted">Área da lamínula examinada: ${fmt(bc.vis.size/(LAM/500)**2*100)}%. ${ks.length} ${ks.length===1?'objeto marcado':'objetos marcados'}.</p>`;
+${ids.length ? ids.map(id=>'• '+NOME[id]).join('\n') : (T.peri ? 'Não foram encontrados ovos de helmintos\nna fita examinada.' : 'Não foram encontrados ovos, larvas ou cistos\nde parasitos na amostra examinada.')}
+${ids.some(id=>COMENSAL.has(id)) ? '\nObs.: protozoários comensais, sem\nsignificado patogênico.' : ''}${ids.includes('eh_c') ? '\nObs.: a microscopia não diferencia\nE. histolytica de E. dispar.' : ''}${!ids.length ? (T.peri ? '\nObs.: recomenda-se repetir a coleta em\nmanhãs consecutivas.' : '\nObs.: um resultado negativo em amostra\núnica não exclui parasitose.') : ''}</div>
+<p class="small muted">Área ${T.peri ? 'da fita' : 'da lamínula'} examinada: ${fmt(bc.vis.size/(LAM/500)**2*100)}%. ${ks.length} ${ks.length===1?'objeto marcado':'objetos marcados'}.</p>`;
   /* correção */
-  const presentes = Object.keys(bc.it), linhas = [], todos = new Set([...presentes, ...ids]);
+  const presentes = [...new Set([...Object.keys(bc.it), ...Object.keys(bc.peri||{})])], linhas = [], todos = new Set([...presentes, ...ids]);
   let acertos = 0, falsos = 0, perdidos = 0, tecnica = 0;
   todos.forEach(id=>{
     const naAmostra = presentes.includes(id), naLam = bc.recup[id] || 0, voce = rel[id] || 0;
@@ -2875,10 +2884,14 @@ ${ids.some(id=>COMENSAL.has(id)) ? '\nObs.: protozoários comensais, sem\nsignif
   if(['dir_sal','dir_lug'].includes(bc.tec)) notas.push('O exame direto examina pouco material e tem baixa sensibilidade; na rotina ele complementa, e não substitui, um método de concentração.');
   if(presentes.includes('eh_c')) notas.push('Cistos do complexo E. histolytica/dispar: compare com E. coli pelo número de núcleos e pela posição do cariossoma.');
   if(presentes.includes('anc') && bc.tec==='hpj') notas.push('Ovos de ancilostomídeo são leves; Willis ou Faust os concentram melhor que a sedimentação.');
+  if(presentes.includes('ent') && bc.tec!=='graham') notas.push('A fêmea de Enterobius deposita os ovos na pele perianal: eles raramente aparecem nas fezes. O método indicado é a fita adesiva (Graham), pela manhã, em dias consecutivos.');
+  if(bc.tec==='graham' && presentes.some(id=>!['ent','taenia'].includes(id))) notas.push('A fita adesiva só recupera o que está na pele perianal. Os demais parasitos desta pessoa exigem exame de fezes.');
+  if(bc.tec==='graham' && (bc.peri||{}).taenia) notas.push('Ovos de Taenia na fita confirmam teníase, mas não identificam a espécie: T. solium e T. saginata têm ovos iguais. A espécie se define pelas proglotes (tamização e contagem das ramificações uterinas, Módulo 3).');
+  if(bc.tec==='graham' && presentes.includes('ent')) notas.push('Um único Graham negativo não exclui enterobíase: repita em manhãs consecutivas e examine também os contactantes.');
   if(bc.proc){ if(bc.proc.cons.length) notas.push(`Execução da técnica: ${bc.proc.cons.map(c=>c.t.toLowerCase()).join('; ')}. Essas escolhas reduziram o que chegou à lâmina ou aumentaram os detritos.`); else notas.push(`Técnica executada corretamente (${bc.proc.ac} de ${bc.proc.n} passos certos na primeira tentativa).`); }
   else notas.push('A lâmina foi preparada sem a etapa de execução da técnica, como numa execução correta.');
   if(errArt) notas.push(`${errArt} artefato${errArt>1?'s':''} (pólen, leveduras) ${errArt>1?'foram identificados':'foi identificado'} como parasito.`);
-  if(bc.vis.size/(LAM/500)**2 < .5) notas.push('Menos da metade da lamínula foi examinada. Ovos raros podem estar justamente nas faixas não percorridas.');
+  if(bc.vis.size/(LAM/500)**2 < .5) notas.push((bc.tec==='graham' ? 'Menos da metade da fita foi examinada.' : 'Menos da metade da lamínula foi examinada.') + ' Ovos raros podem estar justamente nas faixas não percorridas.');
   $('#bc-correcao').innerHTML = `<h4>Correção</h4><div class="fb ${perdidos+falsos===0?'ok':'mais'}"><b>${acertos} de ${presentes.length - tecnica} formas recuperáveis encontradas</b>${falsos?` · ${falsos} falso${falsos>1?'s':''} positivo${falsos>1?'s':''}`:''}${tecnica?` · ${tecnica} não recuperada${tecnica>1?'s':''} pela técnica`:''}.</div>
     <div class="tab-wrap"><table><thead><tr><th>Forma</th><th>Na lâmina</th><th>Você marcou</th><th>Situação</th></tr></thead><tbody>${linhas.join('')}</tbody></table></div>
     ${notas.length ? `<ul class="small" style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:4px">${notas.map(n=>`<li>${esc(n)}</li>`).join('')}</ul>` : ''}`;
@@ -3442,6 +3455,11 @@ const K = {
     return s + `</g>`;
   }
 };
+
+K.abaixador = (x, y, fita, ang=0) => `<g transform="translate(${x} ${y}) rotate(${ang})"><rect x="-90" y="-11" width="180" height="22" rx="11" fill="#E9D3A6" stroke="#B8955A" stroke-width="1.5"/>${fita ? `<rect x="40" y="-15" width="46" height="30" rx="3" fill="#FFFFFF" fill-opacity=".45" stroke="#8FA9B4" stroke-width="1.6" stroke-dasharray="${fita==='fosca' ? '0' : '0'}"/>${fita==='fosca' ? `<rect x="40" y="-15" width="46" height="30" rx="3" fill="#E8DCC0" stroke="#B8A57A"/>` : ''}<text x="63" y="30" text-anchor="middle" font-size="10" fill="currentColor">${fita==='fosca' ? 'fita fosca' : 'lado adesivo para fora'}</text>` : ''}</g>`;
+K.laminaFita = (x, y, o={}) => { let s = K.lamina(x, y, {k:o.k||1.6}); const k = o.k||1.6; s += `<g transform="translate(${x} ${y}) scale(${k})"><rect x="-60" y="-20" width="146" height="40" rx="2" fill="#FFFFFF" fill-opacity=".38" stroke="#8FA9B4" stroke-width="1.2"/>`; if(o.dobras) s += `<path d="M-20 -20 L-12 20 M30 -20 L40 20" stroke="#8FA9B4" stroke-width="1.6"/><circle cx="10" cy="-4" r="5" fill="none" stroke="#8FA9B4"/><circle cx="56" cy="6" r="4" fill="none" stroke="#8FA9B4"/>`; if(o.ovos) [[-30,-6],[-8,8],[20,-8],[48,4],[70,-6]].forEach(([a,b])=>{ s += `<ellipse cx="${a}" cy="${b}" rx="3" ry="1.6" fill="#F4F1E2" stroke="#7E7C6A" stroke-width=".6"/>`; }); return s + `</g>`; };
+K.sol = (x, y, t) => `<g transform="translate(${x} ${y})"><circle r="16" fill="#F2B640"/>${[...Array(8)].map((_,i)=>`<line x1="0" y1="-22" x2="0" y2="-29" stroke="#F2B640" stroke-width="3" stroke-linecap="round" transform="rotate(${i*45})"/>`).join('')}</g>` + K.txt(x, y+50, t, {w:700});
+K.cal = (x, y, dias) => `<g transform="translate(${x} ${y})">${dias.map((d,i)=>`<g transform="translate(${i*62} 0)"><rect x="-26" y="-30" width="52" height="56" rx="6" fill="#FFFFFF" stroke="#4A5A62" stroke-width="2"/><rect x="-26" y="-30" width="52" height="14" rx="6" fill="#C2483A"/><text x="0" y="12" text-anchor="middle" font-size="16" font-weight="700" fill="#2A3238">${d[0]}</text>${d[1] ? `<path d="M-12 18 l8 7 l16 -18" stroke="var(--ok)" stroke-width="4" fill="none" stroke-linecap="round"/>` : ''}</g>`).join('')}</g>`;
 const COR = {sal:'#BFE3F2', lug:'#C98A2A'};
 
 function passosDireto(prep){
@@ -3584,6 +3602,38 @@ const PROC = {
         ['Uma gota do sedimento sem lugol, para ver as larvas se movendo','parc','Serve para ver a motilidade, mas larvas em movimento são difíceis de examinar em detalhe. Na identificação, o lugol ajuda.',{}],
         ['Uma gota do sedimento sem lamínula','err','Sem lamínula a preparação seca e a objetiva pode tocar o material.']],
      c: f => K.lamina(230, 190, {gota: f ? '#B07A30' : '#BFE3F2', lam:f}) + K.reag(430, 'Lugol', '#C98A2A')}
+  ],
+  graham: [
+    {t:'Momento da coleta', ctx:'O paciente vai colher o material em casa ou no laboratório.', q:'Quando a fita deve ser aplicada?',
+     o:[['Pela manhã, ao acordar, antes do banho, da higiene íntima e de evacuar','ok','A fêmea de Enterobius migra à noite e deposita os ovos na pele perianal; o banho e a higiene os removem.'],
+        ['À noite, logo depois do banho','parc','O banho removeu os ovos da noite anterior e as fêmeas ainda não migraram: a fita recolhe muito pouco.',{peri:.1}],
+        ['Em qualquer horário, quando for mais prático','parc','Ao longo do dia, a higiene e o atrito com as roupas removem boa parte dos ovos.',{peri:.4}]],
+     c: f => K.sol(150, 130, f ? 'ao acordar' : '?') + K.relogio(360, 130, f ? 'antes do banho' : '?')},
+    {t:'Preparar a fita', ctx:'Fita adesiva e um abaixador de língua (ou tubo de ensaio) como suporte.', q:'Como você prepara a fita?',
+     o:[['Fita adesiva transparente, com o lado adesivo para fora, sobre a ponta do abaixador','ok','A face adesiva fica em contato com a pele; a fita transparente deixa a luz passar no microscópio.'],
+        ['Fita crepe ou fosca','err','A fita opaca não deixa a luz atravessar: não seria possível examinar ao microscópio.'],
+        ['Fita transparente com o lado adesivo para dentro','err','A face lisa não recolhe nada da pele; o adesivo precisa ficar voltado para fora.']],
+     c: f => K.abaixador(260, 160, f ? 'transparente' : null)},
+    {t:'Aplicar a fita', ctx:'Com o paciente em posição adequada, afastam-se as nádegas.', q:'Como a fita é aplicada?',
+     o:[['Pressiono a face adesiva várias vezes na pele das margens do ânus e ao redor dele','ok','Os ovos ficam aderidos à pele perianal; várias aplicações aumentam o material recolhido.'],
+        ['Introduzo o abaixador no canal anal','err','Não é necessário e pode machucar. Os ovos estão na pele, ao redor do ânus.'],
+        ['Encosto a fita uma única vez, de leve','parc','Uma aplicação leve recolhe só parte dos ovos.',{peri:.4}]],
+     c: f => K.abaixador(240, 150, 'transparente', f ? -8 : 0) + `<ellipse cx="400" cy="150" rx="46" ry="34" fill="#E8C7A8" opacity=".55"/>` + K.txt(400, 210, 'região perianal (esquema)', {s:11}) + (f ? K.seta(330, 150, 360, 150) : '')},
+    {t:'Montar na lâmina', ctx:'A fita foi retirada do abaixador.', q:'Como você monta a preparação?',
+     o:[['Colo a fita esticada sobre a lâmina, com o lado adesivo para baixo, sem dobras nem bolhas','ok','A fita funciona como lamínula: o material fica entre a fita e o vidro, plano e visível.'],
+        ['Colo a fita com dobras e bolhas, depressa','parc','Dobras e bolhas de ar confundem a leitura e escondem ovos.',{deb:1.8, peri:.8}],
+        ['Guardo a fita solta no frasco para colar depois','err','A fita gruda em si mesma, dobra e o material se perde. A montagem é imediata.']],
+     c: f => f ? K.laminaFita(260, 170, {}) : K.lamina(260, 190, {}) + K.abaixador(260, 90, 'transparente')},
+    {t:'Leitura', ctx:'A lâmina com a fita vai ao microscópio.', q:'Como você faz a leitura?',
+     o:[['Percorro toda a fita na objetiva de 10× e confirmo os ovos na de 40×','ok','Os ovos de Enterobius (50–60 µm) já se veem na de 10×; a de 40× confirma o lado achatado e a larva no interior.'],
+        ['Direto na objetiva de 100× com óleo sobre a fita','err','Com 100× e óleo não se consegue percorrer a fita; a imersão é usada em esfregaços corados.'],
+        ['Só olho o centro da fita','parc','Os ovos ficam distribuídos por toda a fita: ler só uma parte perde boa parte deles.',{}]],
+     c: f => K.microscopio(240, f) + K.laminaFita(420, 240, {k:.8, ovos:f})},
+    {t:'Resultado negativo', ctx:'Imagine que esta primeira fita veio negativa, mas a suspeita continua.', q:'O que você recomenda?',
+     o:[['Repetir a coleta em manhãs consecutivas (em geral, três) e examinar também os contactantes','ok','A eliminação de ovos varia de um dia para outro. Várias fitas aumentam a chance de detecção, e a transmissão costuma ser familiar.'],
+        ['Considerar a enterobíase descartada','err','Uma única fita negativa não exclui a infecção.'],
+        ['Pedir só exame de fezes de rotina no lugar do Graham','err','Os ovos de Enterobius raramente aparecem nas fezes; o exame de rotina tende a ser negativo.']],
+     c: f => K.cal(170, 150, [['1', f], ['2', f], ['3', f]])}
   ]
 };
 
@@ -3619,7 +3669,7 @@ function procRender(){
 function procResumo(){
   const P = PROC[pr.tec], ac = pr.primeira.filter(Boolean).length;
   $('#pr-prog').innerHTML = P.map((p,i)=>`<span class="feito">${i+1}. ${esc(p.t)}</span>`).join('');
-  const svg = $('#pr-svg'); svg.innerHTML = K.fundo() + K.lamina(260, 190, {gota: TEC_B[pr.tec].prep==='lug' ? '#B07A30' : '#BFE3F2', esf:'#8A5E34', opac:.3, lam:true}) + K.txt(260, 120, 'Lâmina pronta', {s:18, w:700});
+  const svg = $('#pr-svg'); svg.innerHTML = K.fundo() + (pr.tec==='graham' ? K.laminaFita(260, 190, {}) : K.lamina(260, 190, {gota: TEC_B[pr.tec].prep==='lug' ? '#B07A30' : '#BFE3F2', esf:'#8A5E34', opac:.3, lam:true})) + K.txt(260, 120, 'Lâmina pronta', {s:18, w:700});
   $('#pr-passo').innerHTML = `<span class="eyebrow">Técnica concluída</span><h4>${esc(TEC_B[pr.tec].n)}</h4>
     <div class="fb ${ac===P.length ? 'ok' : 'mais'}"><b>${ac} de ${P.length} passos certos na primeira tentativa.</b></div>
     ${pr.cons.length ? `<p style="margin-top:6px"><b>Escolhas que vão afetar a lâmina:</b></p><ul class="small" style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:4px">${pr.cons.map(c=>`<li><b>${esc(c.t)}:</b> ${esc(c.x)}</li>`).join('')}</ul>` : '<p class="small">Nenhuma escolha comprometeu a preparação: a lâmina sai como numa execução correta.</p>'}
