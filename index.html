@@ -649,10 +649,10 @@ svg text{font-family:var(--f-body)}
       <div class="painel stack">
         <div class="row"><span class="eyebrow">Preparação</span><div class="seg" id="pm-prep" aria-label="Preparação"><button aria-pressed="false" data-p="sal">Salina</button><button aria-pressed="true" data-p="lug">Lugol</button><button aria-pressed="false" data-p="zn">ZN modificado</button></div></div>
         <div class="scope-view"><svg id="pm-svg" viewBox="0 0 400 400" role="img" aria-label="Campo do microscópio com um protozoário"></svg><span class="scope-prep" id="pm-prep-tag"></span></div>
+        <label class="oc-foco"><span class="eyebrow">Foco (micrométrico)</span><input type="range" id="pm-foco" min="-40" max="40" value="0" aria-label="Parafuso micrométrico"></label>
         <div class="oc-read" id="pm-read"></div>
         <div class="row oc-row"><span class="eyebrow">Objetiva</span><div class="seg" id="pm-obj" aria-label="Objetiva"><button aria-pressed="false" data-o="4">4×</button><button aria-pressed="false" data-o="10">10×</button><button aria-pressed="false" data-o="40">40×</button><button aria-pressed="true" data-o="100">100×</button></div><span class="small muted">100× = imersão em óleo</span></div>
         <div class="row oc-row"><span class="eyebrow">Aproximar na tela</span><div class="seg" id="pm-zoom" aria-label="Aproximar a imagem na tela"><button aria-pressed="false" data-z="1">1×</button><button aria-pressed="true" data-z="2">2×</button><button aria-pressed="false" data-z="3">3×</button></div><span class="small muted">só aumenta a imagem; não muda a objetiva</span></div>
-        <label class="oc-foco"><span class="eyebrow">Foco (micrométrico)</span><input type="range" id="pm-foco" min="-40" max="40" value="0" aria-label="Parafuso micrométrico"></label>
         <p class="small muted" id="pm-info"></p>
         <div class="row"><button class="btn sec" id="pm-novo">Próximo campo</button><span class="small muted placar" id="pm-placar"></span></div>
       </div>
@@ -744,6 +744,7 @@ svg text{font-family:var(--f-body)}
           <span class="scope-prep" id="bc-prep-tag"></span>
           <div class="bc-menu" id="bc-menu" hidden></div>
         </div>
+        <label class="oc-foco"><span class="eyebrow">Foco (micrométrico)</span><input type="range" id="bc-foco" min="-40" max="40" value="0" aria-label="Parafuso micrométrico"></label>
         <div class="bc-charriot">
           <button class="btn sec" data-mv="-1,0" aria-label="Mover para a esquerda">←</button>
           <div class="stack" style="gap:6px"><button class="btn sec" data-mv="0,-1" aria-label="Mover para cima">↑</button><button class="btn sec" data-mv="0,1" aria-label="Mover para baixo">↓</button></div>
@@ -753,7 +754,6 @@ svg text{font-family:var(--f-body)}
         <div class="oc-read" id="bc-read"></div>
         <div class="row oc-row"><span class="eyebrow">Objetiva</span><div class="seg" id="bc-obj" aria-label="Objetiva"><button aria-pressed="false" data-o="4">4×</button><button aria-pressed="true" data-o="10">10×</button><button aria-pressed="false" data-o="40">40×</button><button aria-pressed="false" data-o="100">100×</button></div><span class="small muted">100× = imersão em óleo</span></div>
         <div class="row oc-row"><span class="eyebrow">Aproximar na tela</span><div class="seg" id="bc-zoom" aria-label="Aproximar a imagem na tela"><button aria-pressed="true" data-z="1">1×</button><button aria-pressed="false" data-z="2">2×</button><button aria-pressed="false" data-z="3">3×</button></div><span class="small muted">só aumenta a imagem; não muda a objetiva</span></div>
-        <label class="oc-foco"><span class="eyebrow">Foco (micrométrico)</span><input type="range" id="bc-foco" min="-40" max="40" value="0" aria-label="Parafuso micrométrico"></label>
         <p class="small muted mono" id="bc-pos"></p>
       </div>
       <div class="stack">
@@ -1279,9 +1279,9 @@ svg text{font-family:var(--f-body)}
       <div class="painel stack">
         <div class="row"><span class="eyebrow">Preparação</span><div class="seg" id="mi-prep" aria-label="Preparação"><button aria-pressed="true" data-p="sal">Salina</button><button aria-pressed="false" data-p="lug">Lugol</button></div></div>
         <div class="scope-view"><svg id="mi-svg" viewBox="0 0 400 400" role="img" aria-label="Campo do microscópio"></svg><span class="scope-prep" id="mi-prep-tag"></span></div>
+        <label class="oc-foco"><span class="eyebrow">Foco (micrométrico)</span><input type="range" id="mi-foco" min="-40" max="40" value="0" aria-label="Parafuso micrométrico"></label>
         <div class="oc-read" id="mi-read"></div>
         <div class="row oc-row"><span class="eyebrow">Objetiva</span><div class="seg" id="mi-obj" aria-label="Objetiva"><button aria-pressed="false" data-o="4">4×</button><button aria-pressed="false" data-o="10">10×</button><button aria-pressed="true" data-o="40">40×</button><button aria-pressed="false" data-o="100">100×</button></div><span class="small muted">100× = imersão em óleo</span></div>
-        <label class="oc-foco"><span class="eyebrow">Foco (micrométrico)</span><input type="range" id="mi-foco" min="-40" max="40" value="0" aria-label="Parafuso micrométrico"></label>
         <p class="small muted" id="mi-info"></p>
         <div class="row"><button class="btn sec" id="mi-novo">Próximo campo</button><span class="small muted placar" id="mi-placar"></span></div>
       </div>
