@@ -348,6 +348,12 @@ svg text{font-family:var(--f-body)}
 
 .chip:disabled{cursor:default}
 .chip:disabled[aria-pressed="false"]{opacity:.55}
+.opcao .just{display:block; margin-top:6px}
+.tec-card{cursor:default}
+.tec-card .row .btn{font-size:.88rem}
+.pr-prog{margin:0}
+.pr-prog span{font-size:.72rem}
+#pr-passo h4{margin-top:2px}
 @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important} }
 </style>
 </head>
@@ -701,7 +707,7 @@ svg text{font-family:var(--f-body)}
   </div>
 
   <div class="bc-etapas" id="bc-etapas">
-    <span data-e="1" class="at">1. Amostra</span><span data-e="2">2. Técnica</span><span data-e="3">3. Varredura</span><span data-e="4">4. Laudo</span>
+    <span data-e="1" class="at">1. Amostra</span><span data-e="2">2. Técnica</span><span data-e="3">3. Execução</span><span data-e="4">4. Varredura</span><span data-e="5">5. Laudo</span>
   </div>
 
   <section class="secao" id="bc-passo1">
@@ -710,13 +716,25 @@ svg text{font-family:var(--f-body)}
   </section>
 
   <section class="secao" id="bc-passo2" hidden>
-    <header><span class="eyebrow">Etapa 2</span><h3>Escolha a técnica</h3><p class="muted read" id="bc-pedido"></p></header>
+    <header><span class="eyebrow">Etapa 2</span><h3>Escolha a técnica</h3><p class="muted read" id="bc-pedido"></p><p class="small muted read">Execute a técnica passo a passo ou, se preferir, vá direto para a lâmina já pronta.</p></header>
     <div class="cards" id="bc-tecnicas"></div>
+  </section>
+
+  <section class="secao" id="bc-passo-proc" hidden>
+    <header class="row" style="justify-content:space-between; align-items:flex-end; flex-direction:row; flex-wrap:wrap">
+      <div><span class="eyebrow">Etapa 3 · Execução</span><h3 id="pr-titulo"></h3><p class="muted small">Cada escolha muda o que vai aparecer na lâmina.</p></div>
+      <div class="row"><button class="btn sec" id="pr-voltar">Trocar técnica</button><button class="btn sec" id="pr-pular">Pular e ir direto para a lâmina</button></div>
+    </header>
+    <div class="grid-tool">
+      <div class="painel stack"><svg id="pr-svg" class="svgbox" viewBox="0 0 520 340" role="img" aria-label="Bancada com a etapa atual da técnica"></svg><div class="etapas pr-prog" id="pr-prog"></div></div>
+      <div class="painel stack" id="pr-passo"></div>
+    </div>
+    <p class="base"><b>Base:</b> procedimentos descritos em De Carli, <i>Parasitologia Clínica</i>, e Neves, <i>Parasitologia Humana</i> <span class="conf">conferir volumes, tempos e rotações no manual do laboratório</span>. Simulação didática.</p>
   </section>
 
   <section class="secao" id="bc-passo3" hidden>
     <header class="row" style="justify-content:space-between; align-items:flex-end; flex-direction:row">
-      <div><span class="eyebrow">Etapa 3</span><h3>Varredura da lâmina</h3><p class="muted small" id="bc-resumo"></p></div>
+      <div><span class="eyebrow">Etapa 4</span><h3>Varredura da lâmina</h3><p class="muted small" id="bc-resumo"></p></div>
       <div class="row"><button class="btn sec" id="bc-trocar">Trocar técnica</button><button class="btn" id="bc-laudo-btn">Emitir laudo</button></div>
     </header>
     <div class="bc-grid">
@@ -753,7 +771,7 @@ svg text{font-family:var(--f-body)}
   </section>
 
   <section class="secao" id="bc-passo4" hidden>
-    <header><span class="eyebrow">Etapa 4</span><h3>Laudo e correção</h3></header>
+    <header><span class="eyebrow">Etapa 5</span><h3>Laudo e correção</h3></header>
     <div class="grid-tool">
       <div class="painel stack" id="bc-laudo"></div>
       <div class="painel stack" id="bc-correcao"></div>
@@ -2686,7 +2704,7 @@ const MULT = {cisto:30, trofo:30, ovo_l:3, ovo_p:3, larva:3, art:1};
 const bc = {foco:0, alvo:8, amostra:null, tec:null, it:{}, objs:[], buckets:{}, x:LAM/2, y:LAM/2, obj:10, z:1, vis:new Set(), marcas:{}, gab:false, seed:1, menuK:null};
 
 function bcEtapa(n){
-  $('#bc-passo1').hidden = n!==1; $('#bc-passo2').hidden = n!==2; $('#bc-passo3').hidden = n!==3 && n!==4; $('#bc-passo4').hidden = n!==4;
+  $('#bc-passo1').hidden = n!==1; $('#bc-passo2').hidden = n!==2; $('#bc-passo-proc').hidden = n!==3; $('#bc-passo3').hidden = n<4; $('#bc-passo4').hidden = n!==5;
   $$('#bc-etapas span').forEach(s=>{ const e = +s.dataset.e; s.className = e===n ? 'at' : (e<n ? 'feito' : ''); });
 }
 function bcAmostras(){
@@ -2700,24 +2718,26 @@ function bcAmostras(){
   });
 }
 function bcTecnicas(){
-  $('#bc-tecnicas').innerHTML = Object.entries(TEC_B).map(([k,T])=>`<button class="card-mod mod-diag" data-t="${k}"><span class="tag">${T.prep==='lug'?'Lugol':'Salina'}</span><h3>${esc(T.n)}</h3><p>${esc(T.d)}</p><span class="ir">Preparar lâmina →</span></button>`).join('');
-  $$('#bc-tecnicas .card-mod').forEach(b=>b.onclick = () => { bcPrepara(b.dataset.t); });
+  $('#bc-tecnicas').innerHTML = Object.entries(TEC_B).map(([k,T])=>`<div class="card-mod mod-diag tec-card" data-t="${k}"><span class="tag">${T.prep==='lug'?'Lugol':'Salina'}</span><h3>${esc(T.n)}</h3><p>${esc(T.d)}</p><div class="row" style="margin-top:auto"><button class="btn" data-exec="${k}">Executar a técnica →</button><button class="btn sec" data-direto="${k}">Ir direto para a lâmina</button></div></div>`).join('');
+  $$('#bc-tecnicas [data-exec]').forEach(b=>b.onclick = () => procIniciar(b.dataset.exec));
+  $$('#bc-tecnicas [data-direto]').forEach(b=>b.onclick = () => bcPrepara(b.dataset.direto));
 }
-function bcPrepara(tec){
+function bcPrepara(tec, proc){
+  bc.proc = proc || null; const EF = (proc && proc.ef) || {}; bc.debMult = EF.deb || 1;
   bc.tec = tec; const T = TEC_B[tec]; bc.seed = Math.floor(Math.random()*1e9); const r = rng(bc.seed);
   bc.objs = []; bc.marcas = {}; bc.vis = new Set(); bc.gab = false; bc.x = 2600; bc.y = 2600; bc.recup = {};
   const add = (id, n) => { for(let i=0;i<n;i++) bc.objs.push({id, x:600 + r()*(LAM-1200), y:600 + r()*(LAM-1200), rot:r()*360, s:Math.floor(r()*1e6)}); };
   Object.entries(bc.it).forEach(([id,n])=>{
-    const cat = CAT[id]; let f = T.f[cat] || 0;
+    const cat = CAT[id]; let f = (T.f[cat] || 0) * (EF[cat] ?? 1);
     if(cat==='trofo' && !bc.amostra.liq) f = 0;
     const qtd = Math.round(n * MULT[cat] * f * (0.85 + r()*0.3));
     bc.recup[id] = qtd; add(id, qtd);
   });
-  add('pol', Math.round((bc.amostra.pol || 12) * Math.min(1.2, T.deb+.3)));
-  add('levedura', Math.round(260 * Math.min(1.2, T.deb)));
+  add('pol', Math.round((bc.amostra.pol || 12) * Math.min(2.5, T.deb*bc.debMult+.3)));
+  add('levedura', Math.round(260 * Math.min(2.5, T.deb*bc.debMult)));
   bc.buckets = {}; bc.objs.forEach((o,i)=>{ const key = Math.floor(o.x/1000)+','+Math.floor(o.y/1000); (bc.buckets[key] = bc.buckets[key] || []).push(i); });
-  $('#bc-resumo').innerHTML = `${esc(bc.amostra.t)} · ${esc(T.n)}`;
-  bcEtapa(3); bcObj(10); $('#bc-passo3').scrollIntoView(); bcAchados();
+  $('#bc-resumo').innerHTML = `${esc(bc.amostra.t)} · ${esc(T.n)} · ${proc ? `técnica executada (${proc.ac} de ${proc.n} passos certos de primeira)` : 'lâmina pronta, sem executar a técnica'}`;
+  bcEtapa(4); bcObj(10); $('#bc-passo3').scrollIntoView(); bcAchados();
 }
 function bcK(){ return ocK(bc.obj, bc.z); }
 function bcDeb(tx, ty, prep, deb){
@@ -2742,7 +2762,7 @@ function bcDesenha(){
   for(let tx=t0x; tx<=t1x; tx++) for(let ty=t0y; ty<=t1y; ty++){
     if(tx<0||ty<0||tx*300>LAM||ty*300>LAM) continue;
     if(k < .12 && ((tx*7+ty*3)%4)) continue;
-    bcDeb(tx, ty, prep, T.deb).forEach(d=>{
+    bcDeb(tx, ty, prep, T.deb*bc.debMult).forEach(d=>{
       if(Math.hypot(d.x-bc.x, d.y-bc.y) > Rum + 80 || d.x > LAM || d.y > LAM) return;
       const X = sx(d.x), Y = sy(d.y);
       if(d.t < .22){ const rr = (6+d.a*28)*k; s += `<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="${Math.max(.6,rr).toFixed(1)}" fill="none" stroke="#4E4E44" stroke-width="${Math.max(.6,rr*.2).toFixed(1)}" opacity=".5"/>`; }
@@ -2756,7 +2776,7 @@ function bcDesenha(){
     const g0x = Math.floor((bc.x-Rum)/40), g1x = Math.floor((bc.x+Rum)/40), g0y = Math.floor((bc.y-Rum)/40), g1y = Math.floor((bc.y+Rum)/40);
     for(let gx=g0x; gx<=g1x; gx++) for(let gy=g0y; gy<=g1y; gy++){
       if(gx<0||gy<0||gx*40>=LAM||gy*40>=LAM) continue;
-      const r = rng((bc.seed*31 ^ (gx*83492791) ^ (gy*2971215073)) >>> 0), n = 1 + Math.floor(r()*3*T.deb);
+      const r = rng((bc.seed*31 ^ (gx*83492791) ^ (gy*2971215073)) >>> 0), n = 1 + Math.floor(r()*3*T.deb*bc.debMult);
       for(let j=0;j<n;j++){ const ux = gx*40 + r()*40, uy = gy*40 + r()*40; if(Math.hypot(ux-bc.x, uy-bc.y) > Rum) continue; const t = r();
         if(t < .7) s += `<circle cx="${sx(ux).toFixed(1)}" cy="${sy(uy).toFixed(1)}" r="${((.6+r()*1.6)*k).toFixed(1)}" fill="${prep==='lug'?'#A88A44':'#ABA588'}" opacity="${(.35+r()*.4).toFixed(2)}"/>`;
         else { const l = (6+r()*14)*k; s += `<path d="M ${(-l/2).toFixed(1)} 0 Q 0 ${((r()-.5)*l).toFixed(1)} ${(l/2).toFixed(1)} 0" transform="translate(${sx(ux).toFixed(1)} ${sy(uy).toFixed(1)}) rotate(${(r()*360).toFixed(0)})" fill="none" stroke="${prep==='lug'?'#B89C58':'#BDB698'}" stroke-width="${(.8*k).toFixed(1)}" stroke-linecap="round" opacity=".6"/>`; }
@@ -2855,12 +2875,14 @@ ${ids.some(id=>COMENSAL.has(id)) ? '\nObs.: protozoários comensais, sem\nsignif
   if(['dir_sal','dir_lug'].includes(bc.tec)) notas.push('O exame direto examina pouco material e tem baixa sensibilidade; na rotina ele complementa, e não substitui, um método de concentração.');
   if(presentes.includes('eh_c')) notas.push('Cistos do complexo E. histolytica/dispar: compare com E. coli pelo número de núcleos e pela posição do cariossoma.');
   if(presentes.includes('anc') && bc.tec==='hpj') notas.push('Ovos de ancilostomídeo são leves; Willis ou Faust os concentram melhor que a sedimentação.');
+  if(bc.proc){ if(bc.proc.cons.length) notas.push(`Execução da técnica: ${bc.proc.cons.map(c=>c.t.toLowerCase()).join('; ')}. Essas escolhas reduziram o que chegou à lâmina ou aumentaram os detritos.`); else notas.push(`Técnica executada corretamente (${bc.proc.ac} de ${bc.proc.n} passos certos na primeira tentativa).`); }
+  else notas.push('A lâmina foi preparada sem a etapa de execução da técnica, como numa execução correta.');
   if(errArt) notas.push(`${errArt} artefato${errArt>1?'s':''} (pólen, leveduras) ${errArt>1?'foram identificados':'foi identificado'} como parasito.`);
   if(bc.vis.size/(LAM/500)**2 < .5) notas.push('Menos da metade da lamínula foi examinada. Ovos raros podem estar justamente nas faixas não percorridas.');
   $('#bc-correcao').innerHTML = `<h4>Correção</h4><div class="fb ${perdidos+falsos===0?'ok':'mais'}"><b>${acertos} de ${presentes.length - tecnica} formas recuperáveis encontradas</b>${falsos?` · ${falsos} falso${falsos>1?'s':''} positivo${falsos>1?'s':''}`:''}${tecnica?` · ${tecnica} não recuperada${tecnica>1?'s':''} pela técnica`:''}.</div>
     <div class="tab-wrap"><table><thead><tr><th>Forma</th><th>Na lâmina</th><th>Você marcou</th><th>Situação</th></tr></thead><tbody>${linhas.join('')}</tbody></table></div>
     ${notas.length ? `<ul class="small" style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:4px">${notas.map(n=>`<li>${esc(n)}</li>`).join('')}</ul>` : ''}`;
-  bcEtapa(4); $('#bc-passo4').scrollIntoView();
+  bcEtapa(5); $('#bc-passo4').scrollIntoView();
 }
 function initBancada(){
   bcAmostras();
@@ -3364,7 +3386,250 @@ function initMod3467(){
   $$('#rf-freq button').forEach(b=>b.onclick = () => { rfF = +b.dataset.f; $$('#rf-freq button').forEach(x=>x.setAttribute('aria-pressed', x===b)); rfRender(); });
   $('#rf-san').addEventListener('change', rfRender); rfRender(); jcRender();
 }
+/* ============ Bancada: execução da técnica passo a passo ============ */
+const VID = '#6F8C99', VID_F = '#E3EFF4';
+const K = {
+  fundo: () => `<rect width="520" height="340" rx="12" fill="var(--surface-2)"/><rect y="266" width="520" height="6" fill="#A8916B"/><rect y="272" width="520" height="68" fill="#CBB894"/>`,
+  txt: (x, y, t, o={}) => `<text x="${x}" y="${y}" font-size="${o.s||12}" text-anchor="${o.a||'middle'}" fill="${o.c||'currentColor'}" font-weight="${o.w||400}">${t}</text>`,
+  seta: (x1, y1, x2, y2, c='currentColor') => { const a = Math.atan2(y2-y1, x2-x1); return `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="2.2"/><polygon points="${x2},${y2} ${(x2-10*Math.cos(a)+5*Math.sin(a)).toFixed(1)},${(y2-10*Math.sin(a)-5*Math.cos(a)).toFixed(1)} ${(x2-10*Math.cos(a)-5*Math.sin(a)).toFixed(1)},${(y2-10*Math.sin(a)+5*Math.cos(a)).toFixed(1)}" fill="${c}"/>`; },
+  frasco: (x, liq=false, rot='amostra') => `<g transform="translate(${x} 268)"><rect x="-30" y="-74" width="60" height="74" rx="6" fill="${VID_F}" fill-opacity=".6" stroke="${VID}" stroke-width="2"/><rect x="-33" y="-88" width="66" height="15" rx="4" fill="#D9552B"/>${liq ? `<rect x="-27" y="-30" width="54" height="27" rx="3" fill="#9C7040"/>` : `<path d="M-24 -4 q6 -28 22 -22 q18 -10 26 22 z" fill="#7A5230"/>`}</g>` + K.txt(x, 290, rot),
+  reag: (x, rot, cor, y=268) => `<g transform="translate(${x} ${y})"><rect x="-19" y="-62" width="38" height="62" rx="6" fill="${cor}" fill-opacity=".8" stroke="${VID}" stroke-width="1.6"/><rect x="-8" y="-76" width="16" height="15" fill="${VID_F}" stroke="${VID}" stroke-width="1.4"/><rect x="-10" y="-84" width="20" height="9" rx="2" fill="#4A5A62"/><rect x="-16" y="-44" width="32" height="18" rx="2" fill="#FFFFFF"/></g>` + K.txt(x, y-31, rot, {s:7.5, c:'#2A3238'}),
+  lamina: (x, y, o={}) => {
+    let s = `<g transform="translate(${x} ${y}) scale(${o.k||1.6})"><rect x="-90" y="-24" width="180" height="48" rx="3" fill="#EEF6F9" fill-opacity=".92" stroke="${VID}" stroke-width="1.6"/><rect x="-90" y="-24" width="34" height="48" fill="#D5DDE0"/>`;
+    if(o.papel) s += [-14,-6,2,10].map(yy=>`<line x1="-6" x2="${36+(yy%3)*4}" y1="${yy}" y2="${yy}" stroke="#4A4A4A" stroke-width="2.4" stroke-dasharray="5 2" opacity=".55"/>`).join('');
+    if(o.gota) s += `<ellipse cx="18" cy="0" rx="17" ry="11" fill="${o.gota}" fill-opacity=".8"/>`;
+    if(o.esf) s += `<ellipse cx="18" cy="0" rx="24" ry="15" fill="${o.esf}" fill-opacity="${o.opac||.45}"/>`;
+    if(o.grumos) s += [[8,-4],[26,5],[20,-8]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="4" fill="#6B4425"/>`).join('');
+    if(o.lam) s += `<rect x="-6" y="-23" width="48" height="46" fill="#FFFFFF" fill-opacity=".35" stroke="#8FA9B4" stroke-width="1.4"/>`;
+    if(o.lamIncl) s += `<polygon points="-6,-23 42,-40 42,6 -6,23" fill="#FFFFFF" fill-opacity=".4" stroke="#8FA9B4" stroke-width="1.4"/>`;
+    return s + `</g>`;
+  },
+  palito: (x1, y1, x2, y2, ponta) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#C9A06A" stroke-width="5" stroke-linecap="round"/>${ponta ? `<circle cx="${x2}" cy="${y2}" r="5" fill="#7A5230"/>` : ''}`,
+  copo: (x, nivel=0, cor='#9C7040', rot='') => { const h = 96, yL = -h*nivel; const w = 34 - (34-28)*(1-nivel); let s = `<g transform="translate(${x} 268)">`; if(nivel>0) s += `<polygon points="-${w},${yL} ${w},${yL} 28,-2 -28,-2" fill="${cor}" fill-opacity=".75"/>`; return s + `<path d="M-35 -${h} L35 -${h} L29 0 L-29 0 Z" fill="${VID_F}" fill-opacity=".35" stroke="${VID}" stroke-width="2"/></g>` + (rot ? K.txt(x, 290, rot) : ''); },
+  calice: (x, o={}) => {
+    const top = -230, ap = -70; let s = `<g transform="translate(${x} 268)">`;
+    if(o.nivel){ const L = o.nivel, yL = ap + (top-ap)*L, w = 5 + 62*L; s += `<polygon points="-${w.toFixed(1)},${yL.toFixed(1)} ${w.toFixed(1)},${yL.toFixed(1)} 5,${ap} -5,${ap}" fill="${o.cor||'#B08A5A'}" fill-opacity="${o.turvo ? .75 : .3}"/>`;
+      if(o.turvo){ const r = rng(5); for(let i=0;i<40;i++){ const yy = yL + r()*(ap-yL), ww = 5 + 62*((yy-ap)/(top-ap)); s += `<circle cx="${((r()-.5)*2*ww*.9).toFixed(1)}" cy="${yy.toFixed(1)}" r="${(1+r()*1.6).toFixed(1)}" fill="#6B4425" opacity=".7"/>`; } } }
+    if(o.sed) s += `<polygon points="-14,${ap-22} 14,${ap-22} 5,${ap} -5,${ap}" fill="#6B4425"/>`;
+    s += `<path d="M-67 ${top} L67 ${top} L5 ${ap} L5 -12 L28 -4 L-28 -4 L-5 -12 L-5 ${ap} Z" fill="${VID_F}" fill-opacity=".3" stroke="${VID}" stroke-width="2"/>`;
+    if(o.funil) s += `<path d="M-46 ${top-46} L46 ${top-46} L9 ${top-8} L9 ${top+10} L-9 ${top+10} L-9 ${top-8} Z" fill="${VID_F}" fill-opacity=".5" stroke="${VID}" stroke-width="2"/><path d="M-42 ${top-44} L42 ${top-44} L30 ${top-32} L-30 ${top-32} Z" fill="#FFFFFF" stroke="#C9C2B0" stroke-width="1.2"/>` + (o.gazeSuja ? `<path d="M-30 ${top-38} q14 -6 28 0 t26 0" stroke="#7A5230" stroke-width="4" fill="none"/>` : '');
+    if(o.pipeta) s += `<g transform="translate(18 ${o.pipFundo ? ap-6 : top-30})"><line x1="0" y1="0" x2="0" y2="-150" stroke="${VID}" stroke-width="5"/><line x1="0" y1="0" x2="0" y2="-150" stroke="#FFFFFF" stroke-width="2.4"/>${o.pipFundo ? `<line x1="0" y1="-2" x2="0" y2="-18" stroke="#6B4425" stroke-width="2.6"/>` : ''}<ellipse cx="0" cy="-164" rx="9" ry="14" fill="#C2483A"/></g>`;
+    return s + `</g>`;
+  },
+  tubo: (x, o={}, base=258) => {
+    let s = `<g transform="translate(${x} ${base})">`;
+    const topo = -150, nv = o.nivel ?? 0, yL = -26 - (topo+26)*-1*nv;
+    if(nv>0) s += `<path d="M-13 ${(-26 - 124*nv).toFixed(1)} L13 ${(-26 - 124*nv).toFixed(1)} L13 -26 L0 -4 L-13 -26 Z" fill="${o.cor||'#B08A5A'}" fill-opacity="${o.turvo ? .78 : .32}"/>`;
+    if(o.turvo){ const r = rng(9); for(let i=0;i<22;i++) s += `<circle cx="${((r()-.5)*22).toFixed(1)}" cy="${(-30 - r()*120*nv).toFixed(1)}" r="1.4" fill="#6B4425" opacity=".7"/>`; }
+    if(o.sed) s += `<path d="M-9 -20 L9 -20 L0 -5 Z" fill="#6B4425"/>`;
+    if(o.pel){ const yy = -26 - 124*nv; s += `<line x1="-13" x2="13" y1="${yy+2}" y2="${yy+2}" stroke="#A8742A" stroke-width="3.5"/>`; }
+    s += `<path d="M-15 ${topo} L15 ${topo} L15 -26 L0 -2 L-15 -26 Z" fill="${VID_F}" fill-opacity=".3" stroke="${VID}" stroke-width="2"/>`;
+    return s + `</g>`;
+  },
+  centrifuga: (x, gir=false) => `<g transform="translate(${x} 268)"><rect x="-78" y="-96" width="156" height="96" rx="14" fill="#DDE3E6" stroke="#7E8B91" stroke-width="2"/><ellipse cx="0" cy="-96" rx="64" ry="14" fill="#C7D0D4" stroke="#7E8B91" stroke-width="2"/><rect x="-46" y="-56" width="92" height="26" rx="4" fill="#1F2A2E"/><text x="0" y="-38" text-anchor="middle" font-size="12" fill="#7FE0B0" font-family="JetBrains Mono, monospace">${gir ? '2500 rpm' : '0 rpm'}</text>${gir ? `<path d="M-90 -110 a 92 30 0 0 1 60 -18" stroke="currentColor" stroke-width="2" fill="none"/><path d="M90 -110 a 92 30 0 0 0 -60 -18" stroke="currentColor" stroke-width="2" fill="none"/>` : ''}</g>`,
+  alca: (x, y, ang=-50) => `<g transform="translate(${x} ${y}) rotate(${ang})"><rect x="0" y="-4" width="90" height="8" rx="3" fill="#4A5A62"/><line x1="-34" y1="0" x2="0" y2="0" stroke="#B8B8B8" stroke-width="2"/><circle cx="-40" cy="0" r="6" fill="none" stroke="#B8B8B8" stroke-width="2"/></g>`,
+  termo: (x, y, t, quente) => `<g transform="translate(${x} ${y})"><rect x="-4" y="-80" width="8" height="80" rx="4" fill="#FFFFFF" stroke="${VID}" stroke-width="1.5"/><rect x="-2" y="${quente ? -60 : -28}" width="4" height="${quente ? 60 : 28}" fill="#C2483A"/><circle cx="0" cy="4" r="8" fill="#C2483A"/></g>` + K.txt(x, y+28, t, {w:700}),
+  relogio: (x, y, t) => `<g transform="translate(${x} ${y})"><circle r="26" fill="#FFFFFF" stroke="#4A5A62" stroke-width="3"/><line x1="0" y1="0" x2="0" y2="-17" stroke="#4A5A62" stroke-width="3" stroke-linecap="round"/><line x1="0" y1="0" x2="12" y2="4" stroke="#4A5A62" stroke-width="3" stroke-linecap="round"/></g>` + K.txt(x, y+46, t, {w:700}),
+  microscopio: (x, hi) => `<g transform="translate(${x} 268)"><rect x="-56" y="-14" width="112" height="14" rx="5" fill="#3E4C54"/><path d="M28 -14 L28 -150 q0 -24 -24 -24 L-6 -174" stroke="#3E4C54" stroke-width="16" fill="none"/><rect x="-40" y="-82" width="80" height="10" rx="2" fill="#56656E"/><rect x="-22" y="-210" width="20" height="56" rx="4" transform="rotate(-18 -12 -182)" fill="#3E4C54"/><rect x="-18" y="-156" width="10" height="34" fill="${hi ? 'var(--t)' : '#8A99A1'}"/><rect x="-4" y="-150" width="8" height="24" fill="#8A99A1"/></g>`,
+  funilB: (x, o={}) => {
+    const top = -236; let s = `<g transform="translate(${x} 268)"><rect x="70" y="-250" width="8" height="250" fill="#56656E"/><rect x="30" y="-200" width="48" height="8" fill="#56656E"/>`;
+    if(o.agua){ s += `<polygon points="-50,${top+30} 50,${top+30} 7,-150 -7,-150" fill="#9FD0EA" fill-opacity=".65"/>`; }
+    if(o.larvas){ [[-4,-158],[3,-162],[0,-168],[-2,-152],[4,-155]].forEach(([a,b])=>{ s += `<path d="M${a} ${b} q3 -4 0 -8 q-3 -4 0 -8" stroke="#3E3A2A" stroke-width="1.6" fill="none"/>`; }); }
+    if(o.fezes){ s += `<line x1="-52" x2="52" y1="${top+30}" y2="${top+30}" stroke="#7E8B91" stroke-width="3" stroke-dasharray="4 3"/><path d="M-46 ${top+28} q10 -10 26 -12 q24 -10 46 -2 q16 4 18 14 Z" fill="#FFFFFF" stroke="#C9C2B0"/><path d="M-36 ${top+24} q16 -16 40 -14 q22 2 30 14 Z" fill="#7A5230"/>`; }
+    s += `<path d="M-66 ${top} L66 ${top} L8 -150 L8 -138 L-8 -138 L-8 -150 Z" fill="${VID_F}" fill-opacity=".3" stroke="${VID}" stroke-width="2"/>`;
+    s += `<rect x="-6" y="-138" width="12" height="56" fill="#3B3B3B"/><rect x="-16" y="-114" width="32" height="${o.aberta ? 6 : 12}" rx="2" fill="#C9A14A" stroke="#7A5A1A"/>`;
+    if(o.coleta) s += `<line x1="0" y1="-82" x2="0" y2="-64" stroke="#9FD0EA" stroke-width="3" stroke-dasharray="3 3"/><path d="M-10 -56 L10 -56 L10 -16 L0 -4 L-10 -16 Z" fill="#9FD0EA" fill-opacity=".7"/><path d="M-12 -62 L12 -62 L12 -16 L0 -2 L-12 -16 Z" fill="none" stroke="${VID}" stroke-width="2"/>`;
+    return s + `</g>`;
+  }
+};
+const COR = {sal:'#BFE3F2', lug:'#C98A2A'};
+
+function passosDireto(prep){
+  const sal = prep==='sal', gota = COR[prep];
+  return [
+    {t:'Preparar a lâmina', ctx:'Lâmina limpa e identificada sobre a bancada. Ao lado, três frascos de reagentes.', q:'Que líquido você coloca no centro da lâmina?',
+     o: sal ? [['Uma gota de salina 0,85%','ok','A salina isotônica mantém os trofozoítos vivos e móveis e não deforma os cistos.'],['Uma gota de água destilada','err','A água é hipotônica: trofozoítos incham, se deformam e se rompem. Use salina isotônica.'],['Uma gota de lugol','err','O lugol cora, mas mata os trofozoítos, que param de se mover. Para ver motilidade, use salina; o lugol é a outra preparação direta.']]
+            : [['Uma gota de lugol','ok','O iodo cora o glicogênio e deixa visíveis os núcleos e cariossomas dos cistos.'],['Uma gota de salina 0,85%','err','Isso é o exame a fresco em salina. Nesta preparação o objetivo é corar as estruturas.'],['Uma gota de álcool 70%','err','O álcool desidrata e deforma o material; não é usado na preparação direta.']],
+     c: f => K.lamina(200, 200, {gota: f ? gota : null}) + K.reag(360,'Salina 0,85%','#BFE3F2') + K.reag(420,'Lugol','#C98A2A') + K.reag(480,'Água dest.','#E8F4F8')},
+    {t:'Retirar o material', ctx: 'Com um palito, você vai transferir fezes do frasco para a gota.', q:'Quanto material você retira?',
+     o:[['Uma porção pequena, de cerca de 2 mg (o tamanho da cabeça de um fósforo), de pontos diferentes da amostra, incluindo muco ou sangue se houver','ok','Pouco material, de vários pontos, dá um esfregaço fino e representativo. Muco e sangue concentram trofozoítos.'],
+        ['Uma porção grande, de cerca de 1 g','parc','O esfregaço fica espesso e opaco: a luz não atravessa e as estruturas ficam escondidas por detritos.',{deb:2.4, cisto:.6, trofo:.6, ovo_l:.6, ovo_p:.6, larva:.6}],
+        ['Só um traço da superfície externa das fezes','parc','Material de um único ponto, da superfície, é escasso e pouco representativo.',{cisto:.5, trofo:.5, ovo_l:.5, ovo_p:.5, larva:.5}]],
+     c: f => K.frasco(90, !!(bc.amostra && bc.amostra.liq)) + K.lamina(320, 200, {gota, k:1.3}) + (f ? K.palito(240, 120, 312, 196, true) : K.palito(70, 90, 100, 205, false))},
+    {t:'Homogeneizar', ctx:'As fezes estão sobre a gota. Agora é preciso misturar.', q:'Como deve ficar o esfregaço?',
+     o:[['Homogêneo e fino: dá para ler um texto impresso através dele','ok','É o teste prático de espessura: luz suficiente para ver as estruturas e material suficiente para encontrá-las.'],
+        ['Com grumos e partes espessas, para ganhar tempo','parc','Os grumos escondem formas parasitárias e dificultam o foco.',{deb:1.7, cisto:.75, trofo:.75, ovo_l:.8, ovo_p:.8, larva:.8}],
+        ['Espalhado até as bordas, escorrendo da lâmina','err','O material que escorre contamina a bancada e o microscópio. Mantenha o esfregaço na área que a lamínula vai cobrir.']],
+     c: f => K.lamina(260, 190, {papel: f, gota, esf: '#8A5E34', opac: f ? .35 : .8, grumos: !f}) + (f ? K.txt(260, 250, 'o texto impresso aparece através do esfregaço', {s:11}) : '')},
+    {t:'Cobrir com lamínula', ctx:'Esfregaço pronto. Falta a lamínula.', q:'Como você coloca a lamínula?',
+     o:[['Apoio uma borda na lâmina e baixo devagar, inclinada, até cobrir a gota','ok','O ar sai pela frente da lamínula e não se formam bolhas.'],
+        ['Solto a lamínula de cima, na horizontal','parc','O ar fica preso: aparecem muitas bolhas, que confundem a leitura e escondem estruturas.',{deb:1.5, cisto:.85, trofo:.85, ovo_l:.9, ovo_p:.9, larva:.9}],
+        ['Não uso lamínula','err','Sem lamínula a preparação seca, a superfície fica irregular e a objetiva pode encostar no material.']],
+     c: f => K.lamina(260, 190, {gota, esf:'#8A5E34', opac:.35, lam: f, lamIncl: !f})},
+    {t:'Momento do exame', ctx: sal ? 'Em fezes diarreicas podem existir trofozoítos, que degeneram fora do organismo.' : 'A preparação com lugol está pronta.', q: sal ? 'Quando a preparação deve ser examinada?' : 'Quando você examina a preparação?',
+     o: sal ? [['Logo; em fezes diarreicas, até cerca de 30 minutos após a emissão','ok','Trofozoítos degeneram e perdem a motilidade rapidamente fora do organismo.'],
+               ['Depois de 3 horas na bancada, junto com as outras amostras','parc','Os trofozoítos degeneram e deixam de ser reconhecíveis. Ovos de ancilostomídeo também podem eclodir.',{trofo:0}],
+               ['No dia seguinte, depois de guardar a amostra na geladeira','parc','A refrigeração preserva cistos e ovos, mas não mantém trofozoítos móveis e reconhecíveis.',{trofo:0}]]
+           : [['Logo, antes que a preparação seque nas bordas','ok','A preparação úmida mantém a coloração uniforme e as estruturas nítidas.'],
+              ['Uma hora depois','parc','A preparação seca nas bordas, formam-se cristais e a coloração fica irregular.',{deb:1.5, cisto:.7}],
+              ['Depois de aquecer a lâmina na chama','err','O calor deforma e destrói as estruturas; preparações a fresco não são aquecidas.']],
+     c: f => K.lamina(220, 190, {gota, esf:'#8A5E34', opac:.35, lam:true}) + K.relogio(420, 150, f ? (sal ? '≤ 30 min' : 'logo') : '?')},
+    {t:'Leitura', ctx:'A lâmina vai ao microscópio.', q:'Como você começa a leitura?',
+     o:[['Varrendo a lamínula inteira em 10× e confirmando em 40×','ok','A objetiva de 10× permite percorrer toda a área; a de 40× confirma a morfologia de cistos e detalhes dos ovos.'],
+        ['Direto na objetiva de 100× com óleo de imersão','err','Com 100× e óleo não se consegue varrer uma preparação a fresco; a imersão é usada em esfregaços corados e secos.'],
+        ['Só em 10×, sem confirmar em 40×','parc','Na objetiva de 10×, cistos de 5 a 20 µm são quase pontos: a identificação precisa da de 40×.',{}]],
+     c: f => K.microscopio(260, f) + K.lamina(420, 240, {gota, esf:'#8A5E34', opac:.35, lam:true, k:.8}) + (f ? K.txt(140, 120, '10× → 40×', {s:16, w:700}) : '')}
+  ];
+}
+const PROC = {
+  dir_sal: passosDireto('sal'),
+  dir_lug: passosDireto('lug'),
+  hpj: [
+    {t:'Preparar a suspensão', ctx:'Copo descartável, bastão e água ao lado do frasco.', q:'Como você prepara a suspensão?',
+     o:[['Coloco cerca de 2 g de fezes no copo, acrescento uns 5 mL de água e dissolvo bem com o bastão; depois completo com mais uns 20 mL de água','ok','Dissolver primeiro em pouca água desfaz os grumos e libera ovos, larvas e cistos.'],
+        ['Coloco as fezes inteiras direto no cálice cheio de água','err','Sem desfazer o material, as formas parasitárias ficam presas nos grumos e não sedimentam livremente.'],
+        ['Dissolvo em solução saturada de cloreto de sódio','err','Nesta técnica a suspensão é feita em água. Solução saturada de sal é usada na flutuação (Willis).']],
+     c: f => K.frasco(90) + K.copo(240, f ? .6 : 0, '#9C7040', 'copo') + K.palito(f ? 250 : 330, f ? 140 : 200, f ? 236 : 360, f ? 236 : 262)},
+    {t:'Filtrar', ctx:'A suspensão vai para o cálice cônico de sedimentação.', q:'Como você passa a suspensão para o cálice?',
+     o:[['Através de gaze cirúrgica dobrada em quatro, num funil apoiado sobre o cálice','ok','A gaze retém fibras e restos alimentares grosseiros e deixa passar ovos, larvas e cistos.'],
+        ['Despejo sem filtrar','parc','Fibras e restos vegetais vão para o sedimento e escondem as formas parasitárias.',{deb:2.4, cisto:.8, ovo_l:.85, ovo_p:.85, larva:.85}],
+        ['Filtro em papel de filtro','err','O papel de filtro retém também ovos, larvas e cistos: o sedimento ficaria praticamente sem parasitos.']],
+     c: f => K.copo(110, f ? .1 : .6, '#9C7040', 'copo') + K.calice(320, {funil:true, gazeSuja:f, nivel: f ? .22 : 0, cor:'#9C7040', turvo:f})},
+    {t:'Completar o volume', ctx:'A suspensão filtrada está no fundo do cálice.', q:'Com o que você completa o cálice?',
+     o:[['Com água, até cerca de três quartos do cálice','ok','Na coluna de água, as formas mais densas que a água, leves ou pesadas, descem ao fundo.'],
+        ['Com solução saturada de cloreto de sódio','err','Uma solução densa faz os ovos leves flutuarem: esse é o princípio do método de Willis, não da sedimentação.'],
+        ['Com solução de sulfato de zinco a 33%','err','A solução densa é a da centrífugo-flutuação (Faust). Aqui a separação é por gravidade, em água.']],
+     c: f => K.calice(260, {nivel: f ? .75 : .22, cor:'#9C7040', turvo:true}) + K.reag(430, 'Água', '#DCEFF7')},
+    {t:'Repouso', ctx:'O cálice está cheio e turvo.', q:'Quanto tempo você deixa em repouso?',
+     o:[['De 2 a 24 horas, sem mexer','ok','O tempo permite que até as formas mais leves, como os cistos, cheguem ao fundo.'],
+        ['10 minutos','parc','Os ovos pesados já desceram, mas cistos e ovos leves ainda estão em suspensão.',{cisto:.25, ovo_l:.5, larva:.6}],
+        ['2 horas, agitando a cada 10 minutos','err','Agitar ressuspende o que já sedimentou. O repouso precisa ser sem perturbação.']],
+     c: f => K.calice(240, {nivel:.75, cor:'#9C7040', turvo:!f, sed:f}) + K.relogio(420, 140, f ? '2 h ou mais' : '0 h')},
+    {t:'Coletar o sedimento', ctx:'O líquido clareou e há um sedimento no fundo do cálice.', q:'Como você coleta o material para a lâmina?',
+     o:[['Fecho a ponta de cima da pipeta com o dedo, desço até o fundo, solto o dedo e aspiro um pouco do sedimento','ok','Com a pipeta fechada, o líquido de cima não entra na descida; o sedimento concentra as formas parasitárias.'],
+        ['Pego uma gota da superfície do líquido','parc','A superfície tem pouquíssimas formas parasitárias: elas desceram para o fundo.',{cisto:.08, ovo_l:.08, ovo_p:.05, larva:.08}],
+        ['Viro o cálice inteiro numa placa','err','O sedimento se mistura de novo a todo o volume e se perde a concentração.']],
+     c: f => K.calice(260, {nivel:.75, cor:'#9C7040', sed:true, pipeta:true, pipFundo:f})},
+    {t:'Montar a lâmina', ctx:'Sedimento na pipeta.', q:'Como você monta a preparação?',
+     o:[['Uma gota do sedimento, uma gota de lugol e lamínula','ok','O lugol cora os cistos; a lamínula deixa a preparação plana e fina.'],
+        ['Três gotas grandes de sedimento sob a mesma lamínula','parc','O líquido transborda, a lamínula flutua e a preparação fica espessa e instável.',{deb:1.6}],
+        ['Uma gota do sedimento, sem lamínula','err','Sem lamínula a preparação seca e a objetiva pode tocar o material.']],
+     c: f => K.lamina(230, 190, {gota: f ? '#B07A30' : '#8A6A40', esf: f ? '#7A5230' : null, opac:.35, lam:f}) + K.reag(430, 'Lugol', '#C98A2A')}
+  ],
+  faust: [
+    {t:'Preparar a suspensão', ctx:'Frasco, copo, gaze e tubo de centrífuga de 15 mL.', q:'Como você começa?',
+     o:[['Dissolvo cerca de 1 parte de fezes em 10 partes de água e filtro por gaze dobrada para o tubo de centrífuga','ok','A diluição e a filtração removem as partículas grosseiras antes das centrifugações.'],
+        ['Coloco as fezes direto na solução de sulfato de zinco','err','Sem as lavagens com água, gorduras e detritos flutuam junto e a densidade da solução se altera.'],
+        ['Coloco as fezes sem diluir no tubo','err','Fezes sem diluir não se separam na centrifugação e entopem o tubo.']],
+     c: f => K.frasco(80) + K.copo(200, f ? .2 : 0, '#9C7040', 'copo') + K.tubo(360, f ? {nivel:.85, turvo:true, cor:'#9C7040'} : {})},
+    {t:'Centrifugar', ctx:'O tubo vai para a centrífuga, equilibrado por outro tubo com o mesmo volume.', q:'Que centrifugação você usa?',
+     o:[['Cerca de 1 minuto a 2.500 rpm','ok','Basta para sedimentar ovos e cistos sem compactar demais o sedimento.'],
+        ['10 minutos na velocidade máxima','parc','O sedimento compacta, fica difícil de ressuspender e os cistos podem se deformar.',{cisto:.7}],
+        ['Não centrifugo: deixo o tubo parado 1 minuto','err','Em 1 minuto quase nada sedimenta por gravidade; é a centrifugação que acelera a separação.']],
+     c: f => K.centrifuga(200, f) + K.tubo(400, f ? {nivel:.85, cor:'#9C7040', sed:true, turvo:true} : {nivel:.85, turvo:true, cor:'#9C7040'})},
+    {t:'Lavar o sedimento', ctx:'Depois da centrifugação, o sobrenadante está turvo.', q:'O que você faz?',
+     o:[['Descarto o sobrenadante, ressuspendo o sedimento em água e centrifugo de novo, repetindo até o sobrenadante ficar claro','ok','As lavagens removem gorduras e partículas finas que depois flutuariam junto com os cistos.'],
+        ['Sigo direto para a solução de sulfato de zinco','parc','A película final sai cheia de gordura e detritos, que escondem os cistos.',{deb:2.2, cisto:.75}],
+        ['Descarto também o sedimento','err','Nesta fase o sedimento é onde estão os parasitos; só o sobrenadante é descartado.']],
+     c: f => K.tubo(200, {nivel:.85, cor:'#9C7040', sed:true, turvo:!f}) + K.tubo(300, {nivel:.85, cor:'#9C7040', sed:true, turvo:!f}) + (f ? K.txt(250, 300, '2ª e 3ª lavagens: sobrenadante claro', {s:12}) : K.txt(250, 300, '1ª centrifugação', {s:12}))},
+    {t:'Solução de flutuação', ctx:'Último sobrenadante descartado. Só resta o sedimento.', q:'Em que você ressuspende o sedimento?',
+     o:[['Solução de sulfato de zinco a 33% (densidade ≈ 1,18)','ok','A solução é mais densa que cistos e ovos leves, que sobem; ovos pesados e detritos ficam no fundo.'],
+        ['Água','err','Em água, cistos e ovos não flutuam e a superfície ficaria vazia. A flutuação exige uma solução mais densa que as formas parasitárias.'],
+        ['Sulfato de zinco a 10%','err','A densidade é baixa demais: cistos e ovos leves não flutuam.']],
+     c: f => K.tubo(240, f ? {nivel:.85, cor:'#CFE2EA', turvo:true} : {sed:true}) + K.reag(400, 'ZnSO₄ 33%', '#DCEFF7') + K.reag(470, 'Água', '#EAF6FA')},
+    {t:'Centrifugar de novo', ctx:'O sedimento está ressuspenso na solução de sulfato de zinco.', q:'E agora?',
+     o:[['Centrifugo de novo, cerca de 1 minuto a 2.500 rpm','ok','A centrifugação acelera a subida dos cistos e ovos leves até a superfície.'],
+        ['Não centrifugo e coleto logo a superfície','parc','Sem centrifugar, a subida é lenta e incompleta.',{cisto:.5, ovo_l:.5}],
+        ['Centrifugo depois de acrescentar água para completar o tubo','err','A água dilui a solução e reduz a densidade: as formas parasitárias deixam de flutuar.']],
+     c: f => K.centrifuga(200, f) + K.tubo(400, f ? {nivel:.95, cor:'#CFE2EA', sed:true, pel:true} : {nivel:.85, cor:'#CFE2EA', turvo:true})},
+    {t:'Coletar a película', ctx:'Na superfície do tubo formou-se uma película fina.', q:'Onde e como você coleta o material?',
+     o:[['Com uma alça de platina, toco a película da superfície, sem tirar o tubo da centrífuga nem agitá-lo','ok','Os cistos e ovos leves estão na película; agitar o tubo os mistura de novo ao líquido.'],
+        ['Com uma pipeta, aspiro o fundo do tubo','parc','No fundo ficam detritos e ovos pesados; os cistos que flutuaram ficaram na superfície.',{cisto:.08, ovo_l:.1, larva:.3, ovo_p:6, deb:1.8}],
+        ['Tiro o tubo e agito antes de coletar','parc','Agitar desfaz a película e redistribui os cistos no líquido.',{cisto:.3, ovo_l:.3}]],
+     c: f => K.tubo(260, {nivel:.95, cor:'#CFE2EA', sed:true, pel:true}) + K.alca(f ? 330 : 400, f ? 104 : 120, f ? -40 : -20) + (f ? `<circle cx="420" cy="96" r="40" fill="#FFFFFF" stroke="currentColor" stroke-width="1.5"/>` + [[404,86],[426,92],[414,108],[436,106]].map(([a,b])=>`<ellipse cx="${a}" cy="${b}" rx="6" ry="4.5" fill="#E2C27A" stroke="#7A5A1A"/>`).join('') + K.txt(420, 156, 'cistos na película', {s:11}) : '')},
+    {t:'Montar e ler', ctx:'O material da película está na lâmina.', q:'Quando você lê a lâmina?',
+     o:[['Acrescento uma gota de lugol, cubro com lamínula e leio logo','ok','Em contato prolongado com a solução densa, os cistos murcham e se deformam.'],
+        ['Deixo a lâmina pronta e leio 1 hora depois','parc','Os cistos murcham e se deformam na solução hipertônica e ficam difíceis de identificar.',{cisto:.4}],
+        ['Leio sem lamínula','err','Sem lamínula a preparação seca e a objetiva pode tocar o material.']],
+     c: f => K.lamina(220, 190, {gota:'#B07A30', lam:f}) + K.relogio(420, 150, f ? 'logo' : '?')}
+  ],
+  baer: [
+    {t:'Conferir a amostra', ctx:'Chegou um frasco para pesquisa de larvas.', q:'Que amostra serve para o Baermann-Moraes?',
+     o:[['Fezes frescas, à temperatura ambiente, sem conservante','ok','O método depende de larvas vivas, que migram ativamente.'],
+        ['Fezes que passaram a noite na geladeira','parc','O frio imobiliza e mata parte das larvas: menos larvas migram.',{larva:.15}],
+        ['Fezes em formol a 10%','parc','O formol mata as larvas, e larvas mortas não migram: o método fica negativo.',{larva:0}]],
+     c: f => K.frasco(200, false, f ? 'fresca, sem conservante' : 'amostra') + K.termo(380, 220, f ? '25 °C' : '? °C', false)},
+    {t:'Montar o aparelho', ctx:'Funil de vidro preso a um suporte, com tubo de borracha e pinça; tela metálica e gaze.', q:'Como você monta?',
+     o:[['Coloco cerca de 8 a 10 g de fezes sobre gaze dobrada, apoiada numa tela, dentro do funil, com o tubo de borracha fechado pela pinça','ok','As fezes ficam acima e a água vai ficar em contato com elas por baixo; a pinça mantém a água no funil.'],
+        ['Misturo as fezes com a água dentro do funil','err','Misturar arrasta detritos e ovos para o fundo. As fezes ficam sobre a gaze; só as larvas, que se movem, atravessam.'],
+        ['Deixo o tubo de borracha aberto','err','A água escorreria toda antes de as larvas migrarem.']],
+     c: f => K.funilB(240, {fezes:f}) + (f ? '' : K.frasco(430))},
+    {t:'Água', ctx:'O aparelho está montado, ainda sem água.', q:'Que água você coloca no funil?',
+     o:[['Água a cerca de 40–45 °C, até encostar nas fezes','ok','O termo-hidrotropismo atrai as larvas para a água morna; elas atravessam a gaze e descem até o fundo do funil.'],
+        ['Água fria da torneira','parc','Sem o estímulo da água morna, menos larvas saem das fezes.',{larva:.3}],
+        ['Água fervente','parc','Água muito quente mata as larvas, que deixam de migrar.',{larva:0}]],
+     c: f => K.funilB(220, {fezes:true, agua:f}) + K.termo(420, 230, f ? '45 °C' : '? °C', f)},
+    {t:'Esperar', ctx:'A água morna está em contato com as fezes.', q:'Quanto tempo você espera?',
+     o:[['Cerca de 1 hora, sem mexer','ok','É o tempo para as larvas saírem das fezes e se acumularem no fundo do funil, logo acima da pinça.'],
+        ['10 minutos','parc','Pouco tempo: parte das larvas ainda está nas fezes.',{larva:.35}],
+        ['1 hora, agitando o funil a cada 5 minutos','err','Agitar ressuspende detritos e larvas e mistura tudo ao volume de água.']],
+     c: f => K.funilB(220, {fezes:true, agua:true, larvas:f}) + K.relogio(420, 150, f ? '1 h' : '0 h')},
+    {t:'Coletar', ctx:'As larvas devem estar no fundo do funil.', q:'Como você coleta?',
+     o:[['Abro a pinça, recolho os primeiros 5 a 7 mL num tubo e centrifugo cerca de 1 minuto em baixa rotação','ok','As larvas se acumulam logo acima da pinça; os primeiros mililitros as concentram.'],
+        ['Pego com pipeta da superfície da água, perto das fezes','parc','As larvas desceram para o fundo do funil; na superfície há poucas.',{larva:.1}],
+        ['Escorro todo o volume do funil num cálice grande','parc','As larvas se diluem no volume todo e se perde a concentração.',{larva:.4}]],
+     c: f => K.funilB(220, {fezes:true, agua:true, larvas:!f, aberta:f, coleta:f})},
+    {t:'Montar a lâmina', ctx:'Sedimento do tubo coletado.', q:'Como você monta a preparação?',
+     o:[['Uma gota do sedimento com uma gota de lugol, sob lamínula','ok','O lugol mata e imobiliza as larvas e realça vestíbulo bucal, esôfago e primórdio genital.'],
+        ['Uma gota do sedimento sem lugol, para ver as larvas se movendo','parc','Serve para ver a motilidade, mas larvas em movimento são difíceis de examinar em detalhe. Na identificação, o lugol ajuda.',{}],
+        ['Uma gota do sedimento sem lamínula','err','Sem lamínula a preparação seca e a objetiva pode tocar o material.']],
+     c: f => K.lamina(230, 190, {gota: f ? '#B07A30' : '#BFE3F2', lam:f}) + K.reag(430, 'Lugol', '#C98A2A')}
+  ]
+};
+
+const pr = {tec:null, i:0, feito:false, primeira:[], ef:{}, cons:[], ordem:[]};
+function procIniciar(tec){
+  pr.tec = tec; pr.i = 0; pr.feito = false; pr.primeira = []; pr.ef = {}; pr.cons = []; pr.tentou = false;
+  $('#pr-titulo').textContent = TEC_B[tec].n;
+  bcEtapa(3); procRender(); $('#bc-passo-proc').scrollIntoView();
+}
+function procAplica(ef){ Object.entries(ef||{}).forEach(([k,v])=>{ pr.ef[k] = (pr.ef[k] ?? 1) * v; }); }
+function procRender(){
+  const P = PROC[pr.tec], S = P[pr.i];
+  if(!S){ return procResumo(); }
+  const svg = $('#pr-svg'); svg.style.color = 'var(--ink)'; svg.innerHTML = K.fundo() + S.c(pr.feito);
+  $('#pr-prog').innerHTML = P.map((p,i)=>`<span class="${i<pr.i?'feito':i===pr.i?'at':''}">${i+1}. ${esc(p.t)}</span>`).join('');
+  const ordem = shuffle(S.o.map((_,i)=>i), rng(pr.i*31 + pr.tec.length*7 + 3));
+  $('#pr-passo').innerHTML = `<span class="eyebrow">Passo ${pr.i+1} de ${P.length}</span><h4>${esc(S.t)}</h4><p class="small muted">${esc(S.ctx)}</p><p style="font-weight:700; margin-top:6px">${esc(S.q)}</p>
+    <div class="opcoes" id="pr-ops">${ordem.map((oi,n)=>`<button class="opcao" data-oi="${oi}"><span class="let">${'abc'[n]})</span><span><span>${esc(S.o[oi][0])}</span><span class="just" hidden></span></span></button>`).join('')}</div>
+    <div class="row" style="margin-top:6px"><button class="btn" id="pr-prox" hidden>${pr.i===P.length-1 ? 'Concluir a técnica' : 'Próximo passo'}</button></div>`;
+  $$('#pr-ops .opcao').forEach(b=>b.onclick = () => {
+    if(pr.feito) return; const oi = +b.dataset.oi, [, tipo, fb, ef] = S.o[oi], j = $('.just', b);
+    j.textContent = fb; j.hidden = false;
+    if(!pr.tentou){ pr.primeira[pr.i] = tipo==='ok'; pr.tentou = true; }
+    if(tipo==='err'){ b.classList.add('err'); b.disabled = true; return; }
+    b.classList.add(tipo==='ok' ? 'ok' : 'mais');
+    if(tipo==='parc'){ procAplica(ef); pr.cons.push({t:S.t, x:fb}); }
+    pr.feito = true; $$('#pr-ops .opcao').forEach(x=>{ if(x!==b) x.disabled = true; });
+    svg.innerHTML = K.fundo() + S.c(true);
+    $('#pr-prox').hidden = false; $('#pr-prox').focus();
+  });
+  $('#pr-prox').onclick = () => { pr.i++; pr.feito = false; pr.tentou = false; procRender(); };
+}
+function procResumo(){
+  const P = PROC[pr.tec], ac = pr.primeira.filter(Boolean).length;
+  $('#pr-prog').innerHTML = P.map((p,i)=>`<span class="feito">${i+1}. ${esc(p.t)}</span>`).join('');
+  const svg = $('#pr-svg'); svg.innerHTML = K.fundo() + K.lamina(260, 190, {gota: TEC_B[pr.tec].prep==='lug' ? '#B07A30' : '#BFE3F2', esf:'#8A5E34', opac:.3, lam:true}) + K.txt(260, 120, 'Lâmina pronta', {s:18, w:700});
+  $('#pr-passo').innerHTML = `<span class="eyebrow">Técnica concluída</span><h4>${esc(TEC_B[pr.tec].n)}</h4>
+    <div class="fb ${ac===P.length ? 'ok' : 'mais'}"><b>${ac} de ${P.length} passos certos na primeira tentativa.</b></div>
+    ${pr.cons.length ? `<p style="margin-top:6px"><b>Escolhas que vão afetar a lâmina:</b></p><ul class="small" style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:4px">${pr.cons.map(c=>`<li><b>${esc(c.t)}:</b> ${esc(c.x)}</li>`).join('')}</ul>` : '<p class="small">Nenhuma escolha comprometeu a preparação: a lâmina sai como numa execução correta.</p>'}
+    <div class="row" style="margin-top:10px"><button class="btn" id="pr-ir">Levar a lâmina ao microscópio</button><button class="btn sec" id="pr-refazer">Refazer a técnica</button></div>`;
+  $('#pr-ir').onclick = () => bcPrepara(pr.tec, {ef:pr.ef, cons:pr.cons.slice(), ac, n:P.length});
+  $('#pr-refazer').onclick = () => procIniciar(pr.tec);
+}
 init(); initMod01(); initBancada(); initMod3467();
+$('#pr-voltar').onclick = () => { bcEtapa(2); $('#bc-passo2').scrollIntoView(); };
+$('#pr-pular').onclick = () => bcPrepara(pr.tec);
 (function(){ const h = (location.hash||'').replace('#',''); ir(VIEWS.includes(h) ? h : 'inicio'); })();
 </script>
 
