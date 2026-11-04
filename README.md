@@ -1,6 +1,6 @@
 # Enteroparasitos em Foco
 
-Site didático de parasitologia humana para a graduação, com foco nos parasitos intestinais. Reúne oito módulos (fundamentos, protozoários, nematoides, cestódeos, esquistossomose, diagnóstico laboratorial, imunologia e epidemiologia), microscópio virtual e uma bancada de exame parasitológico de fezes (EPF).
+Site didático de parasitologia humana para a graduação, com foco nos parasitos intestinais. Reúne oito módulos (fundamentos, protozoários, nematoides, cestódeos, esquistossomose, diagnóstico laboratorial, imunologia e epidemiologia), uma bancada de exame parasitológico de fezes (EPF) e o Laminário, um microscópio virtual com as 22 lâminas do site e a explicação de cada parasito.
 
 Realização: LaPaHV (Laboratório de Parasitologia Humana e Veterinária) · UFRN.
 

@@ -355,6 +355,48 @@ svg text{font-family:var(--f-body)}
 .pr-prog span{font-size:.72rem}
 #pr-passo h4{margin-top:2px}
 @media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important} }
+
+/* ---- Laminário (microscópio no estilo do Microcosmo) ---- */
+:root{--c-lam:#1F6475; --s-lam:#DCEEF2; --b-lam:#1B4E5C}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--c-lam:#7CCADB; --s-lam:#13292E} }
+:root[data-theme="dark"]{--c-lam:#7CCADB; --s-lam:#13292E}
+.mod-lam{--t:var(--c-lam); --s:var(--s-lam); --b:var(--b-lam)}
+.lm-wrap{border:2px solid color-mix(in srgb, var(--t) 35%, transparent)}
+.lm-grid{display:grid; grid-template-columns:250px minmax(0,1fr) 260px; gap:18px; align-items:start}
+.lm-label{font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--muted)}
+.lm-pill{background:var(--s); color:var(--ink); border:1px solid color-mix(in srgb, var(--t) 30%, transparent)}
+.lm-filtro .chip{padding:4px 10px; font-size:.8rem}
+.lm-itens{display:flex; flex-direction:column; gap:6px; max-height:640px; overflow:auto; padding:2px}
+.lam-btn{display:flex; align-items:center; gap:8px; text-align:left; border:1px solid var(--line); background:var(--surface); border-radius:12px; padding:5px 10px 5px 5px; cursor:pointer; min-width:0}
+.lam-btn:hover{border-color:var(--t)}
+.lam-btn svg{width:44px; height:44px; flex:none; display:block}
+.lam-btn b{display:block; font-weight:700; font-size:.84rem; line-height:1.25}
+.lam-btn small{display:block; font-size:.74rem; color:var(--muted)}
+.lam-btn .vis{margin-left:auto; color:var(--ok); font-weight:700; padding-left:4px}
+.lam-btn[aria-pressed="true"]{border-color:var(--t); background:var(--s); box-shadow:0 0 0 2px var(--t) inset}
+.lm-campo{background:#0b0f0d; border-radius:20px; padding:10px 12px; display:flex; flex-direction:column; gap:8px}
+.lm-top{display:flex; justify-content:space-between; align-items:center; gap:8px; color:#cfd8d2; font-family:var(--f-mono); font-size:.78rem}
+.lm-cbtn{background:#1d2622; color:#e4ebe6; border:1px solid #334039; border-radius:8px; padding:4px 10px; cursor:pointer; font-size:.78rem}
+.lm-vis{max-width:540px}
+.lm-vis svg{touch-action:none; cursor:grab; filter:none; transition:none}
+.lm-vis .scope-prep{left:8px; bottom:8px}
+.lm-ctl{background:var(--surface-2); border-radius:14px; padding:14px; display:flex; flex-direction:column; gap:10px}
+.lm-ctl .seg button{padding:6px 10px; font-size:.84rem}
+.lm-sl{display:flex; flex-direction:column; gap:2px; font-size:.86rem; font-weight:700}
+.lm-sl input{width:100%; accent-color:var(--t)}
+.lm-charriot{display:grid; grid-template-columns:repeat(3,46px); gap:4px; justify-content:center}
+.lm-charriot .btn{padding:8px 0; font-size:1.05rem; touch-action:none}
+.lm-info{display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:26px; align-items:start; border-top:1px solid var(--line); padding-top:18px}
+.est-list{margin:0; padding-left:1.1em; display:flex; flex-direction:column; gap:3px}
+.lm-dl{margin:0; display:flex; flex-direction:column; gap:10px}
+.lm-dl dt{font-family:var(--f-display); font-weight:700}
+.lm-dl dd{margin:2px 0 0; font-size:.94rem}
+.lm-inv{border-left:4px solid var(--t); background:var(--s); padding:10px 14px; border-radius:6px; font-size:.94rem}
+.destaques{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:14px}
+.destaque-bc.lm-dest{background:#1B4E5C}
+.destaque-bc.lm-dest .db-ir{color:#BFEAF3}
+@media (max-width:1150px){ .lm-grid{grid-template-columns:minmax(0,1fr) 260px} .lm-lst{grid-column:1/-1} .lm-itens{flex-direction:row; overflow-x:auto; max-height:none; padding-bottom:6px} .lam-btn{width:230px; flex:none} }
+@media (max-width:760px){ .lm-grid, .lm-info{grid-template-columns:minmax(0,1fr)} }
 </style>
 </head>
 <body>
@@ -373,6 +415,7 @@ svg text{font-family:var(--f-body)}
       <button class="nl" data-ir="imunologia">Imunologia</button>
       <button class="nl" data-ir="epidemiologia">Epidemiologia</button>
       <button class="nl nl-destaque" data-ir="bancada">Bancada</button>
+      <button class="nl nl-destaque" data-ir="laminario">Laminário</button>
       <div class="ferr">
         <button class="btn-ic so-estreito" id="b-mod">Módulos</button>
         <button class="btn-ic" id="b-glos" title="Glossário e busca">Glossário</button>
@@ -394,6 +437,7 @@ svg text{font-family:var(--f-body)}
   <button data-ir="imunologia">Módulo 6 · Imunologia</button>
   <button data-ir="epidemiologia">Módulo 7 · Epidemiologia</button>
   <button data-ir="bancada">Bancada de EPF</button>
+  <button data-ir="laminario">Laminário (microscópio)</button>
   <button id="m-glos">Glossário e busca</button>
 </div>
 
@@ -410,6 +454,7 @@ svg text{font-family:var(--f-body)}
         <div><b class="mono">8</b><span>módulos</span></div>
         <div><b class="mono">32</b><span>ferramentas interativas</span></div>
         <div><b class="mono">8</b><span>amostras na bancada de EPF</span></div>
+        <div><b class="mono">22</b><span>lâminas no laminário</span></div>
       </div>
     </div>
     <figure class="campo-hero" style="margin:0">
@@ -418,12 +463,18 @@ svg text{font-family:var(--f-body)}
     </figure>
   </div>
 
-  <div class="grupo">
+  <div class="grupo destaques">
     <button class="destaque-bc" data-ir="bancada">
       <span class="eyebrow" style="color:#C9D6DE">Simulação de rotina</span>
       <span class="db-t">Bancada de EPF</span>
       <span class="db-d">Receba uma amostra com pedido clínico, escolha a técnica, percorra a lamínula inteira com o charriot, identifique parasitos, comensais e artefatos misturados, e emita o laudo. A correção mostra o que você perdeu e o que a técnica nem chegou a recuperar.</span>
       <span class="db-ir">Abrir a bancada →</span>
+    </button>
+    <button class="destaque-bc lm-dest" data-ir="laminario">
+      <span class="eyebrow" style="color:#C9E3EA">Microscópio virtual</span>
+      <span class="db-t">Laminário</span>
+      <span class="db-d">Todas as 22 lâminas do site num microscópio com objetivas, foco, luz, diafragma e charriot. Cada lâmina traz as estruturas para identificar e a explicação do parasito: hábitat, transmissão, doença e diagnóstico.</span>
+      <span class="db-ir">Abrir o laminário →</span>
     </button>
   </div>
 
@@ -779,6 +830,82 @@ svg text{font-family:var(--f-body)}
     <div class="row" style="margin-top:14px"><button class="btn sec" id="bc-gabarito">Ver gabarito na lâmina</button><button class="btn sec" id="bc-outra">Outra amostra</button></div>
   </section>
   <p class="base" style="margin-top:28px"><b>Base:</b> princípios das técnicas em De Carli, <i>Parasitologia Clínica</i>, e Neves; diâmetro de campo = 18 mm ÷ objetiva; formas desenhadas a partir das medidas de referência do CDC DPDx. As proporções de recuperação por técnica são didáticas. Amostras e pedidos fictícios.</p>
+</section>
+
+
+<!-- ================= LAMINÁRIO ================= -->
+<section id="v-laminario" data-view="laminario" class="mod-lam" hidden>
+  <div class="faixa">
+    <span class="selo">Laminário</span>
+    <p class="eb">Microscópio virtual · Todas as lâminas do site</p>
+    <h2>Laminário de enteroparasitos</h2>
+    <p>As 22 lâminas do site num só microscópio, em escala real: cistos, trofozoítos, oocistos, ovos, larvas e os artefatos que mais confundem. Escolha a lâmina, ajuste foco, luz e diafragma, percorra a preparação com o charriot e leia, ao lado, o que cada parasito é e como se diagnostica.</p>
+    <svg class="marca-agua" viewBox="0 0 100 100" aria-hidden="true"><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><circle cx="50" cy="50" r="34"/><path d="M50 16v12M50 72v12M16 50h12M72 50h12"/><circle cx="50" cy="50" r="8"/></g></svg>
+  </div>
+
+  <section class="secao" id="lm-bancada">
+    <div class="painel stack lm-wrap">
+      <div class="row" style="justify-content:space-between">
+        <div class="stack" style="gap:2px"><span class="eyebrow" style="color:var(--t)">Bancada virtual</span><h3>Microscópio óptico de campo claro</h3></div>
+        <span class="pill lm-pill">Ocular 10× · número de campo 18 mm</span>
+      </div>
+      <div class="lm-grid">
+        <div class="lm-lst stack" style="gap:8px">
+          <span class="lm-label">Lâminas</span>
+          <div class="chips lm-filtro" id="lm-filtro" role="group" aria-label="Filtrar lâminas por grupo"></div>
+          <div class="lm-itens" id="lm-itens"></div>
+          <p class="small muted" id="lm-prog"></p>
+        </div>
+        <div class="stack" style="gap:10px" id="lm-campo">
+          <div class="lm-campo">
+            <div class="lm-top"><span>◉ CAMPO DE OBSERVAÇÃO</span><span id="lm-mag"></span></div>
+            <div class="lm-vis scope-view">
+              <svg id="lm-svg" viewBox="0 0 400 400" role="img" tabindex="0" aria-label="Campo do microscópio. Arraste ou use as setas do teclado para mover a lâmina."></svg>
+              <span class="scope-prep" id="lm-prep-tag"></span>
+            </div>
+            <div class="lm-top"><span id="lm-pos"></span><button type="button" class="lm-cbtn" data-lm-c>⌖ Centralizar</button></div>
+          </div>
+          <div class="oc-read" id="lm-read"></div>
+          <div class="row oc-row"><span class="lm-label">Objetiva</span><div class="seg" id="lm-obj" role="group" aria-label="Objetiva"><button type="button" data-o="4">4×</button><button type="button" data-o="10">10×</button><button type="button" data-o="40">40×</button><button type="button" data-o="100">100× (imersão)</button></div></div>
+          <div class="row oc-row"><span class="lm-label">Aproximar na tela</span><div class="seg" id="lm-zoom" role="group" aria-label="Aproximar a imagem na tela"><button type="button" data-z="1">1×</button><button type="button" data-z="2">2×</button><button type="button" data-z="4">4×</button><button type="button" data-z="8">8×</button></div><span class="small muted">só amplia a imagem; não muda a objetiva</span></div>
+          <p class="aviso" id="lm-oleo" hidden>Objetiva de imersão (100×): no microscópio real, pinga-se uma gota de óleo de imersão sobre a lâmina e a objetiva toca o óleo. O campo fica pequeno (0,18 mm) e o foco é muito sensível: use só o micrométrico.</p>
+          <p class="small muted">Arraste o campo ou use as setas. Comece sempre pela menor objetiva e só depois aumente.</p>
+        </div>
+        <div class="lm-ctl">
+          <span class="lm-label">Preparação</span>
+          <div class="seg" id="lm-prep" role="group" aria-label="Preparação"></div>
+          <span class="lm-label">Ajustes</span>
+          <label class="lm-sl"><span class="row" style="justify-content:space-between"><span>Foco macrométrico</span><output class="mono" id="lm-mac-v"></output></span><input type="range" id="lm-mac" min="0" max="100" step="1"></label>
+          <label class="lm-sl"><span class="row" style="justify-content:space-between"><span>Foco micrométrico</span><output class="mono" id="lm-mic-v"></output></span><input type="range" id="lm-mic" min="-10" max="10" step="0.5"></label>
+          <label class="lm-sl"><span class="row" style="justify-content:space-between"><span>Intensidade da luz</span><output class="mono" id="lm-luz-v"></output></span><input type="range" id="lm-luz" min="20" max="100" step="1"></label>
+          <label class="lm-sl"><span class="row" style="justify-content:space-between"><span>Diafragma (contraste)</span><output class="mono" id="lm-dia-v"></output></span><input type="range" id="lm-dia" min="70" max="150" step="1"></label>
+          <span class="lm-label">Charriot (move a lâmina)</span>
+          <div class="lm-charriot" id="lm-charriot">
+            <span></span><button type="button" class="btn" data-mv="0,-1" aria-label="Mover a lâmina para cima">↑</button><span></span>
+            <button type="button" class="btn" data-mv="-1,0" aria-label="Mover a lâmina para a esquerda">←</button><button type="button" class="btn" data-lm-c aria-label="Centralizar">⌖</button><button type="button" class="btn" data-mv="1,0" aria-label="Mover a lâmina para a direita">→</button>
+            <span></span><button type="button" class="btn" data-mv="0,1" aria-label="Mover a lâmina para baixo">↓</button><span></span>
+          </div>
+          <label class="row small" style="flex-wrap:nowrap; gap:8px"><input type="checkbox" id="lm-fino"> Passo fino</label>
+          <label class="row small" style="flex-wrap:nowrap; gap:8px"><input type="checkbox" id="lm-lab"> Identificar estruturas</label>
+          <p class="fb" id="lm-status" aria-live="polite" style="margin:0"></p>
+        </div>
+      </div>
+
+      <div class="lm-info">
+        <div class="stack" id="lm-ficha" style="gap:10px"></div>
+        <div class="stack" style="gap:12px">
+          <div class="stack" id="lm-par" style="gap:10px"></div>
+          <div class="stack" style="gap:6px">
+            <h4>Caderno desta lâmina</h4>
+            <textarea id="lm-nota" rows="4" placeholder="O que você observou? Descreva forma, tamanho, parede e conteúdo antes de concluir."></textarea>
+            <span class="small muted" id="lm-nota-msg"></span>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="justify-content:space-between"><button type="button" class="btn sec" id="lm-ant">← Lâmina anterior</button><button type="button" class="btn" id="lm-prox">Próxima lâmina →</button></div>
+    </div>
+    <p class="base"><b>Base:</b> medidas e características morfológicas de Neves, <i>Parasitologia Humana</i>; De Carli, <i>Parasitologia Clínica</i>; e CDC DPDx. Desenhos esquemáticos originais, na mesma escala (diâmetro de campo = 18 mm ÷ objetiva). Foco, luz e diafragma são simulações didáticas.</p>
+  </section>
 </section>
 
 <!-- ================= MÓDULO 3 ================= -->
@@ -1906,13 +2033,13 @@ function desenhaQ(id, prep, r){
   return desenha(id, p, r);
 }
 /* ============ navegação ============ */
-const VIEWS = ['inicio','fundamentos','protozoarios','nematoides','cestodeos','trematodeos','diagnostico','imunologia','epidemiologia','bancada'];
+const VIEWS = ['inicio','fundamentos','protozoarios','nematoides','cestodeos','trematodeos','diagnostico','imunologia','epidemiologia','bancada','laminario'];
 function ir(v, ancora){
   if(!VIEWS.includes(v)) v = 'inicio';
   $$('[data-view]').forEach(s=>{ s.hidden = s.dataset.view !== v; });
   $$('.nav .nl').forEach(b=>b.setAttribute('aria-current', b.dataset.ir===v ? 'true':'false'));
   $('#menu-mod').hidden = true;
-  try{ if(v==='nematoides') miDesenha(); if(v==='protozoarios') pmDesenha(); if(v==='bancada' && bc.tec) bcDesenha(); }catch(e){}
+  try{ if(v==='nematoides') miDesenha(); if(v==='protozoarios') pmDesenha(); if(v==='bancada' && bc.tec) bcDesenha(); if(v==='laminario') lmDesenha(); }catch(e){}
   if(ancora){ const el = document.getElementById(ancora); if(el){ el.scrollIntoView(); return; } }
   window.scrollTo(0,0);
   try{ history.replaceState(null,'', v==='inicio' ? location.pathname : '#'+v); }catch(e){}
@@ -3738,7 +3865,423 @@ function procResumo(){
   $('#pr-ir').onclick = () => bcPrepara(pr.tec, {ef:pr.ef, cons:pr.cons.slice(), ac, n:P.length});
   $('#pr-refazer').onclick = () => procIniciar(pr.tec);
 }
-init(); initMod01(); initBancada(); initMod3467();
+/* ============ Laminário: dados das lâminas ============ */
+const LM_W = 5000; /* área explorável de cada lâmina, em µm */
+const LM_PREP = {sal:'Salina (exame a fresco)', lug:'Lugol', zn:'Ziehl-Neelsen modificado', kk:'Kato-Katz (glicerina e verde de malaquita)', fita:'Fita adesiva (Graham)'};
+const LM_PREP_CURTO = {sal:'Salina', lug:'Lugol', zn:'ZN modificado', kk:'Kato-Katz', fita:'Fita adesiva'};
+const LM_FUNDO = {sal:'#F3EFDF', lug:'#F0DDAE', zn:'#C9DCEB', kk:'#D5E8DC', fita:'#EEEEE6'};
+const LM_GRUPOS = [['todos','Todas'],['proto','Protozoários'],['nema','Nematoides'],['cest','Cestódeos'],['trema','Trematódeo'],['art','Artefatos']];
+const LM_GNOME = {proto:'Protozoário', nema:'Nematoide', cest:'Cestódeo', trema:'Trematódeo', art:'Pseudoparasitos'};
+/* rótulos: [nome, x, y] em µm no desenho (centrado em 0,0); nas larvas, [nome, t ao longo do corpo, deslocamento lateral] */
+const LAMS = [
+  {id:'giardia_c', d:'giardia_c', gr:'proto', mod:'protozoarios', preps:['lug','sal'], n:'Cisto de <i>Giardia duodenalis</i>', cur:'Cisto de Giardia', m:'8–12 × 7–10 µm',
+    forma:'Cisto oval de parede lisa e fina. O citoplasma se retrai e deixa um espaço claro junto à parede. No lugol aparecem os quatro núcleos do cisto maduro, os axonemas em feixe longitudinal e os corpos medianos; na salina, esses detalhes mal se veem.',
+    est:[['Parede cística','lisa e refringente'],['Espaço periférico','citoplasma retraído da parede'],['Núcleos','4 no cisto maduro, 2 no imaturo'],['Axonemas','filamentos longitudinais'],['Corpos medianos','bastões curvos no meio do cisto']],
+    rot:[['Parede cística',0,-4],['Espaço claro',4.9,.6],['Núcleos',-2.6,-1],['Axonemas',2.4,-.3],['Corpos medianos',1.35,1.25]],
+    par:[['Hábitat','Duodeno e jejuno, com os trofozoítos aderidos às microvilosidades pelo disco ventral.'],['Transmissão','Ingestão de cistos em água ou alimentos contaminados e de pessoa a pessoa, pela via fecal-oral; é comum em creches. Poucos cistos bastam para infectar.'],['Doença','Giardíase. Muitas infecções são assintomáticas; nas sintomáticas há diarreia, esteatorreia, distensão abdominal e má absorção, sem invasão da mucosa. Tende a ser crônica em crianças e na deficiência de IgA.'],['Diagnóstico','Cistos em fezes formadas por métodos de concentração (Faust, HPJ) corados pelo lugol, em amostras seriadas; coproantígeno.']],
+    nota:'A eliminação de cistos é intermitente: um único exame negativo não descarta a giardíase.',
+    q:'Troque entre salina e lugol. O que o lugol revela neste cisto, e por que ele não serve para procurar o trofozoíto vivo?'},
+  {id:'giardia_t', d:'giardia_t', gr:'proto', mod:'protozoarios', preps:['sal','lug'], mov:true, n:'Trofozoíto de <i>Giardia duodenalis</i>', cur:'Trofozoíto de Giardia', m:'10–20 × 5–15 µm',
+    forma:'Forma piriforme e simétrica, com dois núcleos na parte anterior larga, o disco ventral côncavo e quatro pares de flagelos. Em fezes diarreicas frescas, examinadas na salina, move-se como uma folha caindo.',
+    est:[['Núcleos','2, na porção anterior'],['Disco ventral','órgão de adesão à mucosa'],['Axonemas','eixo longitudinal'],['Corpos medianos','par de bastões curvos'],['Flagelos','4 pares']],
+    rot:[['Núcleos',-4,-1.45],['Disco ventral',-6.6,1.6],['Axonemas',4.2,.08],['Corpos medianos',.9,-.8],['Flagelos',11.2,.9]],
+    par:[['Hábitat','Duodeno e jejuno, aderido à borda em escova.'],['Transmissão','O trofozoíto não é infectante: degenera fora do hospedeiro. A infecção começa pelo cisto.'],['Doença','A adesão lesa de modo difuso as microvilosidades, reduz as dissacaridases (como a lactase) e aumenta a permeabilidade: daí a má absorção de gorduras, lactose e vitaminas lipossolúveis.'],['Diagnóstico','Exame direto a fresco de fezes diarreicas, em até cerca de 30 minutos após a emissão, ou amostra com conservante; aspirado duodenal em casos selecionados.']],
+    nota:'O movimento só aparece na salina. O lugol mata o trofozoíto: troque a preparação e compare.',
+    q:'Por que o trofozoíto aparece em fezes diarreicas e quase nunca em fezes formadas?'},
+  {id:'eh_c', d:'eh_c', gr:'proto', mod:'protozoarios', preps:['lug','sal'], n:'Cisto do complexo <i>Entamoeba histolytica/dispar</i>', cur:'Cisto de E. histolytica/dispar', m:'10–15 µm',
+    forma:'Cisto esférico com até quatro núcleos. Cada núcleo tem cariossoma pequeno e central e cromatina periférica fina e regular. Cistos jovens mostram corpos cromatoides em bastão, de pontas arredondadas.',
+    est:[['Parede','fina e lisa'],['Núcleos','até 4, cariossoma pequeno e central'],['Cromatina periférica','fina e regular'],['Corpo cromatoide','em bastão, de pontas arredondadas']],
+    rot:[['Parede',0,-6.6],['Núcleo',-2,-1.9],['Cariossoma central',2.2,2],['Corpo cromatoide',1.6,0]],
+    par:[['Hábitat','Intestino grosso.'],['Transmissão','Ingestão de cistos maduros, de quatro núcleos, em água, alimentos ou mãos contaminadas. Portadores assintomáticos eliminam cistos por longos períodos.'],['Doença','<i>E. histolytica</i> pode causar colite amebiana, com disenteria, e abscesso hepático. <i>E. dispar</i> coloniza o cólon sem invadir.'],['Diagnóstico','Os cistos das duas espécies são idênticos ao microscópio: o laudo correto é “complexo <i>E. histolytica/dispar</i>”. A espécie se define por coproantígeno específico ou PCR.']],
+    nota:'Não confundir com <i>Entamoeba coli</i>, de cisto maior, com até 8 núcleos e cariossoma excêntrico.',
+    q:'Por que o laudo não pode afirmar “<i>Entamoeba histolytica</i>” a partir deste cisto?'},
+  {id:'eh_t', d:'eh_t', gr:'proto', mod:'protozoarios', preps:['sal','lug'], mov:true, n:'Trofozoíto de <i>Entamoeba histolytica</i> (hematófago)', cur:'Trofozoíto de E. histolytica', m:'15–60 µm',
+    forma:'Forma ameboide de contorno irregular, com pseudópode hialino e citoplasma granuloso. Hemácias fagocitadas no citoplasma indicam <i>E. histolytica</i>, a espécie invasiva.',
+    est:[['Pseudópode','projeção hialina que muda de forma'],['Hemácias fagocitadas','sinal de invasão tecidual'],['Núcleo','cariossoma pequeno e central'],['Endoplasma','granuloso']],
+    rot:[['Pseudópode',12.6,-7.6],['Hemácia fagocitada',3.5,-2.5],['Núcleo',-2,-3.2],['Endoplasma granuloso',-5.4,-.4]],
+    par:[['Hábitat','Luz e parede do cólon; pela veia porta pode chegar ao fígado.'],['Transmissão','O trofozoíto não transmite a infecção: degenera fora do organismo.'],['Doença','A lectina Gal/GalNAc, os amebaporos e as cisteíno-proteases levam à lise tecidual e às úlceras em botão de camisa. Clínica de disenteria com muco e sangue; complicação mais comum fora do intestino é o abscesso hepático.'],['Diagnóstico','Exame a fresco das fezes logo após a emissão; coproantígeno, PCR; sorologia no abscesso hepático.']],
+    nota:'Macrófagos e leucócitos nas fezes podem ser confundidos com amebas. O que define a forma invasiva são as hemácias no citoplasma.',
+    q:'O que diferencia, na lâmina, este trofozoíto do trofozoíto de <i>E. dispar</i>?'},
+  {id:'ecoli_c', d:'ecoli_c', gr:'proto', mod:'protozoarios', preps:['lug','sal'], n:'Cisto de <i>Entamoeba coli</i>', cur:'Cisto de Entamoeba coli', m:'10–35 µm',
+    forma:'Cisto esférico, maior que o do complexo <i>E. histolytica/dispar</i>, com até oito núcleos de cariossoma grosseiro e excêntrico e cromatina periférica irregular. Corpos cromatoides, quando presentes, em forma de lasca, com pontas finas.',
+    est:[['Núcleos','até 8'],['Cariossoma','grosseiro e excêntrico'],['Corpo cromatoide','em lasca, de pontas finas'],['Parede','espessa e refringente']],
+    rot:[['Núcleos (até 8)',-4.6,-2.6],['Cariossoma excêntrico',.95,.65],['Corpo cromatoide',.4,6.4],['Parede',-8.9,1.4]],
+    par:[['Hábitat','Intestino grosso, como comensal.'],['Transmissão','Pela mesma via fecal-oral dos protozoários patogênicos.'],['Doença','Não causa doença.'],['Diagnóstico','Achado frequente no exame de fezes e deve constar no laudo.']],
+    nota:'Comensal não é achado sem importância: indica ingestão de material contaminado por fezes e exposição às mesmas vias dos parasitos patogênicos.',
+    q:'Que informação epidemiológica um laudo com <i>E. coli</i> fornece, mesmo sem doença?'},
+  {id:'enana_c', d:'enana_c', gr:'proto', mod:'protozoarios', preps:['lug','sal'], n:'Cisto de <i>Endolimax nana</i>', cur:'Cisto de Endolimax nana', m:'5–10 µm',
+    forma:'Cisto pequeno e oval, com quatro núcleos formados apenas por um cariossoma grande, sem anel de cromatina periférica.',
+    est:[['Núcleos','4'],['Cariossoma','grande, sem cromatina periférica'],['Parede','fina; cisto oval']],
+    rot:[['Núcleo (só cariossoma)',-1.9,-.9],['Parede',0,-3.1],['4 núcleos',2.2,.9]],
+    par:[['Hábitat','Intestino grosso, como comensal.'],['Transmissão','Fecal-oral.'],['Doença','Não é patogênica.'],['Diagnóstico','Cistos no exame de fezes, melhor vistos com lugol e objetiva de 100×.']],
+    nota:'Por ser muito pequeno, é confundido com leveduras e com cistos de <i>Iodamoeba</i>.',
+    q:'Por que a objetiva de 10× não basta para encontrar este cisto? Teste.'},
+  {id:'iod_c', d:'iod_c', gr:'proto', mod:'protozoarios', preps:['lug','sal'], n:'Cisto de <i>Iodamoeba bütschlii</i>', cur:'Cisto de Iodamoeba', m:'5–20 µm',
+    forma:'Cisto de forma irregular com um único núcleo e um grande vacúolo de glicogênio, que fica castanho-escuro no lugol.',
+    est:[['Vacúolo de glicogênio','castanho-escuro no lugol'],['Núcleo','único'],['Contorno','irregular']],
+    rot:[['Vacúolo de glicogênio',1.6,.6],['Núcleo único',-3.4,-.6],['Contorno irregular',0,-5]],
+    par:[['Hábitat','Intestino grosso, como comensal.'],['Transmissão','Fecal-oral.'],['Doença','Não é patogênica.'],['Diagnóstico','O lugol é decisivo: na salina o vacúolo fica claro e passa despercebido.']],
+    nota:'Compare as duas preparações nesta lâmina: a mudança do vacúolo é a chave da identificação.',
+    q:'Por que o lugol muda tanto a aparência deste cisto?'},
+  {id:'blasto', d:'blasto', gr:'proto', mod:'protozoarios', preps:['lug','sal'], n:'<i>Blastocystis</i> spp. (forma vacuolar)', cur:'Blastocystis spp.', m:'5–40 µm',
+    forma:'Célula esférica cujo grande vacúolo central ocupa quase todo o volume e empurra o citoplasma e os núcleos para uma faixa fina na periferia.',
+    est:[['Vacúolo central','ocupa quase toda a célula'],['Núcleos','2 a 4, na periferia'],['Faixa de citoplasma','fina, junto à membrana']],
+    rot:[['Vacúolo central',.4,.2],['Núcleo periférico',-5.6,-1.6],['Faixa de citoplasma',6.1,.6]],
+    par:[['Hábitat','Intestino grosso de seres humanos e de muitos animais.'],['Transmissão','Fecal-oral, por água e alimentos; alguns subtipos circulam entre animais e pessoas.'],['Doença','Patogenicidade controversa: é frequente em pessoas sem sintomas, e alguns estudos o associam a sintomas intestinais.'],['Diagnóstico','Exame de fezes de rotina; o tamanho varia muito de uma célula para outra.']],
+    nota:'Pode ser confundido com cistos de amebas e com leveduras. O vacúolo central é o detalhe-chave.',
+    q:'Que dados você precisaria para decidir se o <i>Blastocystis</i> explica os sintomas de um paciente?'},
+  {id:'crypto', d:'crypto', gr:'proto', mod:'protozoarios', preps:['zn','sal'], n:'Oocisto de <i>Cryptosporidium</i> spp.', cur:'Oocisto de Cryptosporidium', m:'4–6 µm',
+    forma:'Na coloração de Ziehl-Neelsen modificada, oocistos redondos, vermelhos ou rosados, sobre fundo azul, às vezes com granulações escuras. Na salina são esferas pequenas e refringentes, fáceis de confundir com leveduras.',
+    est:[['Oocisto','redondo, álcool-ácido resistente'],['Esporozoítos','4, vistos como granulações'],['Fundo','azul pelo contracorante']],
+    rot:[['Oocisto',2.3,-1],['Esporozoítos',0,.3]],
+    par:[['Hábitat','Borda em escova do intestino delgado, em posição intracelular, mas fora do citoplasma.'],['Transmissão','O oocisto sai já esporulado e infectante: água (resiste ao cloro), alimentos, contato pessoa a pessoa e animais, como bezerros.'],['Doença','Diarreia aquosa autolimitada no imunocompetente; crônica e grave em pessoas com aids e outras imunossupressões.'],['Diagnóstico','Ziehl-Neelsen modificado ou auramina, coproantígeno e PCR. Passa despercebido no exame de rotina.']],
+    nota:'Esfregaços corados são lidos na objetiva de 100× com óleo de imersão. Nas menores objetivas o oocisto é um ponto.',
+    q:'Por que um surto por <i>Cryptosporidium</i> pode ocorrer mesmo com água clorada?'},
+  {id:'cyclo', d:'cyclo', gr:'proto', mod:'protozoarios', preps:['zn','sal'], n:'Oocisto de <i>Cyclospora cayetanensis</i>', cur:'Oocisto de Cyclospora', m:'8–10 µm',
+    forma:'Oocisto redondo, maior que o de <i>Cryptosporidium</i>, com coloração irregular no ZN modificado: uns vermelhos, outros quase sem cor. Na salina aparece como esfera de conteúdo granular; é autofluorescente sob luz ultravioleta.',
+    est:[['Oocisto','redondo, 8–10 µm'],['Coloração','variável, de rosa-pálido a vermelho'],['Conteúdo','granular, não esporulado']],
+    rot:[['Oocisto (8–10 µm)',0,-4.6],['Coloração variável',3.6,2.4]],
+    par:[['Hábitat','Epitélio do intestino delgado.'],['Transmissão','Sai não esporulado e precisa de dias a semanas no ambiente para ficar infectante. Por isso não passa diretamente de pessoa a pessoa; transmite-se por frutas, folhas e água contaminadas.'],['Doença','Diarreia aquosa prolongada, fadiga e perda de peso, com recaídas.'],['Diagnóstico','ZN modificado, autofluorescência e PCR.']],
+    nota:'O tamanho é a melhor pista para separá-lo de <i>Cryptosporidium</i>: use a régua do campo.',
+    q:'Por que <i>Cyclospora</i> não se transmite diretamente de pessoa a pessoa?'},
+  {id:'cysto', d:'cysto', gr:'proto', mod:'protozoarios', preps:['zn','sal','lug'], n:'Oocisto de <i>Cystoisospora belli</i>', cur:'Oocisto de Cystoisospora', m:'20–33 × 10–19 µm',
+    forma:'Oocisto alongado e elipsoidal, de parede fina e lisa, com um ou dois esporoblastos no interior. É álcool-ácido resistente.',
+    est:[['Parede','elipsoidal, fina e lisa'],['Esporoblasto','1 ou 2 no interior'],['Espaço claro','entre esporoblasto e parede']],
+    rot:[['Parede elipsoidal',0,-7.2],['Esporoblasto',-.5,0],['Espaço claro',10,1.5]],
+    par:[['Hábitat','Epitélio do intestino delgado.'],['Transmissão','Fecal-oral; o oocisto precisa esporular no ambiente antes de infectar.'],['Doença','Diarreia aquosa, grave e crônica no imunossuprimido. É um dos poucos protozoários associados a eosinofilia.'],['Diagnóstico','Por ser grande, aparece no exame a fresco; a confirmação é pelo ZN modificado.']],
+    nota:'É o maior dos coccídios intestinais: já se reconhece na objetiva de 40×.',
+    q:'Compare o tamanho dos três coccídios. Qual pode ser identificado sem óleo de imersão?'},
+  {id:'asc_f', d:'asc_f', gr:'nema', mod:'nematoides', preps:['sal','lug','kk'], n:'Ovo fértil de <i>Ascaris lumbricoides</i>', cur:'Ovo fértil de Ascaris', m:'45–75 × 35–50 µm',
+    forma:'Ovo oval de casca espessa, com camada externa mamilonada castanho-amarelada, corada pela bile, e uma única célula-ovo no interior.',
+    est:[['Camada mamilonada','externa, irregular, castanha'],['Casca','espessa'],['Célula-ovo','única, não embrionada nas fezes frescas']],
+    rot:[['Camada mamilonada',0,-21.8],['Casca espessa',24.5,0],['Célula-ovo',-4,2]],
+    par:[['Hábitat','Vermes adultos no intestino delgado.'],['Transmissão','Ingestão de ovos embrionados, com larva no interior, que precisam de semanas no solo para ficar infectantes.'],['Doença','Ciclo pulmonar com síndrome de Löffler. Muitos vermes adultos causam obstrução intestinal, migração para as vias biliares e prejuízo nutricional em crianças.'],['Diagnóstico','Ovos por sedimentação (HPJ) ou Kato-Katz, que é quantitativo. A eliminação é abundante.']],
+    nota:'Ovos decorticados, sem a camada mamilonada, têm casca lisa e espessa. Não confundir com o ovo de ancilostomídeo, de casca fina.',
+    q:'Por que o ovo fértil eliminado nas fezes ainda não é infectante?'},
+  {id:'asc_i', d:'asc_i', gr:'nema', mod:'nematoides', preps:['sal','lug','kk'], n:'Ovo infértil de <i>Ascaris lumbricoides</i>', cur:'Ovo infértil de Ascaris', m:'85–95 × 43–47 µm',
+    forma:'Ovo alongado e irregular, de casca mais fina, com camada mamilonada irregular ou ausente e interior cheio de grânulos refringentes de tamanhos variados.',
+    est:[['Contorno','alongado e irregular'],['Camada mamilonada','irregular ou ausente'],['Conteúdo','grânulos refringentes']],
+    rot:[['Camada mamilonada irregular',0,-19.4],['Grânulos refringentes',10,3],['Contorno alongado',-38.6,0]],
+    par:[['Hábitat','Vermes adultos no intestino delgado.'],['Transmissão','O ovo infértil não se desenvolve e não infecta. É produzido por fêmeas não fecundadas.'],['Doença','Ascaridíase; encontrar só ovos inférteis indica que há apenas fêmeas no intestino.'],['Diagnóstico','É pesado e não flutua bem: use sedimentação (HPJ) ou Kato-Katz, não métodos de flutuação.']],
+    nota:'É o ovo de <i>Ascaris</i> mais difícil de reconhecer e costuma ser confundido com artefatos.',
+    q:'O que o achado exclusivo de ovos inférteis sugere sobre os vermes adultos?'},
+  {id:'tri', d:'tri', gr:'nema', mod:'nematoides', preps:['sal','lug','kk'], n:'Ovo de <i>Trichuris trichiura</i>', cur:'Ovo de Trichuris', m:'50–55 × 20–25 µm',
+    forma:'Ovo em forma de barril ou limão, de casca espessa e castanha, com um tampão polar hialino em cada extremidade. Não é embrionado nas fezes frescas.',
+    est:[['Tampões polares','hialinos, nas duas extremidades'],['Casca','espessa e castanha'],['Conteúdo','célula não embrionada']],
+    rot:[['Tampão polar',22.4,0],['Casca espessa',0,-10.4],['Conteúdo não embrionado',-6,2]],
+    par:[['Hábitat','Vermes adultos no ceco e no cólon, com a extremidade anterior afilada inserida na mucosa.'],['Transmissão','Ingestão de ovos embrionados no solo. É um geo-helminto sem ciclo pulmonar.'],['Doença','Infecções intensas causam colite, disenteria, anemia e prolapso retal em crianças.'],['Diagnóstico','Kato-Katz, que estima a intensidade em ovos por grama (OPG), e HPJ.']],
+    nota:'Os tampões polares são o detalhe que não falha. Compare com o ovo de <i>Enterobius</i>, também alongado.',
+    q:'Por que a tricuríase não tem fase pulmonar, ao contrário da ascaridíase?'},
+  {id:'anc', d:'anc', gr:'nema', mod:'nematoides', preps:['sal','lug','kk'], n:'Ovo de ancilostomídeo', cur:'Ovo de ancilostomídeo', m:'55–75 × 36–40 µm',
+    forma:'Ovo oval de casca muito fina e incolor, com espaço claro entre a casca e o embrião, que nas fezes frescas tem de 4 a 8 blastômeros.',
+    est:[['Casca','muito fina e incolor'],['Espaço claro','entre a casca e o embrião'],['Blastômeros','4 a 8 nas fezes frescas']],
+    rot:[['Casca fina',0,-19],['Espaço claro',-25,0],['Blastômeros',4.5,5.2]],
+    par:[['Hábitat','Vermes adultos no duodeno e no jejuno, presos à mucosa pela cápsula bucal, onde sugam sangue.'],['Transmissão','Penetração ativa da larva filarioide pela pele, sobretudo dos pés descalços; <i>Ancylostoma duodenale</i> também infecta por via oral.'],['Doença','Anemia ferropriva por perda crônica de sangue e hipoalbuminemia; dermatite no local de penetração e passagem pelos pulmões.'],['Diagnóstico','HPJ, Faust e Kato-Katz. No Kato-Katz, leia logo: a glicerina clarifica demais os ovos de ancilostomídeo e eles somem.']],
+    nota:'<i>Necator americanus</i> e <i>A. duodenale</i> têm ovos idênticos: o laudo diz “ovos de ancilostomídeo”. Em fezes antigas os ovos eclodem e aparecem larvas.',
+    q:'Por que a amostra para pesquisa de ancilostomídeo deve ser examinada logo?'},
+  {id:'ent', d:'ent', gr:'nema', mod:'nematoides', preps:['fita','sal'], n:'Ovo de <i>Enterobius vermicularis</i>', cur:'Ovo de Enterobius', m:'50–60 × 20–30 µm',
+    forma:'Ovo assimétrico, achatado de um lado e convexo do outro, em forma de D, de casca dupla, lisa e incolor, com a larva já formada no interior.',
+    est:[['Lado achatado','e o lado oposto convexo'],['Casca','dupla, lisa e incolor'],['Larva','já formada no interior']],
+    rot:[['Lado achatado',0,11.4],['Lado convexo',0,-14.4],['Casca dupla',-23,-4.6],['Larva',9,-6]],
+    par:[['Hábitat','Vermes adultos no ceco e no apêndice. À noite, as fêmeas migram para a pele perianal e depositam os ovos.'],['Transmissão','Os ovos ficam infectantes em poucas horas: autoinfecção pelas mãos, roupas de cama e poeira. É muito comum em crianças e nas pessoas que convivem com elas.'],['Doença','Prurido anal noturno e sono agitado; em meninas, vulvovaginite.'],['Diagnóstico','Fita adesiva (método de Graham) pela manhã, antes do banho. É raro nas fezes.']],
+    nota:'Exame de fezes negativo não exclui enterobíase: os ovos ficam na pele perianal.',
+    q:'Por que o tratamento costuma incluir toda a família?'},
+  {id:'str', d:'str', gr:'nema', mod:'nematoides', preps:['sal','lug'], mov:true, larva:true, n:'Larva rabditoide de <i>Strongyloides stercoralis</i>', cur:'Larva de Strongyloides', m:'≈ 180–380 × 14–20 µm',
+    forma:'Larva com vestíbulo bucal curto, esôfago rabditoide (corpo, istmo e bulbo) e primórdio genital grande e evidente na metade do corpo.',
+    est:[['Vestíbulo bucal','curto'],['Esôfago','rabditoide: corpo, istmo e bulbo'],['Primórdio genital','grande e evidente'],['Cauda','afilada']],
+    rot:[['Vestíbulo bucal curto',.006,0],['Esôfago',.1,0],['Bulbo esofágico',.245,0],['Primórdio genital grande',.55,0],['Cauda',.95,0]],
+    par:[['Hábitat','Fêmeas partenogenéticas na mucosa do duodeno e do jejuno; os ovos eclodem ainda no intestino.'],['Transmissão','Penetração da larva filarioide pela pele. A autoinfecção interna mantém a infecção por décadas.'],['Doença','Dor epigástrica, diarreia, eosinofilia e lesões cutâneas migratórias. Em imunossuprimidos, sobretudo com corticoides ou HTLV-1, há hiperinfecção e disseminação, com alta mortalidade.'],['Diagnóstico','Baermann-Moraes ou Rugai com fezes frescas, cultura em placa de ágar e sorologia.']],
+    nota:'Nas fezes aparece a larva, e não o ovo. Compare com a larva de ancilostomídeo, a próxima lâmina.',
+    q:'Por que pacientes que vão iniciar corticoide devem ser investigados para estrongiloidíase?'},
+  {id:'ancL', d:'ancL', gr:'nema', mod:'nematoides', preps:['sal','lug'], mov:true, larva:true, n:'Larva rabditoide de ancilostomídeo', cur:'Larva de ancilostomídeo', m:'≈ 250–300 × 15–20 µm',
+    forma:'Larva com vestíbulo bucal longo, esôfago rabditoide e primórdio genital pequeno, pouco visível.',
+    est:[['Vestíbulo bucal','longo'],['Esôfago','rabditoide'],['Primórdio genital','pequeno, pouco visível'],['Cauda','afilada']],
+    rot:[['Vestíbulo bucal longo',.026,0],['Esôfago',.1,0],['Bulbo esofágico',.245,0],['Primórdio genital pequeno',.55,0],['Cauda',.95,0]],
+    par:[['Hábitat','Vermes adultos no duodeno e no jejuno.'],['Transmissão','Esta larva não está nas fezes recém-emitidas: aparece quando os ovos eclodem numa amostra que ficou horas em temperatura ambiente.'],['Doença','Ancilostomíase, com anemia ferropriva (veja a lâmina do ovo).'],['Diagnóstico','Interprete junto com o tempo entre a coleta e o exame.']],
+    nota:'Confundi-la com <i>Strongyloides</i> leva a erro de diagnóstico e de tratamento.',
+    q:'Que duas estruturas separam esta larva da de <i>Strongyloides</i>?'},
+  {id:'hnana', d:'hnana', gr:'cest', mod:'cestodeos', preps:['sal','lug'], n:'Ovo de <i>Hymenolepis nana</i>', cur:'Ovo de Hymenolepis nana', m:'≈ 30–47 µm',
+    forma:'Ovo oval ou arredondado, de membrana externa fina e incolor. Dentro, a oncosfera com seis acúleos fica envolvida por uma membrana interna com dois mamelões polares, de onde partem filamentos polares.',
+    est:[['Membrana externa','fina e incolor'],['Mamelões polares','dois, na membrana interna'],['Filamentos polares','no espaço entre as membranas'],['Oncosfera','com 6 acúleos']],
+    rot:[['Membrana externa',0,-19],['Mamelão polar',13.2,0],['Filamentos polares',15,-5],['Oncosfera e acúleos',-2.2,-2.3]],
+    par:[['Hábitat','Vermes adultos no íleo.'],['Transmissão','Ingestão de ovos, de pessoa a pessoa, autoinfecção interna e, mais raramente, ingestão de insetos com cisticercoides. É o único cestódeo humano que dispensa hospedeiro intermediário.'],['Doença','Em geral assintomática; em infecções intensas, dor abdominal, diarreia e irritabilidade em crianças.'],['Diagnóstico','Ovos no exame de fezes (HPJ, Faust).']],
+    nota:'O ovo de <i>H. diminuta</i> é maior, de 60–80 µm, e não tem filamentos polares.',
+    q:'Como a autoinfecção interna explica cargas parasitárias altas em crianças?'},
+  {id:'taenia', d:'taenia', gr:'cest', mod:'cestodeos', preps:['sal','lug','fita'], n:'Ovo de <i>Taenia</i> sp.', cur:'Ovo de Taenia sp.', m:'≈ 30–35 µm',
+    forma:'Ovo esférico com embrióforo espesso e castanho, de aspecto radiado (estriado), que envolve a oncosfera com seis acúleos.',
+    est:[['Embrióforo','espesso, castanho e radiado'],['Oncosfera','embrião hexacanto'],['Acúleos','6, em pares']],
+    rot:[['Embrióforo radiado',0,-14],['Oncosfera',6.2,6.2],['Acúleos',-2.3,-2.5]],
+    par:[['Hábitat','Vermes adultos no intestino delgado humano.'],['Transmissão','Teníase: carne crua ou malpassada com cisticercos, suína para <i>T. solium</i> e bovina para <i>T. saginata</i>. Cisticercose: ingestão de ovos de <i>T. solium</i>.'],['Doença','A teníase costuma ter sintomas leves e eliminação de proglotes. Os ovos de <i>T. solium</i> podem causar cisticercose, inclusive neurocisticercose.'],['Diagnóstico','Os ovos das espécies são idênticos: laudo “ovos de <i>Taenia</i> sp.”. A espécie se define pelas ramificações uterinas das proglotes, coproantígeno ou PCR. A fita adesiva também recupera ovos.']],
+    nota:'O ovo não indica a espécie, e só os ovos de <i>T. solium</i> causam cisticercose humana.',
+    q:'Por que o achado de ovos de <i>Taenia</i> sp. exige cuidado com quem convive com o paciente?'},
+  {id:'schisto', d:'schisto', gr:'trema', mod:'trematodeos', preps:['kk','sal','lug'], n:'Ovo de <i>Schistosoma mansoni</i>', cur:'Ovo de Schistosoma mansoni', m:'≈ 115–180 × 45–70 µm',
+    forma:'Ovo grande e alongado, de casca fina e sem opérculo, com espículo lateral voltado para trás e o miracídio já formado no interior.',
+    est:[['Espículo lateral','voltado para trás'],['Miracídio','formado no interior'],['Casca','fina, sem opérculo']],
+    rot:[['Espículo lateral',40,-37],['Miracídio',-18,6],['Casca sem opérculo',-74,0]],
+    par:[['Hábitat','Vermes adultos, acasalados, nas veias mesentéricas do sistema porta.'],['Transmissão','Penetração ativa da cercária pela pele, em água doce onde vive o caramujo <i>Biomphalaria</i>.'],['Doença','Os ovos retidos no fígado e no intestino induzem granulomas; a forma crônica evolui com fibrose periportal e hipertensão portal.'],['Diagnóstico','Kato-Katz, quantitativo e recomendado pela OMS, com mais de uma lâmina; sedimentação; biópsia retal.']],
+    nota:'Em infecções leves o Kato-Katz perde sensibilidade: um resultado negativo em área endêmica deve ser repetido.',
+    q:'Por que os ovos retidos nos tecidos, e não os vermes adultos, estão no centro da patogenia?'},
+  {id:'art', d:'pol', gr:'art', mod:'diagnostico', preps:['sal','lug'], n:'Artefatos e pseudoparasitos', cur:'Artefatos e pseudoparasitos', m:'pólen ≈ 35 µm · leveduras ≈ 4–6 µm',
+    forma:'Grãos de pólen de parede ornamentada e simetria radial, leveduras ovais (às vezes em brotamento), fibras e células vegetais e bolhas de ar. Nenhum deles é parasito, mas todos aparecem nas lâminas de rotina.',
+    est:[['Grão de pólen','parede com espinhos, simetria radial'],['Leveduras','ovais, com brotos'],['Bolha de ar','contorno escuro e centro brilhante'],['Fibras vegetais','alongadas, sem estrutura interna']],
+    rot:[['Parede ornamentada',0,-17.8],['Conteúdo sem organização',3,3]],
+    par:[['Origem','Alimentos (frutas, verduras), o ar e a própria preparação da lâmina.'],['Por que importa','Um pseudoparasito confundido com ovo ou cisto gera laudo falso-positivo e tratamento desnecessário.'],['Como evitar o erro','Compare forma, parede, conteúdo e tamanho com a régua. Ovos têm casca definida e conteúdo organizado (célula-ovo, blastômeros ou larva); cistos têm núcleos.']],
+    nota:'Bolhas de ar mudam de aspecto com o foco e não têm conteúdo; leveduras são menores que qualquer cisto de protozoário patogênico, exceto o oocisto de <i>Cryptosporidium</i>.',
+    q:'Que três critérios você usaria para afirmar que uma estrutura não é um ovo de helminto?'}
+];
+
+/* ============ Laminário: microscópio virtual (lista, campo, controles, ficha) ============ */
+const LM_SHIFT = {4:0, 10:2, 40:-3, 100:4}; /* objetivas não perfeitamente parfocais */
+const lm = Object.assign({i:0, obj:10, z:1, prep:'lug', x:LM_W/2, y:LM_W/2, mac:30, mic:0, luz:75, dia:100, lab:false, fino:false, filtro:'todos'}, ST.get('lm', {}));
+lm.x = LM_W/2; lm.y = LM_W/2;
+let lmPend = false;
+const lmSalva = () => ST.set('lm', {i:lm.i, obj:lm.obj, z:lm.z, mac:lm.mac, mic:lm.mic, luz:lm.luz, dia:lm.dia, lab:lm.lab, filtro:lm.filtro});
+const lmAlvo = i => 46 + ((i*37) % 11);
+const lmTxt = s => s.replace(/<[^>]+>/g, '');
+
+function lmGera(L){
+  if(L.objs) return;
+  const idx = LAMS.indexOf(L), r = rng(9000 + idx*131), t = TAM[L.d] || 40;
+  const n = t >= 100 ? 16 : t >= 40 ? 30 : t >= 15 ? 150 : 380;
+  const objs = [{id:L.d, x:LM_W/2, y:LM_W/2, rot:L.larva ? -8 : -12, s:777, main:true}];
+  const livre = (x, y, d) => objs.every(o => Math.hypot(o.x-x, o.y-y) > d);
+  let tent = 0;
+  while(objs.length < n && tent < n*30){ tent++;
+    const x = 150 + r()*(LM_W-300), y = 150 + r()*(LM_W-300);
+    if(livre(x, y, t*1.15)) objs.push({id:L.d, x, y, rot:r()*360, s:Math.floor(r()*1e6)});
+  }
+  const extra = (id, q, perto) => { for(let i=0;i<q;i++){ const x = 100 + r()*(LM_W-200), y = 100 + r()*(LM_W-200); if(!perto && Math.hypot(x-LM_W/2, y-LM_W/2) < t*1.4) continue; objs.push({id, x, y, rot:r()*360, s:Math.floor(r()*1e6)}); } };
+  if(L.gr === 'proto') extra('levedura', 260);
+  if(L.id === 'art') extra('levedura', 1400);
+  L.objs = objs; L.bk = {};
+  objs.forEach((o, i) => { const k = Math.floor(o.x/500)+','+Math.floor(o.y/500); (L.bk[k] = L.bk[k] || []).push(i); });
+}
+function lmCores(prep){
+  if(prep==='zn') return {fio:'#8FB0D0', cel:'#B3CBE0', celB:'#5A82AA', gr:'#7FA2C6', bol:'#3E5E80'};
+  if(prep==='lug') return {fio:'#B39A55', cel:'#E0C47E', celB:'#8E7434', gr:'#A88A44', bol:'#4E4E44'};
+  if(prep==='kk') return {fio:'#9DB8A4', cel:'#CFE3D4', celB:'#6F8E78', gr:'#8DAA95', bol:'#46584C'};
+  return {fio:'#B8B194', cel:'#E6E2C9', celB:'#9C977C', gr:'#ABA588', bol:'#4E4E44'};
+}
+function lmDetritos(L, idx, k, sx, sy, Rum, prep){
+  const C = lmCores(prep), deb = prep==='fita' ? .35 : prep==='kk' ? .7 : L.id==='art' ? 1.6 : 1;
+  let s = '';
+  const t0x = Math.floor((lm.x-Rum)/300), t1x = Math.floor((lm.x+Rum)/300), t0y = Math.floor((lm.y-Rum)/300), t1y = Math.floor((lm.y+Rum)/300);
+  for(let tx=t0x; tx<=t1x; tx++) for(let ty=t0y; ty<=t1y; ty++){
+    if(tx<0 || ty<0 || tx*300>=LM_W || ty*300>=LM_W) continue;
+    if(k < .12 && ((tx*7+ty*3)%3)) continue;
+    const r = rng(((idx+1)*2654435761 ^ (tx*73856093) ^ (ty*19349663)) >>> 0), n = Math.round(4*deb + r()*3*deb);
+    for(let i=0;i<n;i++){
+      const x = tx*300 + r()*300, y = ty*300 + r()*300, t = r(), a = r(), b = r(), rot = r()*360;
+      if(Math.hypot(x-lm.x, y-lm.y) > Rum + 90) continue;
+      const X = sx(x), Y = sy(y);
+      if(t < (L.id==='art' ? .32 : .2)){ const rr = (6+a*30)*k; s += `<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="${Math.max(.6,rr).toFixed(1)}" fill="none" stroke="${C.bol}" stroke-width="${Math.max(.6,rr*.2).toFixed(1)}" opacity=".5"/>${rr>3?`<circle cx="${(X-rr*.35).toFixed(1)}" cy="${(Y-rr*.35).toFixed(1)}" r="${(rr*.18).toFixed(1)}" fill="#fff" opacity=".7"/>`:''}`; }
+      else if(t < .5){ const l = (20+a*120)*k; s += `<path d="M ${(-l/2).toFixed(1)} 0 Q 0 ${((b-.5)*l).toFixed(1)} ${(l/2).toFixed(1)} 0" transform="translate(${X.toFixed(1)} ${Y.toFixed(1)}) rotate(${rot.toFixed(0)})" fill="none" stroke="${C.fio}" stroke-width="${Math.max(.6,(1.5+b*3)*k).toFixed(1)}" stroke-linecap="round" opacity=".75"/>`; }
+      else if(t < .68){ const w = (20+a*40)*k, h = (12+b*16)*k; s += `<rect x="${(-w/2).toFixed(1)}" y="${(-h/2).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" rx="${(h*.25).toFixed(1)}" transform="translate(${X.toFixed(1)} ${Y.toFixed(1)}) rotate(${rot.toFixed(0)})" fill="${C.cel}" stroke="${C.celB}" stroke-width="${Math.max(.5,2*k).toFixed(1)}" opacity=".7"/>`; }
+      else { for(let j=0;j<5;j++){ const an = rot/57 + j*1.3; s += `<circle cx="${(X+Math.cos(an)*(4+j*3)*k).toFixed(1)}" cy="${(Y+Math.sin(an)*(4+j*3)*k).toFixed(1)}" r="${Math.max(.5,(1+a*2)*k).toFixed(1)}" fill="${C.gr}" opacity=".75"/>`; } }
+    }
+  }
+  if(k >= .7){
+    const g0x = Math.floor((lm.x-Rum)/40), g1x = Math.floor((lm.x+Rum)/40), g0y = Math.floor((lm.y-Rum)/40), g1y = Math.floor((lm.y+Rum)/40);
+    for(let gx=g0x; gx<=g1x; gx++) for(let gy=g0y; gy<=g1y; gy++){
+      if(gx<0 || gy<0 || gx*40>=LM_W || gy*40>=LM_W) continue;
+      const r = rng(((idx+3)*31 ^ (gx*83492791) ^ (gy*2971215073)) >>> 0), n = 1 + Math.floor(r()*2.4*deb);
+      for(let j=0;j<n;j++){ const ux = gx*40 + r()*40, uy = gy*40 + r()*40; if(Math.hypot(ux-lm.x, uy-lm.y) > Rum) continue;
+        s += `<circle cx="${sx(ux).toFixed(1)}" cy="${sy(uy).toFixed(1)}" r="${((.6+r()*1.5)*k).toFixed(1)}" fill="${C.gr}" opacity="${(.3+r()*.4).toFixed(2)}"/>`; }
+    }
+  }
+  return s;
+}
+/* posição na tela de um ponto do desenho (µm locais) */
+function lmPonto(o, lx, ly, k, sx, sy){
+  const a = o.rot*Math.PI/180, X = sx(o.x), Y = sy(o.y);
+  return [X + k*(lx*Math.cos(a) - ly*Math.sin(a)), Y + k*(lx*Math.sin(a) + ly*Math.cos(a))];
+}
+function lmRotulos(L, vis, k, sx, sy, Rum){
+  let best = null, bd = 1e9;
+  vis.forEach(o => { if(o.id !== L.d) return; const d = Math.hypot(o.x-lm.x, o.y-lm.y); if(d < bd){ bd = d; best = o; } });
+  if(!best || bd > Rum*.8) return {ov:'', msg:'Centralize um exemplar no campo para identificar as estruturas.'};
+  const px = (TAM[L.d]||40)*k;
+  if(px < 58) return {ov:'', msg:'Exemplar pequeno demais para rotular: aumente a objetiva ou aproxime na tela.'};
+  const pts = L.rot.map(([nome, a, b]) => {
+    let lx = a, ly = b;
+    if(L.larva){ const Lc = L.d==='str' ? 250 : 270, ph = rng(best.s)()*Math.PI; lx = -Lc/2 + a*Lc; ly = 8*Math.sin(2*Math.PI*a*.85 + ph) + b; }
+    const [x, y] = lmPonto(best, lx, ly, k, sx, sy); return {nome, x, y};
+  });
+  const dentro = pts.filter(p => Math.hypot(p.x-200, p.y-200) < OC_R - 10);
+  if(!dentro.length) return {ov:'', msg:'Centralize o exemplar para ver as estruturas.'};
+  const X = sx(best.x), half = Math.min(150, px/2);
+  if(L.larva || px > 230){
+    /* exemplar alongado ou maior que meio campo: rótulos acima e abaixo, alternados */
+    let ov = ''; const postos = [];
+    dentro.sort((a, b) => a.x - b.x).forEach((p, j) => {
+      const w = p.nome.length*7.4, tx = Math.min(378 - w/2, Math.max(22 + w/2, p.x));
+      const base = j % 2 === 0;
+      const tyDe = (u, l) => Math.min(372, Math.max(40, p.y + (u ? -1 : 1)*((L.larva ? 30 : 46) + l*19) + (u ? 0 : 8)));
+      let up = base, ty = tyDe(base, 0);
+      for(let t=0; t<10; t++){ const u = t%2 ? !base : base, l = Math.floor(t/2), y = tyDe(u, l);
+        if(!postos.some(q => Math.abs(q.tx - tx) < (q.w + w)/2 + 6 && Math.abs(q.ty - y) < 17)){ up = u; ty = y; break; } }
+      postos.push({tx, ty, w});
+      ov += `<line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${tx.toFixed(1)}" y2="${(ty + (up ? 4 : -13)).toFixed(1)}" stroke="#0E1512" stroke-width="2.6" opacity=".55"/><line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${tx.toFixed(1)}" y2="${(ty + (up ? 4 : -13)).toFixed(1)}" stroke="#FFFFFF" stroke-width="1.2"/>`;
+      ov += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2.6" fill="#FFFFFF" stroke="#0E1512" stroke-width="1"/>`;
+      ov += `<text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" text-anchor="middle" font-size="12.5" font-weight="700" fill="#FFFFFF" stroke="#0E1512" stroke-width="3.4" paint-order="stroke" stroke-linejoin="round">${esc(p.nome)}</text>`;
+    });
+    return {ov, msg: dentro.length < pts.length ? 'Algumas estruturas estão fora do campo: mova a lâmina ou use uma objetiva menor.' : ''};
+  }
+  let esq = dentro.filter(p => p.x < X), dir = dentro.filter(p => p.x >= X);
+  if(!esq.length && dir.length > 2) esq = dir.splice(0, Math.floor(dir.length/2));
+  if(!dir.length && esq.length > 2) dir = esq.splice(0, Math.floor(esq.length/2));
+  let ov = '';
+  const coluna = (arr, lado) => {
+    arr.sort((a, b) => a.y - b.y);
+    let y = -1e9; arr.forEach(p => { p.ty = Math.max(p.y, y + 19); y = p.ty; });
+    const exc = arr.length ? arr[arr.length-1].ty - 352 : 0; if(exc > 0) arr.forEach(p => p.ty -= exc);
+    const lo = arr.length ? 46 - arr[0].ty : 0; if(lo > 0) arr.forEach(p => p.ty += lo);
+    const tx0 = lado < 0 ? Math.min(Math.max(X - half - 14, 150), 196) : Math.max(Math.min(X + half + 14, 250), 204);
+    arr.forEach(p => {
+      const w = p.nome.length*7.4, cx_ = Math.sqrt(Math.max(0, OC_R*OC_R - (p.ty-200)**2)) - 6;
+      const tx = lado < 0 ? Math.max(tx0, 200 - cx_ + w) : Math.min(tx0, 200 + cx_ - w);
+      const ex = tx + (lado < 0 ? 4 : -4);
+      ov += `<line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${(p.ty-4).toFixed(1)}" stroke="#0E1512" stroke-width="2.6" opacity=".55"/><line x1="${p.x.toFixed(1)}" y1="${p.y.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${(p.ty-4).toFixed(1)}" stroke="#FFFFFF" stroke-width="1.2"/>`;
+      ov += `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2.6" fill="#FFFFFF" stroke="#0E1512" stroke-width="1"/>`;
+      ov += `<text x="${tx.toFixed(1)}" y="${p.ty.toFixed(1)}" text-anchor="${lado < 0 ? 'end' : 'start'}" font-size="12.5" font-weight="700" fill="#FFFFFF" stroke="#0E1512" stroke-width="3.4" paint-order="stroke" stroke-linejoin="round">${esc(p.nome)}</text>`;
+    });
+  };
+  coluna(esq, -1); coluna(dir, 1);
+  return {ov, msg:''};
+}
+function lmDesenha(){
+  if(lmPend) return; lmPend = true;
+  requestAnimationFrame(() => { lmPend = false; try{ lmRender(); }catch(e){ console.error('laminário', e); } });
+}
+function lmRender(){
+  const L = LAMS[lm.i]; if(!L || !$('#lm-svg')) return;
+  lmGera(L);
+  const idx = lm.i, prep = lm.prep, k = ocK(lm.obj, lm.z), c = 200, R = OC_R, Rum = R/k;
+  lm.x = Math.min(LM_W, Math.max(0, lm.x)); lm.y = Math.min(LM_W, Math.max(0, lm.y));
+  const sx = ux => c + (ux - lm.x)*k, sy = uy => c + (uy - lm.y)*k;
+  let s = '';
+  if(lm.x - Rum < 0) s += `<rect x="0" y="0" width="${Math.max(0, sx(0)).toFixed(1)}" height="400" fill="#BDB9AC"/>`;
+  if(lm.x + Rum > LM_W) s += `<rect x="${sx(LM_W).toFixed(1)}" y="0" width="${(400-sx(LM_W)).toFixed(1)}" height="400" fill="#BDB9AC"/>`;
+  if(lm.y - Rum < 0) s += `<rect x="0" y="0" width="400" height="${Math.max(0, sy(0)).toFixed(1)}" fill="#BDB9AC"/>`;
+  if(lm.y + Rum > LM_W) s += `<rect x="0" y="${sy(LM_W).toFixed(1)}" width="400" height="${(400-sy(LM_W)).toFixed(1)}" fill="#BDB9AC"/>`;
+  s += lmDetritos(L, idx, k, sx, sy, Rum, prep);
+  const vis = [];
+  const b0x = Math.floor((lm.x-Rum-200)/500), b1x = Math.floor((lm.x+Rum+200)/500), b0y = Math.floor((lm.y-Rum-200)/500), b1y = Math.floor((lm.y+Rum+200)/500);
+  for(let bx=b0x; bx<=b1x; bx++) for(let by=b0y; by<=b1y; by++) (L.bk[bx+','+by]||[]).forEach(i => { const o = L.objs[i]; if(Math.hypot(o.x-lm.x, o.y-lm.y) < Rum + (TAM[o.id]||40)) vis.push(o); });
+  vis.sort((a, b) => (TAM[b.id]||0) - (TAM[a.id]||0));
+  const mexe = L.mov && prep === 'sal';
+  vis.forEach(o => {
+    const X = sx(o.x), Y = sy(o.y), tam = (TAM[o.id]||20)*k;
+    if(tam < 1.8){ s += `<circle cx="${X.toFixed(1)}" cy="${Y.toFixed(1)}" r="${Math.max(.5, tam/2).toFixed(2)}" fill="${prep==='zn' && ['crypto','cyclo','cysto'].includes(o.id) ? '#C2406A' : '#8E8A72'}" opacity=".8"/>`; return; }
+    const des = pos(desenhaQ(o.id, prep, rng(o.s)), X, Y, k, o.rot);
+    s += (mexe && o.id === L.d) ? `<g class="nada" style="animation-delay:-${(o.s%3000)/1000}s">${des}</g>` : des;
+  });
+  const err = Math.abs(lm.mac + lm.mic*.35 - (lmAlvo(idx) + LM_SHIFT[lm.obj]));
+  const blur = Math.min(14, err*(.3 + lm.obj/60));
+  let ov = '', msgRot = '';
+  if(lm.lab){ const r_ = lmRotulos(L, vis, k, sx, sy, Rum); ov = r_.ov; msgRot = r_.msg; }
+  const svg = $('#lm-svg');
+  svg.innerHTML = ocularSVG('lm', LM_FUNDO[prep] || '#F3EFDF', s, ov, blur*.55, k);
+  svg.style.filter = `brightness(${(.35 + lm.luz/100*.9).toFixed(2)}) contrast(${(lm.dia/100).toFixed(2)})`;
+  $('#lm-mag').textContent = `${lm.obj*10}×${lm.z > 1 ? ' · tela ' + lm.z + '×' : ''}`;
+  $('#lm-prep-tag').textContent = LM_PREP_CURTO[prep];
+  ocLeitura($('#lm-read'), lm.obj);
+  $('#lm-oleo').hidden = lm.obj !== 100;
+  $('#lm-pos').textContent = `X ${fmt((lm.x-LM_W/2)/1000, 2)} mm · Y ${fmt((lm.y-LM_W/2)/1000, 2)} mm`;
+  const st = $('#lm-status'), pxObj = (TAM[L.d]||40)*k;
+  let msg, cls;
+  if(blur < 1.2){ msg = 'Em foco. Explore a preparação.'; cls = 'ok'; }
+  else { msg = err > 6 ? 'Fora de foco: use o macrométrico.' : 'Quase lá: ajuste o micrométrico.'; cls = 'mais'; }
+  if(pxObj < 6) msg += ' Nesta objetiva o organismo é quase um ponto: aumente.';
+  else if(pxObj > 360) msg += ' O exemplar é maior que o campo: use uma objetiva menor.';
+  if(lm.luz < 40) msg += ' Pouca luz: aumente a intensidade.';
+  if(msgRot) msg += ' ' + msgRot;
+  st.className = 'fb ' + cls; st.textContent = msg;
+}
+function lmThumb(L, n){
+  const t = TAM[L.d] || 40, k = 40/t, id = 'lmth' + n;
+  return `<svg viewBox="0 0 64 64" aria-hidden="true"><defs><clipPath id="${id}"><circle cx="32" cy="32" r="30"/></clipPath></defs><circle cx="32" cy="32" r="32" fill="#0b0e0c"/><g clip-path="url(#${id})"><rect width="64" height="64" fill="${LM_FUNDO[L.preps[0]]}"/>${pos(desenhaQ(L.d, L.preps[0], rng(5)), 32, 32, k, L.larva ? 0 : -12)}</g></svg>`;
+}
+function lmLista(){
+  const box = $('#lm-itens'), v = ST.get('lm_vis', []);
+  box.innerHTML = '';
+  LAMS.forEach((L, n) => {
+    if(lm.filtro !== 'todos' && L.gr !== lm.filtro) return;
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'lam-btn'; b.setAttribute('aria-pressed', String(n === lm.i));
+    b.innerHTML = `${lmThumb(L, n)}<span><b>${L.n}</b><small>${String(n+1).padStart(2,'0')} · ${LM_GNOME[L.gr]}</small></span>${v.includes(L.id) ? '<span class="vis" title="Já observada">✓</span>' : ''}`;
+    b.onclick = () => lmSeleciona(n, true);
+    box.appendChild(b);
+  });
+  $('#lm-prog').textContent = `${v.length} de ${LAMS.length} lâminas observadas`;
+  $$('#lm-filtro button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.f === lm.filtro)));
+}
+function lmInfo(){
+  const L = LAMS[lm.i], n = lm.i;
+  $('#lm-ficha').innerHTML = `<span class="eyebrow" style="color:var(--t)">Lâmina ${String(n+1).padStart(2,'0')} · ${LM_GNOME[L.gr]}</span>
+    <h3 style="font-size:1.45rem">${L.n}</h3>
+    <div class="row"><span class="pill lm-pill">${esc(LM_PREP[lm.prep])}</span><span class="pill lm-pill mono">${esc(L.m)}</span></div>
+    <p>${L.forma}</p>
+    <h4>Estruturas para identificar</h4>
+    <ul class="est-list">${L.est.map(([a, b]) => `<li><b>${a}</b> · <span class="muted">${b}</span></li>`).join('')}</ul>
+    <p class="nota"><b>Atenção.</b> ${L.nota}</p>`;
+  $('#lm-par').innerHTML = `<span class="eyebrow" style="color:var(--t)">${L.gr === 'art' ? 'Por que estão na coleção' : 'O parasito'}</span>
+    <dl class="lm-dl">${L.par.map(([a, b]) => `<div><dt>${a}</dt><dd>${b}</dd></div>`).join('')}</dl>
+    <p class="lm-inv"><b>Investigue:</b> ${L.q}</p>
+    <button class="btn sec" data-ir="${L.mod}">${L.gr === 'art' ? 'Ir ao Laboratório de diagnóstico' : 'Abrir o módulo de ' + {proto:'protozoários', nema:'nematoides', cest:'cestódeos', trema:'trematódeos'}[L.gr]} →</button>`;
+  const nota = $('#lm-nota'); nota.value = ST.get('lm_nota_' + L.id, ''); $('#lm-nota-msg').textContent = '';
+}
+function lmPreps(){
+  const L = LAMS[lm.i], box = $('#lm-prep'); box.innerHTML = '';
+  L.preps.forEach(p => { const b = document.createElement('button'); b.type = 'button'; b.textContent = LM_PREP_CURTO[p]; b.setAttribute('aria-pressed', String(p === lm.prep));
+    b.onclick = () => { lm.prep = p; lmPreps(); lmInfo(); lmDesenha(); }; box.appendChild(b); });
+}
+function lmObjs(){
+  $$('#lm-obj button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.o === lm.obj)));
+  $$('#lm-zoom button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.z === lm.z)));
+}
+function lmSeleciona(n, rolar){
+  lm.i = n; const L = LAMS[n]; lm.prep = L.preps[0]; lm.x = LM_W/2; lm.y = LM_W/2;
+  const v = ST.get('lm_vis', []); if(!v.includes(L.id)){ v.push(L.id); ST.set('lm_vis', v); }
+  lmSalva(); lmLista(); lmPreps(); lmInfo(); lmDesenha();
+  if(rolar && window.innerWidth < 1100) $('#lm-campo').scrollIntoView({behavior:'smooth', block:'start'});
+}
+function lmMove(dx, dy){ const f = OC_R*2/ocK(lm.obj, lm.z); const p = f*(lm.fino ? .04 : .2); lm.x += dx*p; lm.y += dy*p; lmDesenha(); }
+function initLaminario(){
+  if(!$('#lm-svg')) return;
+  if(lm.i >= LAMS.length) lm.i = 0;
+  if(!LM_SHIFT[lm.obj]) lm.obj = 10;
+  const fil = $('#lm-filtro');
+  fil.innerHTML = LM_GRUPOS.map(([f, t]) => `<button type="button" class="chip" data-f="${f}" aria-pressed="false">${t}</button>`).join('');
+  $$('button', fil).forEach(b => b.onclick = () => { lm.filtro = b.dataset.f; lmSalva(); lmLista(); });
+  $$('#lm-obj button').forEach(b => b.onclick = () => { lm.obj = +b.dataset.o; lmSalva(); lmObjs(); lmDesenha(); });
+  $$('#lm-zoom button').forEach(b => b.onclick = () => { lm.z = +b.dataset.z; lmSalva(); lmObjs(); lmDesenha(); });
+  const liga = (id, prop, f) => { const el = $('#'+id), out = $('#'+id+'-v'); el.value = lm[prop]; out.textContent = f(lm[prop]);
+    el.addEventListener('input', () => { lm[prop] = +el.value; out.textContent = f(lm[prop]); lmSalva(); lmDesenha(); }); };
+  liga('lm-mac', 'mac', v => String(v)); liga('lm-mic', 'mic', v => fmt(v, 1)); liga('lm-luz', 'luz', v => v + '%'); liga('lm-dia', 'dia', v => v + '%');
+  const lab = $('#lm-lab'); lab.checked = lm.lab; lab.onchange = () => { lm.lab = lab.checked; lmSalva(); lmDesenha(); };
+  const fino = $('#lm-fino'); fino.onchange = () => { lm.fino = fino.checked; };
+  $$('[data-lm-c]').forEach(b => b.onclick = () => { lm.x = LM_W/2; lm.y = LM_W/2; lmDesenha(); });
+  $$('#lm-charriot [data-mv]').forEach(b => {
+    const [dx, dy] = b.dataset.mv.split(',').map(Number); let tm = null;
+    const para = () => { clearInterval(tm); tm = null; };
+    b.addEventListener('pointerdown', e => { e.preventDefault(); para(); lmMove(dx, dy); tm = setInterval(() => lmMove(dx, dy), 70); });
+    ['pointerup','pointerleave','pointercancel'].forEach(ev => b.addEventListener(ev, para));
+    b.addEventListener('click', e => { if(e.detail === 0) lmMove(dx, dy); });
+  });
+  const svg = $('#lm-svg'); let arr = null;
+  svg.addEventListener('pointerdown', e => { arr = {x:e.clientX, y:e.clientY}; try{ svg.setPointerCapture(e.pointerId); }catch(_){} svg.style.cursor = 'grabbing'; });
+  svg.addEventListener('pointermove', e => { if(!arr) return; const f = (400/svg.clientWidth)/ocK(lm.obj, lm.z); lm.x -= (e.clientX-arr.x)*f; lm.y -= (e.clientY-arr.y)*f; arr = {x:e.clientX, y:e.clientY}; lmDesenha(); });
+  ['pointerup','pointercancel'].forEach(ev => svg.addEventListener(ev, () => { arr = null; svg.style.cursor = ''; }));
+  svg.addEventListener('keydown', e => { const m = {ArrowLeft:[-1,0], ArrowRight:[1,0], ArrowUp:[0,-1], ArrowDown:[0,1]}[e.key]; if(m){ e.preventDefault(); lmMove(m[0], m[1]); } });
+  $('#lm-nota').addEventListener('input', e => { ST.set('lm_nota_' + LAMS[lm.i].id, e.target.value); $('#lm-nota-msg').textContent = 'Salvo neste aparelho.'; });
+  $('#lm-ant').onclick = () => lmSeleciona((lm.i - 1 + LAMS.length) % LAMS.length, false);
+  $('#lm-prox').onclick = () => lmSeleciona((lm.i + 1) % LAMS.length, false);
+  lmObjs(); lmSeleciona(lm.i, false);
+}
+FERRAMENTAS.push({t:'Laminário: microscópio com todas as lâminas', v:'laminario', a:'lm-bancada', k:'lâmina microscópio objetiva foco charriot ovo cisto larva oocisto artefato pólen giardia ascaris trichuris schistosoma taenia hymenolepis strongyloides'});
+
+init(); initMod01(); initBancada(); initMod3467(); initLaminario();
 $('#pr-voltar').onclick = () => { bcEtapa(2); $('#bc-passo2').scrollIntoView(); };
 $('#pr-pular').onclick = () => bcPrepara(pr.tec);
 (function(){ const h = (location.hash||'').replace('#',''); ir(VIEWS.includes(h) ? h : 'inicio'); })();
