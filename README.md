@@ -10,6 +10,9 @@ Realização: LaPaHV (Laboratório de Parasitologia Humana e Veterinária) · UF
 | --- | --- |
 | `index.html` | O site inteiro (texto, estilos, scripts e logos embutidos) |
 | `favicon.svg` | Ícone da aba do navegador |
+| `manifest.webmanifest` | Dados do aplicativo instalável (nome, cores, ícones) |
+| `sw.js` | Guarda o site no aparelho para abrir sem internet depois da primeira visita |
+| `icon-192.png`, `icon-512.png`, `icon-maskable-512.png` | Ícones do aplicativo na tela inicial |
 | `_headers` | Cabeçalhos de segurança e de cache usados pelo Cloudflare Pages |
 | `.gitignore` | Arquivos do sistema que o Git deve ignorar |
 
@@ -23,6 +26,10 @@ O site não precisa de compilação nem de servidor. As fontes vêm do Google Fo
 4. Clique em **Salvar e implantar**. O endereço fica no formato `https://<nome-do-projeto>.pages.dev`.
 
 Cada novo commit na branch principal publica a atualização automaticamente.
+
+## Usar como aplicativo
+
+O site funciona como app: barra lateral com os módulos e o laboratório, painel com o progresso de quem estuda e navegação rolável no celular. No Chrome ou Edge, o botão **Instalar o app** aparece na barra lateral (ou use o menu do navegador → Instalar). No iPhone, abra no Safari → Compartilhar → **Adicionar à Tela de Início**. Depois da primeira visita, abre também sem internet.
 
 ## Observações
 

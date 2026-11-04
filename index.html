@@ -6,6 +6,12 @@
 <meta name="description" content="Site didático de parasitologia para graduação: enteroparasitos, microscópio virtual, simuladores e bancada de exame parasitológico de fezes.">
 <meta name="theme-color" content="#0A6C61">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Enteroparasitos">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>Enteroparasitos em Foco</title>
 <style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 
@@ -397,72 +403,144 @@ svg text{font-family:var(--f-body)}
 .destaque-bc.lm-dest .db-ir{color:#BFEAF3}
 @media (max-width:1150px){ .lm-grid{grid-template-columns:minmax(0,1fr) 260px} .lm-lst{grid-column:1/-1} .lm-itens{flex-direction:row; overflow-x:auto; max-height:none; padding-bottom:6px} .lam-btn{width:230px; flex:none} }
 @media (max-width:760px){ .lm-grid, .lm-info{grid-template-columns:minmax(0,1fr)} }
+
+/* ---- formato de app: barra lateral fixa, barra superior e painel ---- */
+:root{--side:248px; --top:60px}
+body{padding-inline:0}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:30; background:var(--surface)}
+main{padding-top:0}
+html{scroll-padding-top:calc(var(--top) + 16px)}
+.app{display:grid; grid-template-columns:var(--side) minmax(0,1fr); min-height:100vh}
+.sidebar{position:fixed; top:0; bottom:0; left:0; width:calc(var(--side) + env(safe-area-inset-left,0px)); padding:calc(22px + env(safe-area-inset-top,0px)) 14px calc(18px + env(safe-area-inset-bottom,0px)) calc(14px + env(safe-area-inset-left,0px)); background:var(--surface); border-right:1px solid var(--line); display:flex; flex-direction:column; overflow-y:auto; z-index:20}
+.brand, .mobilebrand{display:flex; align-items:center; gap:10px; background:none; border:0; padding:0 8px; cursor:pointer; text-align:left; font-family:var(--f-display); font-weight:800; color:var(--ink)}
+.brand .logo{width:38px; height:38px; flex:none}
+.brand span{font-size:1.12rem; line-height:1.05; letter-spacing:-.01em}
+.brand b, .mobilebrand b{display:block; color:var(--c-nema); font-weight:800}
+.subbrand{font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin:10px 8px 18px; font-weight:700}
+.snav{display:flex; flex-direction:column; gap:2px}
+.snav button[data-nav="inicio"], .mnav button[data-nav="inicio"]{--t:var(--c-nema); --s:var(--s-nema)}
+.snav button, .mnav button{display:flex; align-items:center; gap:11px; border:0; background:none; color:var(--muted); text-align:left; padding:9px 10px; border-radius:9px; font-size:.93rem; cursor:pointer}
+.snav button:hover, .mnav button:hover{background:var(--surface-2); color:var(--ink)}
+.snav button[aria-current="page"], .mnav button[aria-current="page"]{background:var(--s); color:var(--ink); font-weight:700}
+.snav button[aria-current="page"] .ico, .mnav button[aria-current="page"] .ico{stroke:var(--t)}
+.snav .nl-t{flex:1; min-width:0}
+.nprog{font-family:var(--f-mono); font-size:.7rem; color:var(--muted); font-variant-numeric:tabular-nums}
+.nprog.ok{color:var(--ok); font-weight:700; font-size:.82rem}
+.ico{width:19px; height:19px; flex:none; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+.navsep{font-size:.64rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); padding:14px 10px 4px; font-weight:700}
+.sidebottom{margin-top:auto; padding:16px 8px 0; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:10px; font-size:.8rem; color:var(--muted)}
+.sidebottom .count{display:flex; flex-direction:column; gap:1px}
+.sidebottom .count b{font-family:var(--f-display); font-size:1.5rem; color:var(--ink); line-height:1}
+.btn-ic{display:inline-flex; align-items:center; gap:6px; color:var(--ink)}
+.btn-ic .ico{width:16px; height:16px}
+.btn-ic.inst{align-self:flex-start; border-color:var(--c-nema)}
+.appmain{grid-column:2; min-width:0}
+.topbar{position:sticky; top:env(safe-area-inset-top,0px); z-index:15; height:var(--top); background:color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:12px; padding-left:max(28px, env(safe-area-inset-left,0px)); padding-right:max(28px, env(safe-area-inset-right,0px))}
+.crumb{font-size:.86rem; color:var(--muted); min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.crumb b{color:var(--ink)}
+.tools{display:flex; align-items:center; gap:8px}
+.sync{display:flex; align-items:center; gap:7px; font-size:.78rem; color:var(--muted); white-space:nowrap; margin-right:6px}
+.sync i{width:7px; height:7px; border-radius:50%; background:var(--warn); display:block}
+.mobilebrand{display:none}
+.mnav{display:none}
+.page{max-width:1180px; margin-inline:auto; padding-block:24px 0; padding-left:max(28px, env(safe-area-inset-left,0px)); padding-right:max(28px, env(safe-area-inset-right,0px))}
+.page > section > .faixa:first-child{margin-top:0}
+/* painel */
+.intro{display:flex; flex-direction:column; gap:8px; max-width:780px; padding-top:6px}
+.intro .eyebrow{color:var(--c-nema)}
+.intro h1{font-size:clamp(2rem, 4.4vw, 3rem); font-weight:800; letter-spacing:-.025em; line-height:1.05}
+.intro h1 .foco{color:var(--c-nema)}
+.intro .lede{font-size:1.05rem; color:var(--muted); max-width:62ch}
+.stats{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-top:24px}
+.stat{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px 18px; display:flex; flex-direction:column; gap:4px}
+.stat .lab{font-size:.82rem; color:var(--muted)}
+.stat .val{font-family:var(--f-display); font-size:2rem; font-weight:800; line-height:1.05}
+.stat .val small{font-size:1rem; color:var(--muted); font-weight:700; margin-left:2px}
+.stat .sub{font-size:.76rem; color:var(--muted)}
+.split{display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:16px; margin-top:16px; align-items:stretch}
+.continuar{background:#14302B; color:#E4F1ED; border-radius:14px; padding:26px 28px; display:flex; flex-direction:column; gap:10px; justify-content:center}
+.continuar .eyebrow{color:#9FD8CA}
+.continuar h2{font-size:1.8rem; color:#FFFFFF}
+.continuar p{color:#CFE4DE; max-width:56ch}
+.continuar .row{margin-top:6px}
+.btn-cont{background:#E1F2EC; color:#14302B; border:0; border-radius:8px; padding:9px 16px; font-weight:700; cursor:pointer}
+.btn-cont.sec{background:transparent; color:#E1F2EC; border:1.5px solid rgb(225 242 236 / .45)}
+.campo-card{margin:0; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px; display:flex; flex-direction:column; align-items:center; justify-content:center; max-width:none}
+.campo-card svg{max-width:300px}
+.mprog{display:flex; flex-direction:column; gap:4px; margin-top:4px}
+.mprog .bar{height:6px; background:var(--surface-2); border-radius:4px; overflow:hidden}
+.mprog .bar i{display:block; height:100%; background:var(--t); border-radius:4px}
+.mprog .foot{display:flex; justify-content:space-between; font-size:.74rem; color:var(--muted)}
+.rodape{margin-top:48px}
+@media (max-width:1100px){ .stats{grid-template-columns:repeat(2,minmax(0,1fr))} .split{grid-template-columns:minmax(0,1fr)} .sync{display:none} }
+@media (max-width:900px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .sidebar{display:none}
+  .appmain{grid-column:1}
+  :root{--top:54px}
+  .mobilebrand{display:flex; padding:0; font-size:1rem; white-space:nowrap}
+  .mobilebrand .logo{width:28px; height:28px; flex:none}
+  .mobilebrand b{display:inline}
+  .crumb{display:none}
+  .tools .btn-ic span{display:none}
+  .tools .btn-ic{padding:7px 9px}
+  .topbar{padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px))}
+  .mnav{display:flex; position:sticky; top:calc(var(--top) + env(safe-area-inset-top,0px)); z-index:14; background:var(--surface); border-bottom:1px solid var(--line); overflow-x:auto; gap:2px; padding-block:6px; padding-left:max(10px, env(safe-area-inset-left,0px)); padding-right:max(10px, env(safe-area-inset-right,0px)); scrollbar-width:none}
+  .mnav::-webkit-scrollbar{display:none}
+  .mnav button{white-space:nowrap; padding:7px 10px; font-size:.86rem; gap:7px; flex:none}
+  .mnav .ico{width:16px; height:16px}
+  html{scroll-padding-top:calc(var(--top) + 64px)}
+  .page{padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px)); padding-block:18px 0}
+  .continuar{padding:20px}
+}
+@media (max-width:420px){ .stats{gap:10px} .stat{padding:12px 14px} .stat .val{font-size:1.6rem} .mobilebrand span{font-size:.92rem} }
 </style>
 </head>
 <body>
 
-<header class="hdr" id="hdr">
-  <div class="hdr-in">
-    <button class="marca" data-ir="inicio">Enteroparasitos <span>em Foco</span></button>
-    <nav class="nav" aria-label="Módulos">
-      <button class="nl" data-ir="inicio">Início</button>
-      <button class="nl" data-ir="fundamentos">Fundamentos</button>
-      <button class="nl" data-ir="protozoarios">Protozoários</button>
-      <button class="nl" data-ir="nematoides">Nematoides</button>
-      <button class="nl" data-ir="cestodeos">Cestódeos</button>
-      <button class="nl" data-ir="trematodeos">Trematódeos</button>
-      <button class="nl" data-ir="diagnostico">Diagnóstico</button>
-      <button class="nl" data-ir="imunologia">Imunologia</button>
-      <button class="nl" data-ir="epidemiologia">Epidemiologia</button>
-      <button class="nl nl-destaque" data-ir="bancada">Bancada</button>
-      <button class="nl nl-destaque" data-ir="laminario">Laminário</button>
-      <div class="ferr">
-        <button class="btn-ic so-estreito" id="b-mod">Módulos</button>
-        <button class="btn-ic" id="b-glos" title="Glossário e busca">Glossário</button>
-        <button class="btn-ic" id="b-proj" aria-pressed="false" title="Aumenta o texto para projeção">Projetor</button>
-        <button class="btn-ic so-desk" id="b-full" title="Tela cheia">Tela cheia</button>
-      </div>
-    </nav>
+<div class="app">
+<aside class="sidebar" aria-label="Navegação principal">
+  <button type="button" class="brand" data-ir="inicio"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#1B2220"/><circle cx="32" cy="32" r="25" fill="#F3EFDF"/><ellipse cx="30" cy="34" rx="12" ry="9" fill="#C08C3E" stroke="#6B430F" stroke-width="2.5" transform="rotate(-20 30 34)"/><ellipse cx="30" cy="34" rx="7" ry="5" fill="#D8B061" transform="rotate(-20 30 34)"/></svg><span>Enteroparasitos<b>em Foco</b></span></button>
+  <p class="subbrand">Parasitologia humana · graduação</p>
+  <nav class="snav" aria-label="Módulos">
+    <button type="button" class="" data-ir="inicio" data-nav="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg><span class="nl-t">Painel</span></button><p class="navsep">Módulos</p><button type="button" class="mod-fund" data-ir="fundamentos" data-nav="fundamentos"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4"/><path d="M11 12h2"/></svg><span class="nl-t">Fundamentos</span><span class="nprog" data-np="fund"></span></button><button type="button" class="mod-proto" data-ir="protozoarios" data-nav="protozoarios"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c4.5 0 8 3.6 8 8.5S16.8 21 12 21 4 16.6 4 11.8 7.5 3 12 3z"/><circle cx="10" cy="10" r="2"/><circle cx="15" cy="14" r="1.2"/></svg><span class="nl-t">Protozoários</span><span class="nprog" data-np="proto"></span></button><button type="button" class="mod-nema" data-ir="nematoides" data-nav="nematoides"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17c2.5 0 2.5-4 5-4s2.5 4 5 4 2.5-8 5-8"/><circle cx="19.5" cy="8.5" r="1"/></svg><span class="nl-t">Nematoides</span><span class="nprog" data-np="nema"></span></button><button type="button" class="mod-cest" data-ir="cestodeos" data-nav="cestodeos"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="4" rx="2"/><rect x="8.5" y="7.5" width="7" height="4" rx="1"/><rect x="8" y="12.5" width="8" height="4" rx="1"/><rect x="7.5" y="17.5" width="9" height="4" rx="1"/></svg><span class="nl-t">Cestódeos</span><span class="nprog" data-np="cest"></span></button><button type="button" class="mod-trema" data-ir="trematodeos" data-nav="trematodeos"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3.5 3 5 6.5 5 10s-2 7-5 8c-3-1-5-4.5-5-8s1.5-7 5-10z"/><circle cx="12" cy="8" r="1.3"/><circle cx="12" cy="13" r="1.3"/></svg><span class="nl-t">Esquistossomose</span><span class="nprog" data-np="trema"></span></button><button type="button" class="mod-diag" data-ir="diagnostico" data-nav="diagnostico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg><span class="nl-t">Diagnóstico</span><span class="nprog" data-np="diag"></span></button><button type="button" class="mod-imuno" data-ir="imunologia" data-nav="imunologia"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-8M12 13 6.5 6.5M12 13l5.5-6.5M5 8 8 5M16 5l3 3"/></svg><span class="nl-t">Imunologia</span><span class="nprog" data-np="imuno"></span></button><button type="button" class="mod-epi" data-ir="epidemiologia" data-nav="epidemiologia"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><rect x="5.5" y="12" width="3" height="6"/><rect x="10.5" y="7" width="3" height="11"/><rect x="15.5" y="10" width="3" height="8"/></svg><span class="nl-t">Epidemiologia</span><span class="nprog" data-np="epi"></span></button><p class="navsep">Laboratório</p><button type="button" class="mod-diag" data-ir="bancada" data-nav="bancada"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="8" width="19" height="8" rx="1"/><rect x="9" y="9.5" width="6" height="5"/></svg><span class="nl-t">Bancada de EPF</span></button><button type="button" class="mod-lam" data-ir="laminario" data-nav="laminario"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span class="nl-t">Laminário</span></button>
+  </nav>
+  <div class="sidebottom">
+    <div class="count"><b class="mono" id="sb-lam">0</b><span>de 22 lâminas observadas</span></div>
+    <div class="count"><b class="mono" id="sb-mod">0</b><span>de 8 módulos concluídos</span></div>
+    <button type="button" class="btn-ic inst" id="b-inst" hidden><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/></svg>Instalar o app</button>
+    <p class="small">LaPaHV · UFRN</p>
+  </div>
+</aside>
+<div class="appmain">
+<header class="topbar">
+  <button type="button" class="mobilebrand" data-ir="inicio"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#1B2220"/><circle cx="32" cy="32" r="25" fill="#F3EFDF"/><ellipse cx="30" cy="34" rx="12" ry="9" fill="#C08C3E" stroke="#6B430F" stroke-width="2.5" transform="rotate(-20 30 34)"/><ellipse cx="30" cy="34" rx="7" ry="5" fill="#D8B061" transform="rotate(-20 30 34)"/></svg><span>Enteroparasitos <b>em Foco</b></span></button>
+  <span class="crumb">Enteroparasitos em Foco / <b id="crumb">Painel</b></span>
+  <div class="tools">
+    <span class="sync"><i></i>Progresso neste aparelho</span>
+    <button type="button" class="btn-ic" id="b-glos" title="Glossário e busca"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h10"/></svg><span>Glossário</span></button>
+    <button type="button" class="btn-ic" id="b-proj" aria-pressed="false" title="Aumenta o texto para projeção"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 16v4M8 20h8"/></svg><span>Projetor</span></button>
+    <button type="button" class="btn-ic so-desk" id="b-full" title="Tela cheia"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span>Tela cheia</span></button>
   </div>
 </header>
-<button class="fab" id="fab" hidden>☰ Módulos</button>
-<div class="menu-mod" id="menu-mod" hidden>
-  <button data-ir="inicio">Início</button>
-  <button data-ir="fundamentos">Módulo 0 · Fundamentos</button>
-  <button data-ir="protozoarios">Módulo 1 · Protozoários</button>
-  <button data-ir="nematoides">Módulo 2 · Nematoides</button>
-  <button data-ir="cestodeos">Módulo 3 · Cestódeos</button>
-  <button data-ir="trematodeos">Módulo 4 · Trematódeos</button>
-  <button data-ir="diagnostico">Módulo 5 · Diagnóstico</button>
-  <button data-ir="imunologia">Módulo 6 · Imunologia</button>
-  <button data-ir="epidemiologia">Módulo 7 · Epidemiologia</button>
-  <button data-ir="bancada">Bancada de EPF</button>
-  <button data-ir="laminario">Laminário (microscópio)</button>
-  <button id="m-glos">Glossário e busca</button>
-</div>
-
-<main class="wrap">
+<nav class="mnav" aria-label="Navegação"><button type="button" class="" data-ir="inicio" data-nav="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg><span class="nl-t">Painel</span></button><button type="button" class="mod-fund" data-ir="fundamentos" data-nav="fundamentos"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4"/><path d="M11 12h2"/></svg><span class="nl-t">Fundamentos</span></button><button type="button" class="mod-proto" data-ir="protozoarios" data-nav="protozoarios"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c4.5 0 8 3.6 8 8.5S16.8 21 12 21 4 16.6 4 11.8 7.5 3 12 3z"/><circle cx="10" cy="10" r="2"/><circle cx="15" cy="14" r="1.2"/></svg><span class="nl-t">Protozoários</span></button><button type="button" class="mod-nema" data-ir="nematoides" data-nav="nematoides"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17c2.5 0 2.5-4 5-4s2.5 4 5 4 2.5-8 5-8"/><circle cx="19.5" cy="8.5" r="1"/></svg><span class="nl-t">Nematoides</span></button><button type="button" class="mod-cest" data-ir="cestodeos" data-nav="cestodeos"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="4" rx="2"/><rect x="8.5" y="7.5" width="7" height="4" rx="1"/><rect x="8" y="12.5" width="8" height="4" rx="1"/><rect x="7.5" y="17.5" width="9" height="4" rx="1"/></svg><span class="nl-t">Cestódeos</span></button><button type="button" class="mod-trema" data-ir="trematodeos" data-nav="trematodeos"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3.5 3 5 6.5 5 10s-2 7-5 8c-3-1-5-4.5-5-8s1.5-7 5-10z"/><circle cx="12" cy="8" r="1.3"/><circle cx="12" cy="13" r="1.3"/></svg><span class="nl-t">Trematódeos</span></button><button type="button" class="mod-diag" data-ir="diagnostico" data-nav="diagnostico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg><span class="nl-t">Diagnóstico</span></button><button type="button" class="mod-imuno" data-ir="imunologia" data-nav="imunologia"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-8M12 13 6.5 6.5M12 13l5.5-6.5M5 8 8 5M16 5l3 3"/></svg><span class="nl-t">Imunologia</span></button><button type="button" class="mod-epi" data-ir="epidemiologia" data-nav="epidemiologia"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><rect x="5.5" y="12" width="3" height="6"/><rect x="10.5" y="7" width="3" height="11"/><rect x="15.5" y="10" width="3" height="8"/></svg><span class="nl-t">Epidemiologia</span></button><button type="button" class="mod-diag" data-ir="bancada" data-nav="bancada"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="8" width="19" height="8" rx="1"/><rect x="9" y="9.5" width="6" height="5"/></svg><span class="nl-t">Bancada</span></button><button type="button" class="mod-lam" data-ir="laminario" data-nav="laminario"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span class="nl-t">Laminário</span></button></nav>
+<main class="wrap page" id="topo">
 
 <!-- ================= INÍCIO ================= -->
 <section id="v-inicio" data-view="inicio">
-  <div class="hero">
-    <div>
-      <p class="eyebrow">Parasitologia humana · Graduação</p>
-      <h1>Enteroparasitos <span class="foco">em foco</span></h1>
-      <p class="lede">Ciclos, morfologia, diagnóstico laboratorial e imunopatologia dos parasitos intestinais, com simuladores, lâminas virtuais em escala real e casos clínicos fictícios para resolver passo a passo.</p>
-      <div class="numeros">
-        <div><b class="mono">8</b><span>módulos</span></div>
-        <div><b class="mono">32</b><span>ferramentas interativas</span></div>
-        <div><b class="mono">8</b><span>amostras na bancada de EPF</span></div>
-        <div><b class="mono">22</b><span>lâminas no laminário</span></div>
-      </div>
-    </div>
-    <figure class="campo-hero" style="margin:0">
+  <div class="intro">
+    <span class="eyebrow">Meu painel</span>
+    <h1>Enteroparasitos <span class="foco">em foco</span></h1>
+    <p class="lede">Ciclos, morfologia, diagnóstico laboratorial e imunopatologia dos parasitos intestinais, com simuladores, lâminas virtuais em escala real e casos clínicos fictícios para resolver passo a passo.</p>
+  </div>
+  <div class="stats" id="stats" aria-live="polite"></div>
+  <div class="split">
+    <div class="continuar" id="continuar"></div>
+    <figure class="campo-hero campo-card">
       <svg id="hero-campo" viewBox="0 0 420 420" role="img" aria-label="Campo de microscópio com ovos de helmintos, uma larva e um grão de pólen"></svg>
       <figcaption class="legenda-campo">Ilustração esquemática, todos os elementos na mesma escala (objetiva de 40×)</figcaption>
     </figure>
   </div>
-
   <div class="grupo destaques">
     <button class="destaque-bc" data-ir="bancada">
       <span class="eyebrow" style="color:#C9D6DE">Simulação de rotina</span>
@@ -1501,6 +1579,8 @@ svg text{font-family:var(--f-body)}
   <p class="small muted">Enteroparasitos em Foco · material didático para graduação. Casos fictícios. Tratamento citado apenas em nível didático, sem doses.</p>
 </footer>
 </main>
+</div>
+</div>
 
 <div class="gaveta" id="gaveta" hidden>
   <div class="gaveta-in" role="dialog" aria-label="Glossário e busca">
@@ -2037,8 +2117,8 @@ const VIEWS = ['inicio','fundamentos','protozoarios','nematoides','cestodeos','t
 function ir(v, ancora){
   if(!VIEWS.includes(v)) v = 'inicio';
   $$('[data-view]').forEach(s=>{ s.hidden = s.dataset.view !== v; });
-  $$('.nav .nl').forEach(b=>b.setAttribute('aria-current', b.dataset.ir===v ? 'true':'false'));
-  $('#menu-mod').hidden = true;
+  $$('[data-nav]').forEach(b=>{ if(b.dataset.nav===v) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
+  appVisita(v);
   try{ if(v==='nematoides') miDesenha(); if(v==='protozoarios') pmDesenha(); if(v==='bancada' && bc.tec) bcDesenha(); if(v==='laminario') lmDesenha(); }catch(e){}
   if(ancora){ const el = document.getElementById(ancora); if(el){ el.scrollIntoView(); return; } }
   window.scrollTo(0,0);
@@ -2047,15 +2127,6 @@ function ir(v, ancora){
 document.addEventListener('click', e=>{
   const b = e.target.closest('[data-ir]'); if(b){ e.preventDefault(); ir(b.dataset.ir); }
 });
-let ultY = 0;
-window.addEventListener('scroll', ()=>{
-  const y = window.scrollY, hdr = $('#hdr');
-  if(y > ultY + 6 && y > 120){ hdr.classList.add('oculto'); $('#fab').hidden = false; }
-  else if(y < ultY - 6 || y < 80){ hdr.classList.remove('oculto'); $('#fab').hidden = true; $('#menu-mod').hidden = true; }
-  ultY = y;
-}, {passive:true});
-$('#fab').onclick = () => { $('#menu-mod').hidden = !$('#menu-mod').hidden; };
-$('#b-mod').onclick = () => { $('#menu-mod').hidden = !$('#menu-mod').hidden; };
 $('#b-proj').onclick = function(){ const on = !document.documentElement.classList.contains('projetor'); document.documentElement.classList.toggle('projetor', on); this.setAttribute('aria-pressed', on); ST.set('proj', on); };
 if(ST.get('proj', false)){ document.documentElement.classList.add('projetor'); $('#b-proj').setAttribute('aria-pressed','true'); }
 $('#b-full').onclick = () => { try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(()=>{}); }catch(e){} };
@@ -2075,8 +2146,8 @@ document.addEventListener('click', e=>{
   let left = r.left + window.scrollX; left = Math.max(16, Math.min(left, window.innerWidth - w - 16));
   popEl.style.left = left+'px'; popEl.style.top = (r.bottom + window.scrollY + 6)+'px';
 });
-function abreGaveta(){ $('#gaveta').hidden = false; $('#menu-mod').hidden = true; listaGlos(''); setTimeout(()=>$('#g-busca').focus(), 30); }
-$('#b-glos').onclick = abreGaveta; $('#m-glos').onclick = abreGaveta;
+function abreGaveta(){ $('#gaveta').hidden = false; listaGlos(''); setTimeout(()=>$('#g-busca').focus(), 30); }
+$('#b-glos').onclick = abreGaveta;
 $('#g-fechar').onclick = () => { $('#gaveta').hidden = true; };
 $('#gaveta').addEventListener('click', e=>{ if(e.target.id==='gaveta') $('#gaveta').hidden = true; });
 document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ $('#gaveta').hidden = true; fechaPop(); } });
@@ -2107,7 +2178,7 @@ function montaPrever(box){
     const j = $('#pv-'+id).value.trim();
     if(esc_i===null){ $('#pvm-'+id).textContent = 'Escolha uma alternativa.'; return; }
     if(j.length < 15){ $('#pvm-'+id).textContent = 'Escreva uma justificativa (pelo menos uma frase).'; return; }
-    ST.set('prev_'+id, {i:esc_i, j}); $('#pvm-'+id).textContent = 'Previsão registrada. Ela volta no fim do módulo.'; montaRecap(id);
+    ST.set('prev_'+id, {i:esc_i, j}); try{ appResumo(); }catch(e){} $('#pvm-'+id).textContent = 'Previsão registrada. Ela volta no fim do módulo.'; montaRecap(id);
   };
 }
 function montaRecap(id){
@@ -2130,6 +2201,7 @@ function montaQuiz(box){
       const oi = +b.dataset.oi; if(oi===q.c) acertos++;
       $$('.opcao', qe).forEach(x=>{ const i = +x.dataset.oi; const j = $('.just', x); j.textContent = q.o[i][1]; j.hidden = false; if(i===q.c) x.classList.add('ok'); else if(x===b) x.classList.add('err'); });
       $('#pl-'+id).textContent = `${acertos} de ${resp} respondidas corretamente` + (resp===Q.length ? ' · fim da revisão' : '');
+      if(resp===Q.length){ ST.set('quiz_'+id, {a:acertos, t:Q.length}); appResumo(); }
     });
   });
 }
@@ -4242,10 +4314,11 @@ function lmObjs(){
 }
 function lmSeleciona(n, rolar){
   lm.i = n; const L = LAMS[n]; lm.prep = L.preps[0]; lm.x = LM_W/2; lm.y = LM_W/2;
-  const v = ST.get('lm_vis', []); if(!v.includes(L.id)){ v.push(L.id); ST.set('lm_vis', v); }
+  lmMarca();
   lmSalva(); lmLista(); lmPreps(); lmInfo(); lmDesenha();
   if(rolar && window.innerWidth < 1100) $('#lm-campo').scrollIntoView({behavior:'smooth', block:'start'});
 }
+function lmMarca(){ const sec = $('#v-laminario'); if(!sec || sec.hidden) return; const L = LAMS[lm.i], v = ST.get('lm_vis', []); if(!v.includes(L.id)){ v.push(L.id); ST.set('lm_vis', v); lmLista(); try{ appResumo(); }catch(e){} } }
 function lmMove(dx, dy){ const f = OC_R*2/ocK(lm.obj, lm.z); const p = f*(lm.fino ? .04 : .2); lm.x += dx*p; lm.y += dy*p; lmDesenha(); }
 function initLaminario(){
   if(!$('#lm-svg')) return;
@@ -4281,7 +4354,54 @@ function initLaminario(){
 }
 FERRAMENTAS.push({t:'Laminário: microscópio com todas as lâminas', v:'laminario', a:'lm-bancada', k:'lâmina microscópio objetiva foco charriot ovo cisto larva oocisto artefato pólen giardia ascaris trichuris schistosoma taenia hymenolepis strongyloides'});
 
-init(); initMod01(); initBancada(); initMod3467(); initLaminario();
+
+/* ============ formato de app: painel, progresso, navegação e instalação ============ */
+const APP_MODS = [['fundamentos','fund','Fundamentos'],['protozoarios','proto','Protozoários'],['nematoides','nema','Nematoides'],['cestodeos','cest','Cestódeos'],['trematodeos','trema','Esquistossomose'],['diagnostico','diag','Laboratório de diagnóstico'],['imunologia','imuno','Imunologia'],['epidemiologia','epi','Epidemiologia']];
+const APP_NOME = {inicio:'Painel', bancada:'Bancada de EPF', laminario:'Laminário'};
+APP_MODS.forEach(([v,,n]) => APP_NOME[v] = n);
+function appEtapas(v, key){ const vis = ST.get('vistas', []); return [vis.includes(v), !!ST.get('prev_'+key, null), !!ST.get('quiz_'+key, null)]; }
+function appVisita(v){
+  const c = $('#crumb'); if(c) c.textContent = APP_NOME[v] || 'Painel';
+  if(v !== 'inicio'){ const vis = ST.get('vistas', []); if(!vis.includes(v)){ vis.push(v); ST.set('vistas', vis); } ST.set('ultima', v); }
+  const m = $(`.mnav [data-nav="${v}"]`); if(m) try{ m.scrollIntoView({block:'nearest', inline:'center'}); }catch(e){}
+  if(v === 'laminario') try{ lmMarca(); }catch(e){}
+  appResumo();
+}
+function appResumo(){
+  let feitos = 0, prev = 0, rev = 0, ac = 0, tot = 0;
+  APP_MODS.forEach(([v,key]) => {
+    const e = appEtapas(v, key), n = e.filter(Boolean).length; if(n === 3) feitos++; if(e[1]) prev++;
+    const q = ST.get('quiz_'+key, null); if(q){ rev++; ac += q.a; tot += q.t; }
+    $$(`[data-np="${key}"]`).forEach(x => { x.textContent = n === 3 ? '✓' : n + '/3'; x.classList.toggle('ok', n === 3); });
+    const card = $(`.card-mod[data-ir="${v}"]`);
+    if(card){ let p = $('.mprog', card); if(!p){ p = document.createElement('div'); p.className = 'mprog'; card.insertBefore(p, $('.ir', card)); }
+      p.innerHTML = `<div class="bar"><i style="width:${n/3*100}%"></i></div><div class="foot"><span>${['Não iniciado','Visitado','Previsão feita','Concluído'][e[2] && e[1] && e[0] ? 3 : n]}</span><span class="mono">${n}/3</span></div>`; }
+  });
+  const lam = ST.get('lm_vis', []).length;
+  const sl = $('#sb-lam'); if(sl) sl.textContent = lam; const sm = $('#sb-mod'); if(sm) sm.textContent = feitos;
+  const st = $('#stats');
+  if(st) st.innerHTML = [
+    ['Módulos concluídos', feitos, '/8', 'visitado, previsão e revisão'],
+    ['Previsões registradas', prev, '/8', 'Prever · Observar · Explicar'],
+    ['Revisões feitas', rev, '/8', tot ? `${ac} de ${tot} questões certas` : 'questões comentadas no fim de cada módulo'],
+    ['Lâminas observadas', lam, '/22', 'no Laminário']
+  ].map(([l, v, d, sub]) => `<div class="stat"><span class="lab">${l}</span><span class="val mono">${v}<small>${d}</small></span><span class="sub">${sub}</span></div>`).join('');
+  const ct = $('#continuar');
+  if(ct){
+    const u = ST.get('ultima', null), prox = APP_MODS.find(([v,key]) => appEtapas(v, key).filter(Boolean).length < 3);
+    let alvo, tit, txt, rot;
+    if(u && APP_NOME[u]){ alvo = u; tit = 'Continue de onde parou'; txt = `Você estava em <b>${APP_NOME[u]}</b>.` + (prox && prox[0] !== u ? ` O próximo módulo ainda incompleto é ${prox[2]}.` : ''); rot = 'Voltar para ' + APP_NOME[u]; }
+    else { alvo = 'fundamentos'; tit = 'Comece por aqui'; txt = 'Os Fundamentos organizam o vocabulário que todos os outros módulos usam: hospedeiros, formas infectantes e diagnósticas, tipos de ciclo.'; rot = 'Abrir os Fundamentos'; }
+    ct.innerHTML = `<span class="eyebrow">${tit}</span><h2>${APP_NOME[alvo]}</h2><p>${txt}</p><div class="row"><button type="button" class="btn-cont" data-ir="${alvo}">${rot} →</button>${alvo === 'laminario' ? (prox ? `<button type="button" class="btn-cont sec" data-ir="${prox[0]}">Ir para ${prox[2]}</button>` : '') : '<button type="button" class="btn-cont sec" data-ir="laminario">Abrir o Laminário</button>'}</div>`;
+  }
+}
+/* instalação como aplicativo (só no site publicado; dentro de uma moldura não se aplica) */
+let appPrompt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); appPrompt = e; const b = $('#b-inst'); if(b) b.hidden = false; });
+$('#b-inst').onclick = async () => { if(!appPrompt) return; appPrompt.prompt(); try{ await appPrompt.userChoice; }catch(e){} appPrompt = null; $('#b-inst').hidden = true; };
+try{ if('serviceWorker' in navigator && window.top === window && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(()=>{}); }catch(e){}
+
+init(); initMod01(); initBancada(); initMod3467(); initLaminario(); appResumo();
 $('#pr-voltar').onclick = () => { bcEtapa(2); $('#bc-passo2').scrollIntoView(); };
 $('#pr-pular').onclick = () => bcPrepara(pr.tec);
 (function(){ const h = (location.hash||'').replace('#',''); ir(VIEWS.includes(h) ? h : 'inicio'); })();
