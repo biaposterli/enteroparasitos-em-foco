@@ -516,6 +516,13 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
 .app.recolhida .sidebottom{display:none}
 @media (max-width:900px){ .btn-side{display:none} }
 @media (prefers-reduced-motion: reduce){ .app, .sidebar, .btn-side .seta-side{transition:none} }
+
+/* foco logo abaixo do campo, fácil de usar com o polegar */
+.lm-st{grid-column:1/-1; margin:0; font-size:.88rem; padding:8px 12px}
+.lm-foco{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px 16px; background:var(--surface-2); border-radius:14px; padding:12px 14px}
+.lm-sl-foco input[type="range"]{height:28px}
+.lm-sl-foco input[type="range"]::-webkit-slider-thumb{width:24px; height:24px}
+@media (max-width:520px){ .lm-foco{grid-template-columns:minmax(0,1fr)} .lm-sl-foco input[type="range"]{height:34px} }
 </style>
 </head>
 <body>
@@ -966,9 +973,14 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
             </div>
             <div class="lm-top"><span id="lm-pos"></span><button type="button" class="lm-cbtn" data-lm-c>⌖ Centralizar</button></div>
           </div>
-          <div class="oc-read" id="lm-read"></div>
+          <div class="lm-foco" role="group" aria-label="Foco">
+          <label class="lm-sl lm-sl-foco"><span class="row" style="justify-content:space-between"><span>Foco macrométrico</span><output class="mono" id="lm-mac-v"></output></span><input type="range" id="lm-mac" min="0" max="100" step="1"></label>
+          <label class="lm-sl lm-sl-foco"><span class="row" style="justify-content:space-between"><span>Foco micrométrico</span><output class="mono" id="lm-mic-v"></output></span><input type="range" id="lm-mic" min="-10" max="10" step="0.5"></label>
+            <p class="fb lm-st" id="lm-status" aria-live="polite"></p>
+          </div>
           <div class="row oc-row"><span class="lm-label">Objetiva</span><div class="seg" id="lm-obj" role="group" aria-label="Objetiva"><button type="button" data-o="4">4×</button><button type="button" data-o="10">10×</button><button type="button" data-o="40">40×</button><button type="button" data-o="100">100× (imersão)</button></div></div>
           <div class="row oc-row"><span class="lm-label">Aproximar na tela</span><div class="seg" id="lm-zoom" role="group" aria-label="Aproximar a imagem na tela"><button type="button" data-z="1">1×</button><button type="button" data-z="2">2×</button><button type="button" data-z="4">4×</button><button type="button" data-z="8">8×</button></div><span class="small muted">só amplia a imagem; não muda a objetiva</span></div>
+          <div class="oc-read" id="lm-read"></div>
           <p class="aviso" id="lm-oleo" hidden>Objetiva de imersão (100×): no microscópio real, pinga-se uma gota de óleo de imersão sobre a lâmina e a objetiva toca o óleo. O campo fica pequeno (0,18 mm) e o foco é muito sensível: use só o micrométrico.</p>
           <p class="small muted">Arraste o campo ou use as setas. Comece sempre pela menor objetiva e só depois aumente.</p>
         </div>
@@ -976,8 +988,6 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
           <span class="lm-label">Preparação</span>
           <div class="seg" id="lm-prep" role="group" aria-label="Preparação"></div>
           <span class="lm-label">Ajustes</span>
-          <label class="lm-sl"><span class="row" style="justify-content:space-between"><span>Foco macrométrico</span><output class="mono" id="lm-mac-v"></output></span><input type="range" id="lm-mac" min="0" max="100" step="1"></label>
-          <label class="lm-sl"><span class="row" style="justify-content:space-between"><span>Foco micrométrico</span><output class="mono" id="lm-mic-v"></output></span><input type="range" id="lm-mic" min="-10" max="10" step="0.5"></label>
           <label class="lm-sl"><span class="row" style="justify-content:space-between"><span>Intensidade da luz</span><output class="mono" id="lm-luz-v"></output></span><input type="range" id="lm-luz" min="20" max="100" step="1"></label>
           <label class="lm-sl"><span class="row" style="justify-content:space-between"><span>Diafragma (contraste)</span><output class="mono" id="lm-dia-v"></output></span><input type="range" id="lm-dia" min="70" max="150" step="1"></label>
           <span class="lm-label">Charriot (move a lâmina)</span>
@@ -988,7 +998,6 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
           </div>
           <label class="row small" style="flex-wrap:nowrap; gap:8px"><input type="checkbox" id="lm-fino"> Passo fino</label>
           <label class="row small" style="flex-wrap:nowrap; gap:8px"><input type="checkbox" id="lm-lab"> Identificar estruturas</label>
-          <p class="fb" id="lm-status" aria-live="polite" style="margin:0"></p>
         </div>
       </div>
 
