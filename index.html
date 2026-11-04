@@ -494,16 +494,38 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
   .continuar{padding:20px}
 }
 @media (max-width:420px){ .stats{gap:10px} .stat{padding:12px 14px} .stat .val{font-size:1.6rem} .mobilebrand span{font-size:.92rem} }
+
+/* ---- barra lateral retrátil ---- */
+.app{transition:grid-template-columns .22s ease}
+.sidebar{transition:width .22s ease, padding .22s ease}
+.topbar{justify-content:flex-start}
+.topbar .tools{margin-left:auto}
+.btn-side{padding:7px 9px}
+.btn-side .seta-side{transition:transform .22s ease; transform-origin:14px 12px}
+.app.recolhida{--side:72px}
+.app.recolhida .btn-side .seta-side{transform:scaleX(-1)}
+.app.recolhida .sidebar{padding-left:calc(10px + env(safe-area-inset-left,0px)); padding-right:10px; overflow-x:hidden}
+.app.recolhida .brand{padding:0; justify-content:center}
+.app.recolhida .brand > span, .app.recolhida .subbrand, .app.recolhida .nl-t, .app.recolhida .nprog, .app.recolhida .sidebottom .count span, .app.recolhida .sidebottom p, .app.recolhida .inst{display:none}
+.app.recolhida .subbrand + .snav{margin-top:18px}
+.app.recolhida .navsep{font-size:0; padding:10px 0 6px; border-top:1px solid var(--line); margin:8px 6px 0}
+.app.recolhida .snav button{justify-content:center; padding:10px 0; position:relative}
+.app.recolhida .snav button .ico{width:21px; height:21px}
+.app.recolhida .snav button::after{content:""; position:absolute; right:7px; top:7px; width:6px; height:6px; border-radius:50%; background:var(--ok); opacity:0}
+.app.recolhida .snav button.feito::after{opacity:1}
+.app.recolhida .sidebottom{display:none}
+@media (max-width:900px){ .btn-side{display:none} }
+@media (prefers-reduced-motion: reduce){ .app, .sidebar, .btn-side .seta-side{transition:none} }
 </style>
 </head>
 <body>
 
 <div class="app">
-<aside class="sidebar" aria-label="Navegação principal">
+<aside class="sidebar" id="sidebar" aria-label="Navegação principal">
   <button type="button" class="brand" data-ir="inicio"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#1B2220"/><circle cx="32" cy="32" r="25" fill="#F3EFDF"/><ellipse cx="30" cy="34" rx="12" ry="9" fill="#C08C3E" stroke="#6B430F" stroke-width="2.5" transform="rotate(-20 30 34)"/><ellipse cx="30" cy="34" rx="7" ry="5" fill="#D8B061" transform="rotate(-20 30 34)"/></svg><span>Enteroparasitos<b>em Foco</b></span></button>
   <p class="subbrand">Parasitologia humana · graduação</p>
   <nav class="snav" aria-label="Módulos">
-    <button type="button" class="" data-ir="inicio" data-nav="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg><span class="nl-t">Painel</span></button><p class="navsep">Módulos</p><button type="button" class="mod-fund" data-ir="fundamentos" data-nav="fundamentos"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4"/><path d="M11 12h2"/></svg><span class="nl-t">Fundamentos</span><span class="nprog" data-np="fund"></span></button><button type="button" class="mod-proto" data-ir="protozoarios" data-nav="protozoarios"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c4.5 0 8 3.6 8 8.5S16.8 21 12 21 4 16.6 4 11.8 7.5 3 12 3z"/><circle cx="10" cy="10" r="2"/><circle cx="15" cy="14" r="1.2"/></svg><span class="nl-t">Protozoários</span><span class="nprog" data-np="proto"></span></button><button type="button" class="mod-nema" data-ir="nematoides" data-nav="nematoides"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17c2.5 0 2.5-4 5-4s2.5 4 5 4 2.5-8 5-8"/><circle cx="19.5" cy="8.5" r="1"/></svg><span class="nl-t">Nematoides</span><span class="nprog" data-np="nema"></span></button><button type="button" class="mod-cest" data-ir="cestodeos" data-nav="cestodeos"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="4" rx="2"/><rect x="8.5" y="7.5" width="7" height="4" rx="1"/><rect x="8" y="12.5" width="8" height="4" rx="1"/><rect x="7.5" y="17.5" width="9" height="4" rx="1"/></svg><span class="nl-t">Cestódeos</span><span class="nprog" data-np="cest"></span></button><button type="button" class="mod-trema" data-ir="trematodeos" data-nav="trematodeos"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3.5 3 5 6.5 5 10s-2 7-5 8c-3-1-5-4.5-5-8s1.5-7 5-10z"/><circle cx="12" cy="8" r="1.3"/><circle cx="12" cy="13" r="1.3"/></svg><span class="nl-t">Esquistossomose</span><span class="nprog" data-np="trema"></span></button><button type="button" class="mod-diag" data-ir="diagnostico" data-nav="diagnostico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg><span class="nl-t">Diagnóstico</span><span class="nprog" data-np="diag"></span></button><button type="button" class="mod-imuno" data-ir="imunologia" data-nav="imunologia"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-8M12 13 6.5 6.5M12 13l5.5-6.5M5 8 8 5M16 5l3 3"/></svg><span class="nl-t">Imunologia</span><span class="nprog" data-np="imuno"></span></button><button type="button" class="mod-epi" data-ir="epidemiologia" data-nav="epidemiologia"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><rect x="5.5" y="12" width="3" height="6"/><rect x="10.5" y="7" width="3" height="11"/><rect x="15.5" y="10" width="3" height="8"/></svg><span class="nl-t">Epidemiologia</span><span class="nprog" data-np="epi"></span></button><p class="navsep">Laboratório</p><button type="button" class="mod-diag" data-ir="bancada" data-nav="bancada"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="8" width="19" height="8" rx="1"/><rect x="9" y="9.5" width="6" height="5"/></svg><span class="nl-t">Bancada de EPF</span></button><button type="button" class="mod-lam" data-ir="laminario" data-nav="laminario"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span class="nl-t">Laminário</span></button>
+    <button type="button" class="" data-ir="inicio" title="Painel" data-nav="inicio"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></svg><span class="nl-t">Painel</span></button><p class="navsep">Módulos</p><button type="button" class="mod-fund" data-ir="fundamentos" title="Fundamentos" data-nav="fundamentos"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="12" r="4"/><circle cx="17" cy="12" r="4"/><path d="M11 12h2"/></svg><span class="nl-t">Fundamentos</span><span class="nprog" data-np="fund"></span></button><button type="button" class="mod-proto" data-ir="protozoarios" title="Protozoários" data-nav="protozoarios"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c4.5 0 8 3.6 8 8.5S16.8 21 12 21 4 16.6 4 11.8 7.5 3 12 3z"/><circle cx="10" cy="10" r="2"/><circle cx="15" cy="14" r="1.2"/></svg><span class="nl-t">Protozoários</span><span class="nprog" data-np="proto"></span></button><button type="button" class="mod-nema" data-ir="nematoides" title="Nematoides" data-nav="nematoides"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17c2.5 0 2.5-4 5-4s2.5 4 5 4 2.5-8 5-8"/><circle cx="19.5" cy="8.5" r="1"/></svg><span class="nl-t">Nematoides</span><span class="nprog" data-np="nema"></span></button><button type="button" class="mod-cest" data-ir="cestodeos" title="Cestódeos" data-nav="cestodeos"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="2.5" width="6" height="4" rx="2"/><rect x="8.5" y="7.5" width="7" height="4" rx="1"/><rect x="8" y="12.5" width="8" height="4" rx="1"/><rect x="7.5" y="17.5" width="9" height="4" rx="1"/></svg><span class="nl-t">Cestódeos</span><span class="nprog" data-np="cest"></span></button><button type="button" class="mod-trema" data-ir="trematodeos" title="Esquistossomose" data-nav="trematodeos"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3.5 3 5 6.5 5 10s-2 7-5 8c-3-1-5-4.5-5-8s1.5-7 5-10z"/><circle cx="12" cy="8" r="1.3"/><circle cx="12" cy="13" r="1.3"/></svg><span class="nl-t">Esquistossomose</span><span class="nprog" data-np="trema"></span></button><button type="button" class="mod-diag" data-ir="diagnostico" title="Diagnóstico" data-nav="diagnostico"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg><span class="nl-t">Diagnóstico</span><span class="nprog" data-np="diag"></span></button><button type="button" class="mod-imuno" data-ir="imunologia" title="Imunologia" data-nav="imunologia"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-8M12 13 6.5 6.5M12 13l5.5-6.5M5 8 8 5M16 5l3 3"/></svg><span class="nl-t">Imunologia</span><span class="nprog" data-np="imuno"></span></button><button type="button" class="mod-epi" data-ir="epidemiologia" title="Epidemiologia" data-nav="epidemiologia"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h16"/><rect x="5.5" y="12" width="3" height="6"/><rect x="10.5" y="7" width="3" height="11"/><rect x="15.5" y="10" width="3" height="8"/></svg><span class="nl-t">Epidemiologia</span><span class="nprog" data-np="epi"></span></button><p class="navsep">Laboratório</p><button type="button" class="mod-diag" data-ir="bancada" title="Bancada de EPF" data-nav="bancada"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="8" width="19" height="8" rx="1"/><rect x="9" y="9.5" width="6" height="5"/></svg><span class="nl-t">Bancada de EPF</span></button><button type="button" class="mod-lam" data-ir="laminario" title="Laminário" data-nav="laminario"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span class="nl-t">Laminário</span></button>
   </nav>
   <div class="sidebottom">
     <div class="count"><b class="mono" id="sb-lam">0</b><span>de 22 lâminas observadas</span></div>
@@ -514,6 +536,7 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
 </aside>
 <div class="appmain">
 <header class="topbar">
+  <button type="button" class="btn-ic btn-side" id="b-side" aria-expanded="true" aria-controls="sidebar" title="Recolher a barra lateral (atalho: [ )"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/><path class="seta-side" d="M15.5 10 13 12l2.5 2"/></svg></button>
   <button type="button" class="mobilebrand" data-ir="inicio"><svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#1B2220"/><circle cx="32" cy="32" r="25" fill="#F3EFDF"/><ellipse cx="30" cy="34" rx="12" ry="9" fill="#C08C3E" stroke="#6B430F" stroke-width="2.5" transform="rotate(-20 30 34)"/><ellipse cx="30" cy="34" rx="7" ry="5" fill="#D8B061" transform="rotate(-20 30 34)"/></svg><span>Enteroparasitos <b>em Foco</b></span></button>
   <span class="crumb">Enteroparasitos em Foco / <b id="crumb">Painel</b></span>
   <div class="tools">
@@ -4372,7 +4395,7 @@ function appResumo(){
   APP_MODS.forEach(([v,key]) => {
     const e = appEtapas(v, key), n = e.filter(Boolean).length; if(n === 3) feitos++; if(e[1]) prev++;
     const q = ST.get('quiz_'+key, null); if(q){ rev++; ac += q.a; tot += q.t; }
-    $$(`[data-np="${key}"]`).forEach(x => { x.textContent = n === 3 ? '✓' : n + '/3'; x.classList.toggle('ok', n === 3); });
+    $$(`[data-np="${key}"]`).forEach(x => { x.textContent = n === 3 ? '✓' : n + '/3'; x.classList.toggle('ok', n === 3); x.closest('button').classList.toggle('feito', n === 3); });
     const card = $(`.card-mod[data-ir="${v}"]`);
     if(card){ let p = $('.mprog', card); if(!p){ p = document.createElement('div'); p.className = 'mprog'; card.insertBefore(p, $('.ir', card)); }
       p.innerHTML = `<div class="bar"><i style="width:${n/3*100}%"></i></div><div class="foot"><span>${['Não iniciado','Visitado','Previsão feita','Concluído'][e[2] && e[1] && e[0] ? 3 : n]}</span><span class="mono">${n}/3</span></div>`; }
@@ -4395,6 +4418,16 @@ function appResumo(){
     ct.innerHTML = `<span class="eyebrow">${tit}</span><h2>${APP_NOME[alvo]}</h2><p>${txt}</p><div class="row"><button type="button" class="btn-cont" data-ir="${alvo}">${rot} →</button>${alvo === 'laminario' ? (prox ? `<button type="button" class="btn-cont sec" data-ir="${prox[0]}">Ir para ${prox[2]}</button>` : '') : '<button type="button" class="btn-cont sec" data-ir="laminario">Abrir o Laminário</button>'}</div>`;
   }
 }
+
+/* barra lateral retrátil: lembra a escolha neste aparelho */
+function appLateral(rec){
+  const app = $('.app'), b = $('#b-side'); app.classList.toggle('recolhida', rec);
+  b.setAttribute('aria-expanded', String(!rec)); b.title = rec ? 'Expandir a barra lateral (atalho: [ )' : 'Recolher a barra lateral (atalho: [ )';
+  ST.set('lateral_recolhida', rec);
+}
+$('#b-side').onclick = () => appLateral(!$('.app').classList.contains('recolhida'));
+document.addEventListener('keydown', e => { if(e.key === '[' && !e.ctrlKey && !e.metaKey && !e.altKey && !e.target.closest('input, textarea, select, [contenteditable]')) appLateral(!$('.app').classList.contains('recolhida')); });
+appLateral(ST.get('lateral_recolhida', false));
 /* instalação como aplicativo (só no site publicado; dentro de uma moldura não se aplica) */
 let appPrompt = null;
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); appPrompt = e; const b = $('#b-inst'); if(b) b.hidden = false; });
