@@ -536,6 +536,25 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
 .rest-mod{display:flex; justify-content:flex-end; margin-top:12px}
 .sr-rest{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
 @media print{ .b-rest{display:none} }
+
+/* sumário do módulo fixo ao rolar, com a seção atual destacada */
+.sumario{position:sticky; top:calc(var(--top) + env(safe-area-inset-top,0px)); z-index:12; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; margin-inline:-6px; padding:8px 6px; background:var(--bg); border-bottom:1px solid transparent; transition:border-color .15s, box-shadow .15s}
+.sumario::-webkit-scrollbar{display:none}
+.sumario a, .sumario .b-rest{flex:none; white-space:nowrap}
+.sumario.preso{border-bottom-color:var(--line); box-shadow:0 8px 14px -12px rgb(0 0 0 / .4)}
+.sumario a[aria-current="true"]{border-color:var(--t); background:var(--s); font-weight:700}
+html{scroll-padding-top:calc(var(--top) + 70px)}
+@media (max-width:900px){
+  .sumario{top:calc(var(--top) + var(--mnav, 49px) + env(safe-area-inset-top,0px))}
+  html{scroll-padding-top:calc(var(--top) + var(--mnav, 49px) + 70px)}
+}
+/* Prever · Observar · Explicar: as duas últimas etapas levam à parte correspondente do módulo */
+.comecar .ppe button{font:inherit; letter-spacing:inherit; text-transform:inherit; padding:2px 9px; border-radius:999px; background:var(--surface); color:var(--ink); border:1px solid var(--line); cursor:pointer}
+.comecar .ppe button:hover{border-color:var(--t)}
+/* régua arrastável da ocular */
+.regua{cursor:grab; touch-action:none; outline:none}
+.regua.arrastando{cursor:grabbing}
+.regua:focus-visible .regua-fundo{stroke:var(--accent); stroke-width:2.5}
 </style>
 </head>
 <body>
@@ -1073,7 +1092,7 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
           <tr><td>Escólex</td><td>Armado: rostro com dupla coroa de acúleos</td><td>Inerme, sem acúleos</td><td>Rostro retrátil com uma coroa de acúleos</td><td>Rostro sem acúleos</td></tr>
           <tr><td>Proglote grávida</td><td>Poucas ramificações uterinas (≈ 7–13 de cada lado)</td><td>Muitas ramificações (≈ 15–30 de cada lado)</td><td>Pequenas; raramente vistas</td><td>Pequenas; raramente vistas</td></tr>
           <tr><td>Ovo</td><td class="mono">≈ 30–35 µm, embrióforo radiado</td><td class="mono">idem (indistinguível)</td><td class="mono">≈ 30–47 µm, com filamentos polares</td><td class="mono">≈ 60–80 µm, sem filamentos</td></tr>
-          <tr><td>Diagnóstico</td><td>Tamização, ovos na sedimentação ou no Graham; cisticercose: imagem e sorologia</td><td>Tamização, Graham (proglotes ativas)</td><td>Sedimentação (ovos nas fezes)</td><td>Sedimentação</td></tr>
+          <tr><td>Diagnóstico</td><td>Tamização, ovos na sedimentação ou no Graham; cisticercose: imagem e sorologia</td><td>Tamização, Graham (proglotes ativas)</td><td>Sedimentação espontânea (HPJ/Lutz): ovos nas fezes</td><td>Sedimentação espontânea (HPJ/Lutz)</td></tr>
         </tbody>
       </table>
     </div>
@@ -1147,7 +1166,7 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
       <p>Cerca de metade dos ovos não alcança a luz intestinal e é levada pelo sangue ao fígado. Lá, os antígenos solúveis do ovo induzem um <b>granuloma</b> com predomínio de resposta Th2 (eosinófilos, macrófagos alternativamente ativados, fibroblastos). O granuloma protege os hepatócitos das toxinas do ovo, mas sua cicatrização deposita colágeno ao redor dos ramos portais: a <b>fibrose periportal</b> (de Symmers). O resultado é hipertensão portal, esplenomegalia, circulação colateral e varizes de esôfago, com risco de hemorragia digestiva.</p>
       <p>Na fase aguda, logo após a primeira oviposição, pode haver a forma toxêmica (febre de Katayama), com febre, eosinofilia elevada e hepatomegalia, mais comum em pessoas que se expõem pela primeira vez, como turistas em áreas endêmicas.</p>
     </div>
-    <p class="nota read" style="margin-top:12px"><b>Diagnóstico.</b> Kato-Katz (quantitativo, padrão em inquéritos); sedimentação; biópsia retal em casos selecionados; sorologia e detecção de antígenos circulantes (como o CCA na urina) para áreas de baixa transmissão. A sensibilidade do Kato-Katz cai muito em cargas baixas, tema da Ferramenta 3.</p>
+    <p class="nota read" style="margin-top:12px"><b>Diagnóstico.</b> Kato-Katz (quantitativo, padrão em inquéritos); sedimentação espontânea (HPJ/Lutz); biópsia retal em casos selecionados; sorologia e detecção de antígenos circulantes (como o CCA na urina) para áreas de baixa transmissão. A sensibilidade do Kato-Katz cai muito em cargas baixas, tema da Ferramenta 3.</p>
     <p class="base"><b>Base:</b> Neves, capítulos de <i>Schistosoma mansoni</i> e esquistossomose; Pearce &amp; MacDonald (2002); Ministério da Saúde, Guia de Vigilância em Saúde <span class="conf">conferir edição</span>.</p>
   </section>
   <section class="secao" id="t-barreiras">
@@ -1501,8 +1520,8 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
   <section class="secao" id="n-quadro">
     <header><span class="eyebrow">Conteúdo essencial</span><h3>Quadro comparativo</h3></header>
     <div class="stack read">
-      <p>Os três primeiros (<i>Ascaris</i>, <i>Trichuris</i> e ancilostomídeos) são <button class="gl" data-g="geo">geo-helmintos</button>: o ovo ou a larva precisa passar um período no solo para se tornar infectante. Por isso não há transmissão direta de pessoa a pessoa. <i>Enterobius</i> é o oposto: o ovo fica infectante em poucas horas na pele perianal, o que explica a transmissão intradomiciliar e em creches.</p>
-      <p><i>Ascaris</i>, ancilostomídeos e <i>Strongyloides</i> passam pelo pulmão (ciclo de Loss), onde as larvas atravessam os capilares para os alvéolos, sobem pela árvore brônquica, são deglutidas e chegam ao intestino delgado. Essa passagem pode causar tosse, infiltrados pulmonares transitórios e eosinofilia.</p>
+      <p><i>Ascaris lumbricoides</i>, <i>Trichuris trichiura</i>, os ancilostomídeos (<i>Necator americanus</i> e <i>Ancylostoma duodenale</i>) e <i>Strongyloides stercoralis</i> são <button class="gl" data-g="geo">geo-helmintos</button>: o ovo ou a larva precisa passar um período no solo para se tornar infectante. Por isso não há transmissão direta de pessoa a pessoa. Os três primeiros costumam ser tratados em conjunto, inclusive nos programas de controle da OMS, porque respondem aos mesmos medicamentos (albendazol e mebendazol). <i>S. stercoralis</i> fica à parte por exigir outros métodos de diagnóstico e outro fármaco (ivermectina), e porque a autoinfecção mantém a infecção sem nova exposição ao solo. <i>Enterobius vermicularis</i> é o oposto de todos: o ovo fica infectante em poucas horas na pele perianal, o que explica a transmissão intradomiciliar e em creches.</p>
+      <p><i>A. lumbricoides</i>, os ancilostomídeos e <i>S. stercoralis</i> passam pelo pulmão (ciclo de Loss), onde as larvas atravessam os capilares para os alvéolos, sobem pela árvore brônquica, são deglutidas e chegam ao intestino delgado. Essa passagem pode causar tosse, infiltrados pulmonares transitórios e eosinofilia.</p>
     </div>
     <div class="tab-wrap" style="margin-top:16px">
       <table class="tab-nema">
@@ -1513,7 +1532,7 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
           <tr><td>Via de infecção</td><td>Oral (água, alimentos, mãos)</td><td>Oral</td><td>Penetração ativa na pele; <i>A. duodenale</i> também por via oral</td><td>Penetração na pele; autoinfecção interna e externa</td><td>Oral (mãos, fômites, poeira), autoinfecção externa e <button class="gl" data-g="retro">retroinfecção</button></td></tr>
           <tr><td>Ciclo pulmonar</td><td>Sim</td><td>Não</td><td>Sim</td><td>Sim</td><td>Não</td></tr>
           <tr><td>Forma diagnóstica</td><td>Ovo fértil ou infértil nas fezes</td><td>Ovo nas fezes</td><td>Ovo nas fezes (larva rabditoide se as fezes envelhecerem)</td><td><button class="gl" data-g="rabd">Larva rabditoide</button> nas fezes</td><td>Ovo na pele perianal</td></tr>
-          <tr><td>Exame preferencial</td><td>Sedimentação; Kato-Katz</td><td>Kato-Katz; sedimentação</td><td>Willis; Kato-Katz com leitura rápida</td><td>Baermann-Moraes, Rugai, cultura em placa de ágar</td><td>Graham (fita adesiva)</td></tr>
+          <tr><td>Exame preferencial</td><td>Sedimentação espontânea (HPJ/Lutz); Kato-Katz</td><td>Kato-Katz; sedimentação espontânea (HPJ/Lutz)</td><td>Willis-Molloy; Kato-Katz com leitura rápida</td><td>Baermann-Moraes; Rugai, Mattos e Brisola; cultura em placa de ágar</td><td>Graham (fita adesiva)</td></tr>
           <tr><td>Marca clínica</td><td>Obstrução por bolo de vermes; migração errática (vias biliares); Loeffler</td><td>Colite, disenteria e prolapso retal nas infecções intensas</td><td>Anemia ferropriva por perda de sangue</td><td>Dor epigástrica, <button class="gl" data-g="currens">larva currens</button>, hiperinfecção</td><td>Prurido anal noturno</td></tr>
         </tbody>
       </table>
@@ -1524,7 +1543,7 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
 
   <section class="secao" id="n-micro">
     <header><span class="eyebrow">Ferramenta 1</span><h3>Microscópio virtual</h3>
-      <p class="muted read">Cada campo traz uma forma diagnóstica em tamanho real em relação ao campo (diâmetro do campo = 18 mm ÷ objetiva: 1.800 µm com a de 10× e 450 µm com a de 40×). Há artefatos de propósito. Use a régua, identifique e confira.</p></header>
+      <p class="muted read">Cada campo traz uma forma diagnóstica em tamanho real em relação ao campo (diâmetro do campo = 18 mm ÷ objetiva: 1.800 µm com a de 10× e 450 µm com a de 40×). Há artefatos de propósito. A régua no canto do campo pode ser arrastada até o objeto para medir. Use-a, identifique e confira.</p></header>
     <div class="micro">
       <div class="painel stack">
         <div class="row"><span class="eyebrow">Preparação</span><div class="seg" id="mi-prep" aria-label="Preparação"><button aria-pressed="true" data-p="sal">Salina</button><button aria-pressed="false" data-p="lug">Lugol</button></div></div>
@@ -1551,7 +1570,7 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
   </section>
 
   <section class="secao" id="n-pulmao">
-    <header><span class="eyebrow">Ferramenta 3</span><h3>Monte o trajeto: ciclo pulmonar do <i>Ascaris</i></h3><p class="muted read">Toque nas etapas na ordem em que acontecem, da ingestão até o verme adulto. Para desfazer, toque numa etapa já colocada.</p></header>
+    <header><span class="eyebrow">Ferramenta 3</span><h3>Monte o trajeto: ciclo pulmonar de <i>A. lumbricoides</i></h3><p class="muted read">Toque nas etapas na ordem em que acontecem, da ingestão até o verme adulto. Para desfazer, toque numa etapa já colocada.</p></header>
     <div class="grid2">
       <div class="painel stack"><h4>Etapas disponíveis</h4><div class="pool" id="pul-pool"></div></div>
       <div class="painel stack"><h4>Sua sequência</h4><div class="slots" id="pul-slots"></div><div class="row"><button class="btn" id="pul-conf">Conferir</button><button class="btn sec" id="pul-reset">Recomeçar</button></div><div id="pul-fb"></div></div>
@@ -1662,8 +1681,8 @@ const GLOS = {
   eosin:{t:'Eosinofilia', en:'eosinophilia', d:'Aumento de eosinófilos no sangue. É comum nas helmintíases com fase tecidual, mas pode faltar, por exemplo na hiperinfecção ou em quem usa corticoide.'},
   esp:{t:'Especificidade', en:'specificity', d:'Proporção de pessoas sem a doença que têm o teste negativo. Mede a capacidade de não dar falso positivo.'},
   filar:{t:'Larva filarioide', en:'filariform larva', d:'Larva infectante (L3) de ancilostomídeos e Strongyloides, com esôfago longo e cilíndrico, sem bulbo. A de S. stercoralis tem a cauda entalhada (bifurcada).'},
-  flutuacao:{t:'Flutuação', en:'flotation', d:'Princípio das técnicas que usam solução mais densa que os ovos ou cistos leves, que sobem e são recolhidos na superfície (Willis, Faust).'},
-  geo:{t:'Geo-helmintos', en:'soil-transmitted helminths', d:'Helmintos cujos ovos ou larvas precisam de um período no solo para se tornarem infectantes: Ascaris lumbricoides, Trichuris trichiura e ancilostomídeos (e, por muitos autores, S. stercoralis).'},
+  flutuacao:{t:'Flutuação', en:'flotation', d:'Princípio das técnicas que usam solução mais densa que os ovos ou cistos leves, que sobem e são recolhidos na superfície (Willis-Molloy, Faust).'},
+  geo:{t:'Geo-helmintos', en:'soil-transmitted helminths', d:'Helmintos cujos ovos ou larvas precisam de um período no solo para se tornarem infectantes: Ascaris lumbricoides, Trichuris trichiura, os ancilostomídeos (Necator americanus e Ancylostoma duodenale) e Strongyloides stercoralis. Os três primeiros são abordados em conjunto nos programas de controle da OMS, porque respondem aos mesmos medicamentos; S. stercoralis exige diagnóstico próprio (Baermann-Moraes; Rugai, Mattos e Brisola) e tratamento com ivermectina.'},
   hiperinf:{t:'Hiperinfecção', en:'hyperinfection', d:'Autoinfecção acelerada, com aumento acentuado do número de larvas no intestino e no pulmão, em geral desencadeada por alteração da imunidade. A diferença em relação à autoinfecção habitual é quantitativa.'},
   loeffler:{t:'Síndrome de Loeffler', en:"Loeffler's syndrome", d:'Quadro pulmonar transitório (tosse, chiado, infiltrados que mudam de lugar) com eosinofilia, associado à passagem de larvas pelo pulmão.'},
   opg:{t:'OPG', en:'eggs per gram, EPG', d:'Ovos por grama de fezes. Estimativa da carga parasitária usada para classificar a intensidade da infecção.'},
@@ -1674,7 +1693,7 @@ const GLOS = {
   sedimentacao:{t:'Sedimentação', en:'sedimentation', d:'Princípio em que ovos, larvas e cistos se depositam no fundo por gravidade (espontânea) ou por centrifugação. Recupera bem as formas mais pesadas.'},
   sens:{t:'Sensibilidade', en:'sensitivity', d:'Proporção de pessoas com a doença que têm o teste positivo. Mede a capacidade de não dar falso negativo.'},
   tampoes:{t:'Tampões polares', en:'polar plugs', d:'Saliências hialinas nas duas extremidades do ovo de Trichuris trichiura.'},
-  termo:{t:'Termo-hidrotropismo', en:'thermo-hydrotropism', d:'Atração das larvas vivas pela água morna. É o princípio dos métodos de Baermann-Moraes e de Rugai.'},
+  termo:{t:'Termo-hidrotropismo', en:'thermo-hydrotropism', d:'Atração das larvas vivas pela água morna. É o princípio dos métodos de Baermann-Moraes e de Rugai, Mattos e Brisola.'},
   vest:{t:'Vestíbulo bucal', en:'buccal cavity', d:'Cavidade entre a boca e o esôfago. Curto na larva rabditoide de S. stercoralis e longo na de ancilostomídeo.'},
   vpp:{t:'Valor preditivo', en:'predictive value', d:'VPP: probabilidade de ter a doença quando o teste é positivo. VPN: probabilidade de não ter quando é negativo. Dependem da prevalência na população testada.'},
   mamil:{t:'Camada mamilonada', en:'mammillated coat', d:'Camada externa, albuminosa e irregular do ovo de Ascaris lumbricoides, corada de castanho pela bile. O ovo sem ela é chamado de decorticado.'}
@@ -1699,9 +1718,9 @@ const FERRAMENTAS = [
 const TEC = {
   hpj:{n:'Sedimentação espontânea (Hoffman, Pons e Janer / Lutz)', p:'Ovos, larvas e cistos se depositam no fundo do cálice por gravidade, em água.', r:'Ampla gama de formas, inclusive ovos pesados (Schistosoma mansoni, Taenia spp., ovos inférteis de Ascaris) e larvas.', l:'Qualitativo; demorado; sedimento com muitos detritos; cistos menos concentrados que no Faust.'},
   faust:{n:'Centrífugo-flutuação em sulfato de zinco (Faust)', p:'Após centrifugação e lavagem, cistos e ovos leves flutuam em solução de sulfato de zinco a 33% (densidade ≈ 1,18).', r:'Cistos de protozoários (Giardia, Entamoeba) e ovos leves.', l:'Ovos pesados e operculados não flutuam; cistos se deformam se a leitura demorar.'},
-  willis:{n:'Flutuação espontânea em salina saturada (Willis)', p:'Ovos leves sobem em solução saturada de cloreto de sódio (densidade ≈ 1,20) e aderem à lâmina colocada sobre o frasco.', r:'Ovos de ancilostomídeos, em especial; também Ascaris férteis e Trichuris.', l:'Não serve para ovos pesados, larvas nem cistos de protozoários.'},
+  willis:{n:'Flutuação espontânea em salina saturada (Willis-Molloy)', p:'Ovos leves sobem em solução saturada de cloreto de sódio (densidade ≈ 1,20) e aderem à lâmina colocada sobre o frasco.', r:'Ovos de ancilostomídeos, em especial; também Ascaris férteis e Trichuris.', l:'Não serve para ovos pesados, larvas nem cistos de protozoários.'},
   kk:{n:'Kato-Katz', p:'Esfregaço espesso de massa padronizada de fezes (41,7 mg), clarificado por glicerina com verde de malaquita sob celofane. Quantitativo.', r:'Ovos de Schistosoma mansoni (método recomendado pela OMS para diagnóstico e inquéritos), Ascaris e Trichuris; estima OPG.', l:'Ovos de ancilostomídeos clarificam e somem se a leitura demorar; não serve para larvas nem cistos; baixa sensibilidade em infecções leves.'},
-  baer:{n:'Baermann-Moraes / Rugai', p:'Termo-hidrotropismo: larvas vivas migram das fezes para a água morna e se acumulam no fundo.', r:'Larvas de Strongyloides stercoralis.', l:'Exige fezes frescas, sem conservante nem refrigeração (larvas precisam estar vivas).'},
+  baer:{n:'Baermann-Moraes / Rugai, Mattos e Brisola', p:'Termo-hidrotropismo: larvas vivas migram das fezes para a água morna e se acumulam no fundo.', r:'Larvas de Strongyloides stercoralis.', l:'Exige fezes frescas, sem conservante nem refrigeração (larvas precisam estar vivas).'},
   graham:{n:'Fita adesiva (Graham)', p:'Fita gomada transparente aplicada na pele perianal pela manhã, antes da higiene, recolhe os ovos ali depositados.', r:'Ovos de Enterobius vermicularis; às vezes ovos de Taenia.', l:'Ovos raramente aparecem nas fezes; pode ser preciso repetir em dias seguidos.'},
   zn:{n:'Ziehl-Neelsen modificado', p:'Coloração em que os oocistos álcool-ácido resistentes retêm a fucsina e ficam vermelho-rosados.', r:'Cryptosporidium spp. (4–6 µm), Cyclospora cayetanensis (8–10 µm), Cystoisospora belli.', l:'Coloração variável entre oocistos; Cyclospora cora de forma irregular.'},
   copro:{n:'Pesquisa de coproantígeno', p:'Imunoensaio (ELISA ou imunocromatográfico) que detecta antígenos do parasito nas fezes.', r:'Giardia, Cryptosporidium, Entamoeba histolytica (kits específicos a distinguem de E. dispar).', l:'Um alvo por teste; custo; não detecta outros parasitos presentes.'},
@@ -1712,7 +1731,7 @@ const TEC = {
 const QUAL = [
   {s:'Criança de 5 anos com prurido anal noturno, sono agitado e irritabilidade. Um EPF de rotina veio negativo.', best:['graham'], ok:[], x:'A fêmea de Enterobius migra à noite para a região perianal e deposita os ovos ali. Por isso o EPF de rotina costuma ser negativo, e a fita adesiva é colhida pela manhã, antes do banho.'},
   {s:'Um programa de controle quer saber não só quantos moradores de uma localidade endêmica têm Schistosoma mansoni, mas também a intensidade da infecção.', best:['kk'], ok:['hpj'], x:'O Kato-Katz quantifica os ovos (OPG) e é o método recomendado pela OMS para inquéritos de esquistossomose e geo-helmintíases. A sedimentação detecta, mas não quantifica.'},
-  {s:'Homem de 48 anos, nascido em zona rural, vai começar imunossupressão para um transplante renal. Tem eosinofilia leve.', best:['baer'], ok:[], x:'A preocupação é Strongyloides stercoralis, que pode persistir por décadas e evoluir para hiperinfecção com a imunossupressão. Métodos baseados em termo-hidrotropismo (Baermann-Moraes, Rugai), em várias amostras, são os indicados. Sorologia também é usada no rastreio, mas não está nesta lista.'},
+  {s:'Homem de 48 anos, nascido em zona rural, vai começar imunossupressão para um transplante renal. Tem eosinofilia leve.', best:['baer'], ok:[], x:'A preocupação é Strongyloides stercoralis, que pode persistir por décadas e evoluir para hiperinfecção com a imunossupressão. Métodos baseados em termo-hidrotropismo (Baermann-Moraes; Rugai, Mattos e Brisola), em várias amostras, são os indicados. Sorologia também é usada no rastreio, mas não está nesta lista.'},
   {s:'Adulto vivendo com HIV, com contagem de linfócitos T CD4⁺ muito baixa, tem diarreia aquosa volumosa há três semanas.', best:['zn'], ok:['copro','pcr'], x:'Os coccídios intestinais (Cryptosporidium, Cystoisospora, Cyclospora) são causas importantes de diarreia em imunossuprimidos e não aparecem bem nos métodos de rotina. A coloração álcool-ácido resistente é o método clássico; coproantígeno e PCR são alternativas.'},
   {s:'Criança de creche com diarreia crônica, fezes gordurosas e com mau cheiro, distensão abdominal e perda de peso.', best:['faust'], ok:['copro','pcr','hpj'], x:'O quadro sugere giardíase com má absorção. O Faust concentra bem os cistos. Como a eliminação é intermitente, examinar mais de uma amostra aumenta a chance de detecção. Coproantígeno e PCR também servem; a sedimentação recupera cistos com menos eficiência.'},
   {s:'Inquérito em uma escola rural para ancilostomídeos. Não há centrífuga disponível e as lâminas serão lidas no mesmo dia.', best:['willis'], ok:['kk'], x:'Os ovos de ancilostomídeos são leves e flutuam bem na salina saturada, sem centrífuga. O Kato-Katz também serve e quantifica, desde que a leitura seja feita logo, antes de os ovos clarificarem.'},
@@ -1720,7 +1739,7 @@ const QUAL = [
   {s:'Adulto relata eliminar "pedacinhos brancos que se mexem" nas fezes e na roupa íntima.', best:['tam'], ok:['hpj','graham'], x:'A descrição sugere proglotes de Taenia. A tamização recupera as proglotes, e o número de ramificações uterinas diferencia T. solium de T. saginata. Os ovos de Taenia, vistos na sedimentação ou no Graham, são iguais nas duas espécies e não permitem identificar a espécie.'}
 ];
 const ORDEM_TEC = ['hpj','faust','willis','kk','baer','graham','zn','copro','pcr','tam'];
-const CURTO = {hpj:'Sedimentação (HPJ/Lutz)', faust:'Faust', willis:'Willis', kk:'Kato-Katz', baer:'Baermann-Moraes / Rugai', graham:'Graham', zn:'Ziehl-Neelsen mod.', copro:'Coproantígeno', pcr:'PCR', tam:'Tamização'};
+const CURTO = {hpj:'Sedimentação (HPJ/Lutz)', faust:'Faust', willis:'Willis-Molloy', kk:'Kato-Katz', baer:'Baermann-Moraes / Rugai', graham:'Graham', zn:'Ziehl-Neelsen mod.', copro:'Coproantígeno', pcr:'PCR', tam:'Tamização'};
 
 /* ============ intensidade (OMS, TRS 912) ============ */
 const INT = {
@@ -1956,7 +1975,7 @@ const MICRO = {
   tri:{n:'Ovo de Trichuris trichiura', m:'50–55 × 20–25 µm', e:['Forma de barril ou limão','Tampões polares hialinos nas duas extremidades','Casca espessa e castanha'], nota:'Não é embrionado nas fezes frescas.'},
   anc:{n:'Ovo de ancilostomídeo', m:'55–75 × 36–40 µm', e:['Oval, de casca muito fina e incolor','Espaço claro entre a casca e o embrião','4 a 8 blastômeros nas fezes frescas'], nota:'Ovos de Necator americanus e Ancylostoma duodenale não se distinguem pela morfologia; o laudo diz "ovos de ancilostomídeo".'},
   ent:{n:'Ovo de Enterobius vermicularis', m:'50–60 × 20–30 µm', e:['Assimétrico: um lado achatado e outro convexo (forma de D)','Casca dupla, lisa e incolor','Larva já formada no interior'], nota:'Achado incomum nas fezes. O exame indicado é a fita adesiva (Graham).'},
-  str:{n:'Larva rabditoide de Strongyloides stercoralis', m:'≈ 180–380 × 14–20 µm', e:['Vestíbulo bucal curto','Esôfago rabditoide (corpo, istmo e bulbo)','Primórdio genital grande e evidente na metade do corpo'], nota:'É a forma diagnóstica habitual nas fezes. Use métodos de Baermann-Moraes ou Rugai com fezes frescas.'},
+  str:{n:'Larva rabditoide de Strongyloides stercoralis', m:'≈ 180–380 × 14–20 µm', e:['Vestíbulo bucal curto','Esôfago rabditoide (corpo, istmo e bulbo)','Primórdio genital grande e evidente na metade do corpo'], nota:'É a forma diagnóstica habitual nas fezes. Use métodos de Baermann-Moraes ou Rugai, Mattos e Brisola com fezes frescas.'},
   ancL:{n:'Larva rabditoide de ancilostomídeo', m:'≈ 250–300 × 15–20 µm', e:['Vestíbulo bucal longo','Esôfago rabditoide','Primórdio genital pequeno, pouco visível'], nota:'Aparece quando as fezes ficam horas à temperatura ambiente e os ovos eclodem. Por isso a amostra para pesquisa de larvas deve ser fresca.'},
   pol:{n:'Grão de pólen (pseudoparasito)', m:'tamanho variável (este ≈ 35 µm)', e:['Parede com espinhos ou ornamentação regular','Simetria radial','Sem estruturas internas organizadas como blastômeros ou larva'], nota:'Pólens, células vegetais, fibras e bolhas de ar são confundidos com ovos. Compare forma, parede e conteúdo.'}
 };
@@ -2004,14 +2023,14 @@ function escala(){
   const k = 1.15, rr = rng(21);
   const ovos = [['asc_f',70,'Ascaris fértil','60 × 45'],['asc_i',195,'Ascaris infértil','85 × 43'],['tri',318,'T. trichiura','52 × 23'],['anc',430,'Ancilostomídeo','60 × 38'],['ent',545,'E. vermicularis','55 × 26'],['pol',660,'Grão de pólen','≈ 35']];
   let s = '';
-  ovos.forEach(([id,x,n,m])=>{ s += pos(DES[id]('sal', rng(30+x)), x, 82, k, 0); s += `<text x="${x}" y="146" text-anchor="middle" font-size="12.5" font-style="italic" fill="currentColor">${n}</text><text x="${x}" y="164" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".75" font-family="JetBrains Mono, monospace">${m} µm</text>`; });
+  ovos.forEach(([id,x,n,m])=>{ s += pos(DES[id]('sal', rng(30+x)), x, 82, k, 0); s += `<text x="${x}" y="146" text-anchor="middle" font-size="12.5" fill="currentColor">${n}</text><text x="${x}" y="164" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".75" font-family="JetBrains Mono, monospace">${m} µm</text>`; });
   const L1 = 250*k, L2 = 270*k, y = 262, x1 = 215, x2 = 575;
   s += pos(DES.larva('str','sal',null,0), x1, y, k, 0) + pos(DES.larva('anc','sal',null,0), x2, y, k, 0);
   const call = (x, yy, ty, txt) => `<line x1="${x}" y1="${yy}" x2="${x}" y2="${ty+4}" stroke="currentColor" stroke-width="1" opacity=".6"/><text x="${x}" y="${ty}" text-anchor="middle" font-size="11.5" fill="currentColor">${txt}</text>`;
   s += call(x1-L1/2+2, y-9, 214, 'vestíbulo bucal curto') + call(x1-L1/2+0.55*L1, y-6, 232, 'primórdio genital grande');
   s += call(x2-L2/2+8, y-10, 214, 'vestíbulo bucal longo') + call(x2-L2/2+0.55*L2, y-4, 232, 'primórdio genital pequeno');
-  s += `<text x="${x1}" y="300" text-anchor="middle" font-size="12.5" font-style="italic" fill="currentColor">Strongyloides stercoralis · larva rabditoide</text><text x="${x1}" y="318" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".75" font-family="JetBrains Mono, monospace">≈ 250 × 15 µm</text>`;
-  s += `<text x="${x2}" y="300" text-anchor="middle" font-size="12.5" font-style="italic" fill="currentColor">Ancilostomídeo · larva rabditoide</text><text x="${x2}" y="318" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".75" font-family="JetBrains Mono, monospace">≈ 270 × 17 µm</text>`;
+  s += `<text x="${x1}" y="300" text-anchor="middle" font-size="12.5" fill="currentColor">Strongyloides stercoralis · larva rabditoide</text><text x="${x1}" y="318" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".75" font-family="JetBrains Mono, monospace">≈ 250 × 15 µm</text>`;
+  s += `<text x="${x2}" y="300" text-anchor="middle" font-size="12.5" fill="currentColor">Ancilostomídeo · larva rabditoide</text><text x="${x2}" y="318" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".75" font-family="JetBrains Mono, monospace">≈ 270 × 17 µm</text>`;
   const b = 100*k; s += `<line x1="40" y1="390" x2="${40+b}" y2="390" stroke="currentColor" stroke-width="3"/><text x="${40+b/2}" y="380" text-anchor="middle" font-size="12" fill="currentColor" font-family="JetBrains Mono, monospace">100 µm</text><text x="${60+b}" y="394" font-size="11.5" fill="currentColor" opacity=".75">Todos desenhados na mesma ampliação. Medidas médias aproximadas.</text>`;
   const svg = $('#escala-svg'); svg.style.color = 'var(--ink)'; svg.innerHTML = s;
 }
@@ -2028,8 +2047,37 @@ function ocularSVG(id, fundo, conteudo, sobre, blur, k){
 <circle cx="200" cy="200" r="200" fill="#0b0e0c"/>
 <g clip-path="url(#oc-c-${id})"><rect width="400" height="400" fill="${fundo}"/><g filter="url(#oc-f-${id})">${conteudo}</g>
 <rect width="400" height="400" fill="url(#oc-l-${id})" pointer-events="none"/><circle cx="200" cy="200" r="${OC_R}" fill="url(#oc-v-${id})" pointer-events="none"/>${sobre||''}</g>
-<rect x="${(OC_D-58-sb.px).toFixed(1)}" y="${OC_D-78}" width="${sb.px.toFixed(1)}" height="5" rx="2" fill="#1d2420" pointer-events="none"/><text x="${(OC_D-58-sb.px/2).toFixed(1)}" y="${OC_D-86}" text-anchor="middle" font-size="14" font-weight="700" fill="#1d2420" font-family="JetBrains Mono, monospace" pointer-events="none">${sb.um} µm</text>`;
+${reguaSVG(id, sb)}`;
 }
+/* régua: arraste com o dedo ou o mouse (ou use as setas) para encostar no objeto e medir */
+const OC_REG = {};
+function reguaSVG(id, sb){
+  const rx = OC_D-58-sb.px, ry = OC_D-78, d = OC_REG[id] || [0,0]; let tk = '';
+  for(let i=0;i<=5;i++){ const x = (rx + sb.px*i/5).toFixed(1), fim = i===0 || i===5; tk += `<line x1="${x}" y1="${ry-(fim?9:5)}" x2="${x}" y2="${ry+5}" stroke="#1d2420" stroke-width="${fim?2:1.2}"/>`; }
+  return `<g class="regua" data-oc="${id}" data-rx="${rx.toFixed(1)}" data-ry="${ry}" data-w="${sb.px.toFixed(1)}" transform="translate(${d[0].toFixed(1)} ${d[1].toFixed(1)})" tabindex="0" role="img" aria-label="Régua de ${sb.um} µm. Arraste ou use as setas para encostá-la no objeto.">
+<title>Arraste a régua até o objeto para medir</title>
+<rect x="${(rx-12).toFixed(1)}" y="${ry-30}" width="${(sb.px+24).toFixed(1)}" height="44" fill="#fff" fill-opacity="0" pointer-events="all"/>
+<rect class="regua-fundo" x="${(rx-6).toFixed(1)}" y="${ry-24}" width="${(sb.px+12).toFixed(1)}" height="34" rx="6" fill="#fff" fill-opacity=".55"/>
+<rect x="${rx.toFixed(1)}" y="${ry}" width="${sb.px.toFixed(1)}" height="5" rx="2" fill="#1d2420"/>${tk}<text x="${(rx+sb.px/2).toFixed(1)}" y="${ry-11}" text-anchor="middle" font-size="13" font-weight="700" fill="#1d2420" font-family="JetBrains Mono, monospace">${sb.um} µm</text></g>`;
+}
+function reguaMove(g, dx, dy){
+  const rx = +g.dataset.rx, ry = +g.dataset.ry, w = +g.dataset.w, d = OC_REG[g.dataset.oc] || [0,0];
+  const x = Math.max(8-rx, Math.min(OC_D-8-rx-w, d[0]+dx)), y = Math.max(34-ry, Math.min(OC_D-14-ry, d[1]+dy));
+  OC_REG[g.dataset.oc] = [x, y]; g.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+}
+document.addEventListener('pointerdown', e => {
+  const g = e.target.closest && e.target.closest('.regua'); if(!g) return;
+  e.stopPropagation(); e.preventDefault(); try{ g.focus({preventScroll:true}); }catch(_){}
+  const svg = g.ownerSVGElement; let lx = e.clientX, ly = e.clientY; g.classList.add('arrastando');
+  const mv = ev => { const m = svg.getScreenCTM(); if(!m) return; reguaMove(g, (ev.clientX-lx)/m.a, (ev.clientY-ly)/m.d); lx = ev.clientX; ly = ev.clientY; };
+  const up = () => { g.classList.remove('arrastando'); removeEventListener('pointermove', mv); removeEventListener('pointerup', up); removeEventListener('pointercancel', up); };
+  addEventListener('pointermove', mv); addEventListener('pointerup', up); addEventListener('pointercancel', up);
+}, true);
+document.addEventListener('keydown', e => {
+  const g = e.target.closest && e.target.closest('.regua'); if(!g) return;
+  const p = e.shiftKey ? 20 : 4, v = {ArrowLeft:[-p,0], ArrowRight:[p,0], ArrowUp:[0,-p], ArrowDown:[0,p]}[e.key];
+  if(v){ e.preventDefault(); reguaMove(g, v[0], v[1]); }
+});
 function ocLeitura(el, obj){
   const fov = 18000/obj;
   el.innerHTML = [['Ocular','10×'],['Objetiva',obj+'×'],['Ampliação total',(10*obj)+'×'],['Campo de visão', fov>=1000 ? fmt(fov/1000, obj===4?1:2)+' mm' : fmt(fov)+' µm']]
@@ -2213,11 +2261,14 @@ $('#g-busca').addEventListener('input', e=>listaGlos(e.target.value));
 /* ============ para começar / recap ============ */
 function montaPrever(box){
   const id = box.dataset.prever, ops = box.dataset.opcoes.split('|'), salvo = ST.get('prev_'+id, null);
-  box.innerHTML = `<div class="ppe"><span class="at">Prever</span><span>Observar</span><span>Explicar</span></div>
+  box.innerHTML = `<div class="ppe" role="group" aria-label="Etapas do módulo"><span class="at" aria-current="step">Prever</span><button type="button" data-ppe="obs" title="Ir para o conteúdo e as ferramentas do módulo">Observar ↓</button><button type="button" data-ppe="exp" title="Ir para De volta à sua previsão, no fim do módulo">Explicar ↓</button></div>
     <p style="margin-top:10px; font-weight:700">${esc(box.dataset.pergunta)}</p>
     <div class="opcoes" style="margin-top:10px">${ops.map((o,i)=>`<button class="opcao" data-i="${i}" aria-pressed="false"><span class="let">${'ABC'[i]}</span><span>${esc(o)}</span></button>`).join('')}</div>
     <label class="campo" style="margin-top:12px">Justifique em uma ou duas frases<textarea id="pv-${id}" placeholder="Eu acho que… porque…"></textarea></label>
     <div class="row" style="margin-top:10px"><button class="btn" id="pvb-${id}">Registrar previsão</button><span class="small muted" id="pvm-${id}"></span></div>`;
+  const ppeIr = el => { if(el) el.scrollIntoView({behavior:'smooth', block:'start'}); };
+  $('[data-ppe="obs"]', box).onclick = () => { let el = box.closest('.secao').nextElementSibling; while(el && !el.matches('.secao')) el = el.nextElementSibling; ppeIr(el); };
+  $('[data-ppe="exp"]', box).onclick = () => { const r = $(`[data-recap="${id}"]`); ppeIr(r && r.closest('.secao')); };
   let esc_i = salvo ? salvo.i : null;
   const marca = () => $$('.opcao', box).forEach(b=>b.setAttribute('aria-pressed', String(+b.dataset.i===esc_i)));
   $$('.opcao', box).forEach(b=>b.onclick = () => { esc_i = +b.dataset.i; marca(); });
@@ -2312,7 +2363,7 @@ $('#kk-conf').onclick = () => {
   const real = {sch:0, tri:0}, cert = {sch:0, tri:0}; let trocados = 0;
   kk.ovos.forEach((o,i)=>{ real[o.sp]++; const m = kk.marcas[i]; if(m===o.sp) cert[o.sp]++; else if(m) trocados++; });
   const falt = (real.sch-cert.sch)+(real.tri-cert.tri)-trocados;
-  const linha = sp => { const n = real[sp], opg = n*24, c = classe(sp, opg); return `<tr><td><i>${INT[sp].n}</i></td><td class="mono">${n}</td><td class="mono">${n} × 24 = ${fmt(opg)}</td><td>${c}</td></tr>`; };
+  const linha = sp => { const n = real[sp], opg = n*24, c = classe(sp, opg); return `<tr><td>${INT[sp].n}</td><td class="mono">${n}</td><td class="mono">${n} × 24 = ${fmt(opg)}</td><td>${c}</td></tr>`; };
   $('#kk-res').innerHTML = `<div class="fb ${(trocados+Math.max(0,falt))===0?'ok':'mais'}">Você marcou corretamente ${cert.sch+cert.tri} de ${real.sch+real.tri} ovos${trocados?`; ${trocados} com a espécie trocada`:''}${falt>0?`; ${falt} ficaram sem marcar`:''}.</div>
    <div class="tab-wrap"><table><thead><tr><th>Espécie</th><th>Ovos</th><th>OPG</th><th>Intensidade</th></tr></thead><tbody>${linha('sch')}${linha('tri')}</tbody></table></div>
    <p class="small muted">Diferencie pelo formato: o ovo de <i>S. mansoni</i> é grande (cerca de 115–180 × 45–70 µm), alongado, com espículo lateral e miracídio no interior; o de <i>Trichuris</i> tem forma de barril, com tampões polares. Para <i>S. mansoni</i>, cada ovo na lâmina vale 24 OPG: com 5 ovos a infecção já é moderada (≥ 100 OPG) e com 17 ovos, intensa (≥ 400 OPG). Para <i>Trichuris</i>, a classe moderada começa em 1.000 OPG.</p>`;
@@ -2327,7 +2378,7 @@ function calcOPG(){
   if(opg>0) s += `<path d="M ${lx(opg)} 18 l -6 -9 h 12 z" fill="var(--t)"/><line x1="${lx(opg)}" y1="18" x2="${lx(opg)}" y2="40" stroke="var(--t)" stroke-width="2.5"/>`;
   $('#c-out').innerHTML = `<p><span class="mono">${fmt(n)}${l>1?` ÷ ${l} lâminas`:''} × ${fator} = <b>${fmt(opg)} OPG</b></span> · intensidade <b>${c}</b></p>
     <div class="intens"><svg viewBox="0 0 440 62" style="color:var(--ink)" role="img" aria-label="Faixas de intensidade">${s}</svg></div>
-    <p class="small muted">Faixas da OMS para <i>${C.n}</i>: leve 1–${fmt(C.mod-1)}; moderada ${fmt(C.mod)}–${fmt(C.alta-1)}; alta ≥ ${fmt(C.alta)} OPG.</p>`;
+    <p class="small muted">Faixas da OMS para ${C.n}: leve 1–${fmt(C.mod-1)}; moderada ${fmt(C.mod)}–${fmt(C.alta-1)}; alta ≥ ${fmt(C.alta)} OPG.</p>`;
 }
 ['#c-sp','#c-pl','#c-n','#c-l'].forEach(s=>$(s).addEventListener('input', calcOPG));
 
@@ -2412,7 +2463,7 @@ const SETAS = [
   {id:'a4', de:'G', para:'H', r:['direto'], rot:'L1 → L3', lx:670, ly:290, anc:'end'},
   {id:'a5', de:'G', para:'I', r:['indireto'], rot:'L1 → adultos', lx:742, ly:205, anc:'start'},
   {id:'a6', de:'I', para:'H', r:['indireto'], rot:'ovos → L1 → L3', lx:742, ly:368, anc:'start'},
-  {id:'a7', de:'H', para:'F', r:['direto','indireto'], rot:'penetra a pele', lx:590, ly:410},
+  {id:'a7', de:'H', para:'F', r:['direto','indireto'], rot:'penetra a pele', lx:533, ly:410},
   {id:'a8', de:'C', para:'D', r:['auto']},
   {id:'a9', de:'D', para:'F', r:['auto'], rot:'penetra a mucosa', lx:150, ly:388, anc:'end'},
   {id:'a10', de:'C', para:'E', r:['externa']},
@@ -2516,7 +2567,7 @@ const CASO = [
     ['Mostra que a bacteremia explica todo o quadro', 0, 'A bacteremia por Gram-negativo é uma pista a favor da hiperinfecção, não uma explicação alternativa.']]},
   {et:'Escolha do exame',
    q:'Que exame você pede para confirmar a suspeita?', o:[
-    ['Baermann-Moraes ou Rugai, com fezes frescas, em mais de uma amostra; e pesquisa de larvas no escarro', 1, 'Esses métodos exploram o termo-hidrotropismo das larvas vivas. Na hiperinfecção, larvas também aparecem no escarro e no lavado broncoalveolar.'],
+    ['Baermann-Moraes ou Rugai, Mattos e Brisola, com fezes frescas, em mais de uma amostra; e pesquisa de larvas no escarro', 1, 'Esses métodos exploram o termo-hidrotropismo das larvas vivas. Na hiperinfecção, larvas também aparecem no escarro e no lavado broncoalveolar.'],
     ['Kato-Katz', 0, 'O Kato-Katz quantifica ovos; não é adequado para larvas.'],
     ['Fita adesiva (Graham)', 0, 'É o método para Enterobius vermicularis.'],
     ['Faust (centrífugo-flutuação em sulfato de zinco)', 0, 'Pode até mostrar larvas, mas não é o método de escolha: não aproveita o comportamento das larvas e a solução densa pode deformá-las.']]},
@@ -2694,16 +2745,16 @@ const CIC = [
   ['Taenia solium','hetero','Ser humano como hospedeiro definitivo; suíno como intermediário.'],
   ['Taenia saginata','hetero','Ser humano como hospedeiro definitivo; bovino como intermediário.'],
   ['Schistosoma mansoni','hetero','Ser humano como hospedeiro definitivo; caramujo Biomphalaria como intermediário.'],
-  ['Hymenolepis nana','ambos','Pode completar o ciclo num único hospedeiro (ingestão direta do ovo) ou usar insetos como intermediários. As duas colunas são aceitas.']
+  ['Hymenolepis nana','ambos','Hymenolepis nana conta como acerto nas duas colunas porque tem os dois tipos de ciclo. Pode ser monoxênico: o ovo ingerido já é infectante, o cisticercoide se forma na vilosidade intestinal do próprio ser humano e há autoinfecção interna. E pode ser heteroxênico: insetos (larvas de pulga, besouros de farinha e cereais) ingerem o ovo e abrigam o cisticercoide até serem ingeridos.']
 ];
 let cicSel = null, cicCol = {};
 function cicRender(){
   const livres = CIC.map((_,i)=>i).filter(i=>!(i in cicCol));
-  $('#cic-pool').innerHTML = livres.length ? livres.map(i=>`<button data-i="${i}" aria-pressed="${cicSel===i}" style="${cicSel===i?'border-color:var(--t); background:var(--s)':''}"><i>${esc(CIC[i][0])}</i></button>`).join('') : '<p class="small muted">Todos classificados. Confira.</p>';
+  $('#cic-pool').innerHTML = livres.length ? livres.map(i=>`<button data-i="${i}" aria-pressed="${cicSel===i}" style="${cicSel===i?'border-color:var(--t); background:var(--s)':''}">${esc(CIC[i][0])}</button>`).join('') : '<p class="small muted">Todos classificados. Confira.</p>';
   $$('#cic-pool button').forEach(b=>b.onclick = () => { cicSel = +b.dataset.i; cicRender(); });
   $$('.coluna').forEach(c=>{
     const col = c.dataset.col;
-    $('.col-itens', c).innerHTML = Object.entries(cicCol).filter(([,v])=>v===col).map(([i])=>`<button data-i="${i}" class="item-col"><i>${esc(CIC[i][0])}</i></button>`).join('') || '<span class="small muted">Toque num parasito e depois aqui.</span>';
+    $('.col-itens', c).innerHTML = Object.entries(cicCol).filter(([,v])=>v===col).map(([i])=>`<button data-i="${i}" class="item-col">${esc(CIC[i][0])}</button>`).join('') || '<span class="small muted">Toque num parasito e depois aqui.</span>';
     c.onclick = e => { const it = e.target.closest('.item-col'); if(it){ delete cicCol[it.dataset.i]; $('#cic-fb').innerHTML=''; cicRender(); return; } if(cicSel!==null){ cicCol[cicSel] = col; cicSel = null; $('#cic-fb').innerHTML=''; cicRender(); } };
   });
 }
@@ -2713,7 +2764,7 @@ $('#cic-conf').onclick = () => {
   if(n < CIC.length){ $('#cic-fb').innerHTML = `<div class="fb mais">Faltam ${CIC.length-n} parasitos para classificar.</div>`; return; }
   let ok = 0; const erros = [];
   $$('.item-col').forEach(b=>{ const i = +b.dataset.i, cert = CIC[i][1]==='ambos' || CIC[i][1]===cicCol[i]; if(cert) ok++; else erros.push(i); b.classList.add(cert?'ok':'err'); });
-  $('#cic-fb').innerHTML = `<div class="fb ${erros.length?'mais':'ok'}"><b>${ok} de ${CIC.length} corretos.</b></div>` + (erros.length ? `<ul class="small" style="margin:0; padding-left:18px">${erros.map(i=>`<li><i>${esc(CIC[i][0])}</i>: ${esc(CIC[i][2])}</li>`).join('')}</ul>` : '') + `<p class="small">${esc(CIC[11][2])}</p>`;
+  $('#cic-fb').innerHTML = `<div class="fb ${erros.length?'mais':'ok'}"><b>${ok} de ${CIC.length} corretos.</b></div>` + (erros.length ? `<ul class="small" style="margin:0; padding-left:18px">${erros.map(i=>`<li><b>${esc(CIC[i][0])}</b>: ${esc(CIC[i][2])}</li>`).join('')}</ul>` : '') + `<div class="nota" style="margin-top:10px"><b>Duas respostas aceitas.</b> ${esc(CIC[11][2])}</div>`;
 };
 
 /* ============ Módulo 0: formas ============ */
@@ -2729,7 +2780,7 @@ const FORMAS = [
   ['Schistosoma mansoni',['Cercária'],['Ovo'],'A cercária penetra a pele na água; o ovo com espículo lateral é procurado nas fezes.']
 ];
 function formasRender(){
-  $('#formas-tb').innerHTML = FORMAS.map((f,i)=>`<tr data-i="${i}"><td><i>${esc(f[0])}</i></td>
+  $('#formas-tb').innerHTML = FORMAS.map((f,i)=>`<tr data-i="${i}"><td>${esc(f[0])}</td>
     <td><select id="fi-${i}" aria-label="Forma infectante de ${esc(f[0])}"><option value="">—</option>${FORM_OP.map(o=>`<option>${o}</option>`).join('')}</select></td>
     <td><select id="fd-${i}" aria-label="Forma diagnóstica de ${esc(f[0])}"><option value="">—</option>${FORM_OP.map(o=>`<option>${o}</option>`).join('')}</select></td><td class="res"></td></tr>`).join('');
 }
@@ -2746,13 +2797,13 @@ $('#formas-conf').onclick = () => {
 /* ============ Módulo 0: barreiras ============ */
 const MED = {san:'Esgotamento sanitário', agua:'Água tratada ou filtrada', maos:'Lavagem das mãos e unhas curtas', alim:'Higienização de hortaliças', calc:'Uso de calçados', carne:'Inspeção e cozimento da carne', banho:'Evitar banho em água contaminada', mda:'Tratamento anti-helmíntico em massa'};
 const BAR = [
-  {n:'Ascaris', fonte:{san:.75, mda:.5}, vias:[['Água',.2,{agua:.9}],['Hortaliças cruas',.4,{alim:.8}],['Mãos sujas de terra',.4,{maos:.7}]]},
-  {n:'Trichuris', fonte:{san:.75, mda:.3}, vias:[['Água',.2,{agua:.9}],['Hortaliças cruas',.4,{alim:.8}],['Mãos sujas de terra',.4,{maos:.7}]]},
+  {n:'A. lumbricoides', fonte:{san:.75, mda:.5}, vias:[['Água',.2,{agua:.9}],['Hortaliças cruas',.4,{alim:.8}],['Mãos sujas de terra',.4,{maos:.7}]]},
+  {n:'T. trichiura', fonte:{san:.75, mda:.3}, vias:[['Água',.2,{agua:.9}],['Hortaliças cruas',.4,{alim:.8}],['Mãos sujas de terra',.4,{maos:.7}]]},
   {n:'Ancilostomídeos', fonte:{san:.75, mda:.5}, vias:[['Pele em contato com o solo',.9,{calc:.8}],['Via oral (A. duodenale)',.1,{maos:.6, alim:.6}]]},
-  {n:'Strongyloides', fonte:{san:.6, mda:.1}, vias:[['Pele em contato com o solo',.8,{calc:.8}],['Autoinfecção',.2,{}]]},
-  {n:'Enterobius', fonte:{mda:.5}, vias:[['Mãos e unhas',.6,{maos:.65}],['Roupas, poeira e fômites',.3,{}],['Retroinfecção',.1,{}]]},
-  {n:'Giardia', fonte:{san:.55}, vias:[['Água',.5,{agua:.9}],['Alimentos',.2,{alim:.7}],['Pessoa a pessoa',.3,{maos:.6}]]},
-  {n:'Taenia (teníase)', fonte:{san:.5, mda:.3}, vias:[['Carne crua ou malpassada',1,{carne:.9}]]},
+  {n:'S. stercoralis', fonte:{san:.6, mda:.1}, vias:[['Pele em contato com o solo',.8,{calc:.8}],['Autoinfecção',.2,{}]]},
+  {n:'E. vermicularis', fonte:{mda:.5}, vias:[['Mãos e unhas',.6,{maos:.65}],['Roupas, poeira e fômites',.3,{}],['Retroinfecção',.1,{}]]},
+  {n:'G. duodenalis', fonte:{san:.55}, vias:[['Água',.5,{agua:.9}],['Alimentos',.2,{alim:.7}],['Pessoa a pessoa',.3,{maos:.6}]]},
+  {n:'Taenia spp. (teníase)', fonte:{san:.5, mda:.3}, vias:[['Carne crua ou malpassada',1,{carne:.9}]]},
   {n:'S. mansoni', fonte:{san:.8, mda:.5}, vias:[['Contato com água com cercárias',1,{banho:.85}]]}
 ];
 const barOn = new Set();
@@ -2763,10 +2814,10 @@ function barRender(){
   let s = '', y0 = 18, h = 32;
   [0,25,50,75,100].forEach(v=>{ const x = 140 + v*2.7; s += `<line x1="${x}" x2="${x}" y1="10" y2="${y0+BAR.length*h}" stroke="currentColor" opacity=".12"/><text x="${x}" y="${y0+BAR.length*h+16}" font-size="10.5" text-anchor="middle" fill="currentColor" opacity=".7" font-family="JetBrains Mono, monospace">${v}%</text>`; });
   BAR.forEach((B,i)=>{ const v = risco(B), y = y0 + i*h, w = v*270;
-    s += `<text x="132" y="${y+15}" font-size="12" text-anchor="end" fill="currentColor" font-style="italic">${B.n}</text><rect x="140" y="${y+3}" width="${Math.max(1.5,w)}" height="18" rx="3" fill="var(--t)" opacity="${.35+.65*v}"/><text x="${146+w}" y="${y+16}" font-size="11" fill="currentColor" font-family="JetBrains Mono, monospace">${fmt(v*100)}%</text>`; });
+    s += `<text x="132" y="${y+15}" font-size="12" text-anchor="end" fill="currentColor">${B.n}</text><rect x="140" y="${y+3}" width="${Math.max(1.5,w)}" height="18" rx="3" fill="var(--t)" opacity="${.35+.65*v}"/><text x="${146+w}" y="${y+16}" font-size="11" fill="currentColor" font-family="JetBrains Mono, monospace">${fmt(v*100)}%</text>`; });
   s += `<text x="140" y="${y0+BAR.length*h+32}" font-size="11" fill="currentColor" opacity=".7">Risco relativo de transmissão (sem medidas = 100%)</text>`;
   const g = $('#bar-graf'); g.style.color = 'var(--ink)'; g.innerHTML = s;
-  $('#bar-txt').innerHTML = BAR.map(B=>`<div><b><i>${B.n}</i></b>: ${B.vias.map(([n,,bl])=>{ const blq = Object.keys(bl).some(m=>barOn.has(m)); return `<span style="${blq?'text-decoration:line-through; color:var(--muted)':''}">${n}</span>`; }).join(' · ')}</div>`).join('') +
+  $('#bar-txt').innerHTML = BAR.map(B=>`<div><b>${B.n}</b>: ${B.vias.map(([n,,bl])=>{ const blq = Object.keys(bl).some(m=>barOn.has(m)); return `<span style="${blq?'text-decoration:line-through; color:var(--muted)':''}">${n}</span>`; }).join(' · ')}</div>`).join('') +
     (barOn.has('mda') && !barOn.has('san') ? '<div class="fb mais">O tratamento em massa reduz a fonte por um tempo, mas sem saneamento a reinfecção volta. O tema será retomado no Módulo 7.</div>' : '') +
     (barOn.size===0 ? '<p class="muted">Nenhuma medida ativa.</p>' : '');
 }
@@ -2787,7 +2838,7 @@ const PMI = {
 };
 const CHAVE = {
   k1:{q:'Na coloração de Ziehl-Neelsen modificada, a estrutura fica vermelho-rosada (álcool-ácido resistente)?', dica:'Para responder, mude a preparação para ZN modificado.', o:[['Sim','k2'],['Não','k3']]},
-  k2:{q:'Qual o tamanho e a forma do oocisto? Use a régua.', o:[['Redondo, 4–6 µm','=crypto'],['Redondo, 8–10 µm, coloração irregular','=cyclo'],['Elipsoidal, maior que 20 µm','=cysto']]},
+  k2:{q:'Qual o tamanho e a forma do oocisto? Arraste a régua até ele para comparar.', o:[['Redondo, 4–6 µm','=crypto'],['Redondo, 8–10 µm, coloração irregular','=cyclo'],['Elipsoidal, maior que 20 µm','=cysto']]},
   k3:{q:'É uma forma sem parede, de contorno irregular ou piriforme (trofozoíto), ou uma forma com parede definida?', o:[['Trofozoíto','k4'],['Forma com parede ou arredondada','k5']]},
   k4:{q:'Como é o trofozoíto?', o:[['Piriforme, com dois núcleos, disco ventral e flagelos','=giardia_t'],['Ameboide, um núcleo, com hemácias no citoplasma','=eh_t']]},
   k5:{q:'O cisto é oval e mostra filamentos longitudinais (axonemas) e corpos medianos?', o:[['Sim','=giardia_c'],['Não','k6']]},
@@ -2843,13 +2894,13 @@ function pmChave(){
 /* ============ Módulo 1: escala ============ */
 function escalaProto(){
   const k = 3.6, svg = $('#p-escala-svg'); let s = '';
-  s += pos(DES.asc_f('lug', rng(4)), 120, 120, k, 0) + `<text x="120" y="230" text-anchor="middle" font-size="12.5" font-style="italic" fill="currentColor">Ascaris (ovo fértil)</text><text x="120" y="247" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".75" font-family="JetBrains Mono, monospace">60 × 45 µm</text>`;
+  s += pos(DES.asc_f('lug', rng(4)), 120, 120, k, 0) + `<text x="120" y="230" text-anchor="middle" font-size="12.5" fill="currentColor">Ascaris (ovo fértil)</text><text x="120" y="247" text-anchor="middle" font-size="11.5" fill="currentColor" opacity=".75" font-family="JetBrains Mono, monospace">60 × 45 µm</text>`;
   const it = [['giardia_c','Giardia','10 × 8'],['eh_c','E. hist./dispar','13'],['ecoli_c','E. coli','18'],['enana_c','E. nana','8 × 6'],['iod_c','Iodamoeba','12 × 9'],['blasto','Blastocystis','13'],['crypto','Cryptosporidium','5'],['cyclo','Cyclospora','9'],['cysto','Cystoisospora','30 × 14']];
   let x = 270;
   it.forEach(([id,n,m],i)=>{ const w = Math.max(TAM[id]*k, 30); x += w/2; const prep = ['crypto','cyclo','cysto'].includes(id) ? 'zn' : 'lug';
     s += pos(PRO[id](prep, rng(9+i)), x, 120, k, 0);
     const ly = i%2 ? 196 : 164;
-    s += `<line x1="${x}" y1="${120+TAM[id]*k/2*.75+4}" x2="${x}" y2="${ly-12}" stroke="currentColor" opacity=".3"/><text x="${x}" y="${ly}" text-anchor="middle" font-size="11.5" font-style="italic" fill="currentColor">${n}</text><text x="${x}" y="${ly+14}" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".75" font-family="JetBrains Mono, monospace">${m} µm</text>`;
+    s += `<line x1="${x}" y1="${120+TAM[id]*k/2*.75+4}" x2="${x}" y2="${ly-12}" stroke="currentColor" opacity=".3"/><text x="${x}" y="${ly}" text-anchor="middle" font-size="11.5" fill="currentColor">${n}</text><text x="${x}" y="${ly+14}" text-anchor="middle" font-size="10.5" fill="currentColor" opacity=".75" font-family="JetBrains Mono, monospace">${m} µm</text>`;
     x += w/2 + 22; });
   const b = 20*k; s += `<line x1="40" y1="282" x2="${40+b}" y2="282" stroke="currentColor" stroke-width="3"/><text x="${40+b/2}" y="272" text-anchor="middle" font-size="12" fill="currentColor" font-family="JetBrains Mono, monospace">20 µm</text><text x="${56+b}" y="286" font-size="11.5" fill="currentColor" opacity=".75">Mesma ampliação para todos. Amebas e Giardia em lugol; coccídios em ZN modificado.</text>`;
   svg.setAttribute('viewBox', `0 0 ${Math.max(780, x+10)} 300`); svg.style.color = 'var(--ink)'; svg.innerHTML = s;
@@ -3135,11 +3186,11 @@ ${T.kk ? kkOPGtxt(rel) : ''}${ids.some(id=>COMENSAL.has(id)) ? '\nObs.: protozo�
   const notas = [];
   if(presentes.some(id=>CAT[id]==='ovo_p') && bc.tec==='faust') notas.push('Ovos pesados (Schistosoma, Taenia, ovos inférteis de Ascaris) praticamente não flutuam no Faust. A sedimentação ou o Kato-Katz os recuperam.');
   if(presentes.some(id=>CAT[id]==='trofo') && !['dir_sal','dir_lug'].includes(bc.tec)) notas.push('Trofozoítos não resistem às técnicas de concentração. Em fezes diarreicas, faça também o exame direto a fresco, logo após a emissão.');
-  if(presentes.includes('str') && bc.tec!=='baer') notas.push('Para larvas de Strongyloides, o método de escolha é o Baermann-Moraes (ou Rugai), com fezes frescas.');
+  if(presentes.includes('str') && bc.tec!=='baer') notas.push('Para larvas de Strongyloides, o método de escolha é o Baermann-Moraes (ou Rugai, Mattos e Brisola), com fezes frescas.');
   if(bc.tec==='baer' && presentes.some(id=>CAT[id]!=='larva')) notas.push('O Baermann-Moraes só recupera larvas. Ovos e cistos desta amostra exigiriam outra técnica, feita em paralelo.');
   if(['dir_sal','dir_lug'].includes(bc.tec)) notas.push('O exame direto examina pouco material e tem baixa sensibilidade; na rotina ele complementa, e não substitui, um método de concentração.');
   if(presentes.includes('eh_c')) notas.push('Cistos do complexo E. histolytica/dispar: compare com E. coli pelo número de núcleos e pela posição do cariossoma.');
-  if(presentes.includes('anc') && bc.tec==='hpj') notas.push('Ovos de ancilostomídeo são leves; Willis ou Faust os concentram melhor que a sedimentação.');
+  if(presentes.includes('anc') && bc.tec==='hpj') notas.push('Ovos de ancilostomídeo são leves; Willis-Molloy ou Faust os concentram melhor que a sedimentação.');
   if(presentes.includes('ent') && bc.tec!=='graham') notas.push('A fêmea de Enterobius deposita os ovos na pele perianal: eles raramente aparecem nas fezes. O método indicado é a fita adesiva (Graham), pela manhã, em dias consecutivos.');
   if(bc.tec==='graham' && presentes.some(id=>!['ent','taenia'].includes(id))) notas.push('A fita adesiva só recupera o que está na pele perianal. Os demais parasitos desta pessoa exigem exame de fezes.');
   if(bc.tec==='graham' && (bc.peri||{}).taenia) notas.push('Ovos de Taenia na fita confirmam teníase, mas não identificam a espécie: T. solium e T. saginata têm ovos iguais. A espécie se define pelas proglotes (tamização e contagem das ramificações uterinas, Módulo 3).');
@@ -3576,7 +3627,7 @@ const EV = [
 let evOps = [];
 function evRender(){
   evOps = shuffle(EV.map(e=>e[1]));
-  $('#ev-tb').innerHTML = EV.map((e,i)=>`<tr data-i="${i}"><td><i>${esc(e[0])}</i></td><td><select id="ev-${i}" aria-label="Estratégia de ${esc(e[0])}"><option value="">—</option>${evOps.map(o=>`<option>${esc(o)}</option>`).join('')}</select></td><td class="res"></td></tr>`).join('');
+  $('#ev-tb').innerHTML = EV.map((e,i)=>`<tr data-i="${i}"><td>${esc(e[0])}</td><td><select id="ev-${i}" aria-label="Estratégia de ${esc(e[0])}"><option value="">—</option>${evOps.map(o=>`<option>${esc(o)}</option>`).join('')}</select></td><td class="res"></td></tr>`).join('');
   $('#ev-fb').innerHTML = '';
 }
 $('#ev-conf').onclick = () => { let ok = 0; EV.forEach((e,i)=>{ const v = $('#ev-'+i).value, c = v===e[1]; if(c) ok++; $(`#ev-tb tr[data-i="${i}"] .res`).innerHTML = c ? '<span style="color:var(--ok); font-weight:700">Certo</span>' : `<span style="color:var(--bad); font-weight:700">Revise</span> <span class="small">${esc(e[1])}</span>`; }); $('#ev-fb').innerHTML = `<div class="fb ${ok===EV.length?'ok':'mais'}"><b>${ok} de ${EV.length}.</b></div>`; };
@@ -3629,7 +3680,7 @@ function rfRender(){
   const fim = ser[ser.length-1][1]; s += `<circle cx="${X(36)}" cy="${Y(fim)}" r="4.5" fill="var(--t)"/>`;
   const g = $('#rf-graf'); g.style.color = 'var(--ink)'; g.innerHTML = s;
   const med = ser.reduce((a,b)=>a+b[1],0)/ser.length;
-  $('#rf-txt').innerHTML = `<h4><i>${R.n}</i></h4><p>Taxa de cura do albendazol em dose única: <b class="mono">${fmt(R.cura*100)}%</b> (Keiser &amp; Utzinger, 2008). Prevalência 12 meses após o tratamento: <b class="mono">${fmt(R.f12*100)}%</b> do valor anterior (Jia et al., 2012).</p><p>Prevalência no mês 36: <b class="mono">${fmt(fim,1)}%</b>. Média no período: <b class="mono">${fmt(med,1)}%</b>.</p>` + (rfSp==='tri' ? '<div class="fb mais">Com cura de cerca de 28%, o tratamento em dose única mal altera a prevalência de Trichuris: daí o interesse em esquemas e combinações mais eficazes.</div>' : '') + (rfF===0 ? '<p class="muted">Sem tratamento, a prevalência se mantém.</p>' : '') + (san ? '<p>Com saneamento, o nível ao qual a prevalência retorna diminui: o tratamento passa a ter efeito duradouro.</p>' : '');
+  $('#rf-txt').innerHTML = `<h4>${R.n}</h4><p>Taxa de cura do albendazol em dose única: <b class="mono">${fmt(R.cura*100)}%</b> (Keiser &amp; Utzinger, 2008). Prevalência 12 meses após o tratamento: <b class="mono">${fmt(R.f12*100)}%</b> do valor anterior (Jia et al., 2012).</p><p>Prevalência no mês 36: <b class="mono">${fmt(fim,1)}%</b>. Média no período: <b class="mono">${fmt(med,1)}%</b>.</p>` + (rfSp==='tri' ? '<div class="fb mais">Com cura de cerca de 28%, o tratamento em dose única mal altera a prevalência de Trichuris: daí o interesse em esquemas e combinações mais eficazes.</div>' : '') + (rfF===0 ? '<p class="muted">Sem tratamento, a prevalência se mantém.</p>' : '') + (san ? '<p>Com saneamento, o nível ao qual a prevalência retorna diminui: o tratamento passa a ter efeito duradouro.</p>' : '');
 }
 
 /* ============ M7: clube de revista ============ */
@@ -3646,7 +3697,7 @@ function jcRender(){
   const D = [['S. mansoni',.99,.20,1.78],['Ascaris',6.00,5.05,6.96],['Trichuris',5.41,4.06,6.77],['Ancilostomídeos',2.73,1.98,3.49]];
   const Y = v => 170 - v/8*150; let s = '';
   [0,2,4,6,8].forEach(v=>{ s += `<line x1="44" x2="370" y1="${Y(v)}" y2="${Y(v)}" stroke="currentColor" opacity=".12"/><text x="38" y="${Y(v)+4}" font-size="10.5" text-anchor="end" fill="currentColor" opacity=".7" font-family="JetBrains Mono, monospace">${v}%</text>`; });
-  D.forEach(([n,v,lo,hi],i)=>{ const x = 70 + i*78; s += `<rect x="${x}" y="${Y(v)}" width="44" height="${170-Y(v)}" rx="3" fill="var(--t)" opacity=".85"/><line x1="${x+22}" x2="${x+22}" y1="${Y(hi)}" y2="${Y(lo)}" stroke="currentColor" stroke-width="1.6"/><line x1="${x+15}" x2="${x+29}" y1="${Y(hi)}" y2="${Y(hi)}" stroke="currentColor" stroke-width="1.6"/><line x1="${x+15}" x2="${x+29}" y1="${Y(lo)}" y2="${Y(lo)}" stroke="currentColor" stroke-width="1.6"/><text x="${x+22}" y="188" font-size="11" text-anchor="middle" fill="currentColor" font-style="italic">${n}</text><text x="${x+22}" y="${Y(hi)-6}" font-size="10.5" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace">${fmt(v,2)}</text>`; });
+  D.forEach(([n,v,lo,hi],i)=>{ const x = 70 + i*78; s += `<rect x="${x}" y="${Y(v)}" width="44" height="${170-Y(v)}" rx="3" fill="var(--t)" opacity=".85"/><line x1="${x+22}" x2="${x+22}" y1="${Y(hi)}" y2="${Y(lo)}" stroke="currentColor" stroke-width="1.6"/><line x1="${x+15}" x2="${x+29}" y1="${Y(hi)}" y2="${Y(hi)}" stroke="currentColor" stroke-width="1.6"/><line x1="${x+15}" x2="${x+29}" y1="${Y(lo)}" y2="${Y(lo)}" stroke="currentColor" stroke-width="1.6"/><text x="${x+22}" y="188" font-size="11" text-anchor="middle" fill="currentColor">${n}</text><text x="${x+22}" y="${Y(hi)-6}" font-size="10.5" text-anchor="middle" fill="currentColor" font-family="JetBrains Mono, monospace">${fmt(v,2)}</text>`; });
   const g = $('#jc-graf'); g.style.color = 'var(--ink)'; g.innerHTML = s;
 }
 
@@ -3777,7 +3828,7 @@ const PROC = {
     {t:'Preparar a suspensão', ctx:'Copo descartável, bastão e água ao lado do frasco.', q:'Como você prepara a suspensão?',
      o:[['Coloco cerca de 2 g de fezes no copo, acrescento uns 5 mL de água e dissolvo bem com o bastão; depois completo com mais uns 20 mL de água','ok','Dissolver primeiro em pouca água desfaz os grumos e libera ovos, larvas e cistos.'],
         ['Coloco as fezes inteiras direto no cálice cheio de água','err','Sem desfazer o material, as formas parasitárias ficam presas nos grumos e não sedimentam livremente.'],
-        ['Dissolvo em solução saturada de cloreto de sódio','err','Nesta técnica a suspensão é feita em água. Solução saturada de sal é usada na flutuação (Willis).']],
+        ['Dissolvo em solução saturada de cloreto de sódio','err','Nesta técnica a suspensão é feita em água. Solução saturada de sal é usada na flutuação (Willis-Molloy).']],
      c: f => K.frasco(90) + K.copo(240, f ? .6 : 0, '#9C7040', 'copo') + K.palito(f ? 250 : 330, f ? 140 : 200, f ? 236 : 360, f ? 236 : 262)},
     {t:'Filtrar', ctx:'A suspensão vai para o cálice cônico de sedimentação.', q:'Como você passa a suspensão para o cálice?',
      o:[['Através de gaze cirúrgica dobrada em quatro, num funil apoiado sobre o cálice','ok','A gaze retém fibras e restos alimentares grosseiros e deixa passar ovos, larvas e cistos.'],
@@ -3786,7 +3837,7 @@ const PROC = {
      c: f => K.copo(110, f ? .1 : .6, '#9C7040', 'copo') + K.calice(320, {funil:true, gazeSuja:f, nivel: f ? .22 : 0, cor:'#9C7040', turvo:f})},
     {t:'Completar o volume', ctx:'A suspensão filtrada está no fundo do cálice.', q:'Com o que você completa o cálice?',
      o:[['Com água, até cerca de três quartos do cálice','ok','Na coluna de água, as formas mais densas que a água, leves ou pesadas, descem ao fundo.'],
-        ['Com solução saturada de cloreto de sódio','err','Uma solução densa faz os ovos leves flutuarem: esse é o princípio do método de Willis, não da sedimentação.'],
+        ['Com solução saturada de cloreto de sódio','err','Uma solução densa faz os ovos leves flutuarem: esse é o princípio do método de Willis-Molloy, não da sedimentação.'],
         ['Com solução de sulfato de zinco a 33%','err','A solução densa é a da centrífugo-flutuação (Faust). Aqui a separação é por gravidade, em água.']],
      c: f => K.calice(260, {nivel: f ? .75 : .22, cor:'#9C7040', turvo:true}) + K.reag(430, 'Água', '#DCEFF7')},
     {t:'Repouso', ctx:'O cálice está cheio e turvo.', q:'Quanto tempo você deixa em repouso?',
@@ -4110,7 +4161,7 @@ const LAMS = [
     forma:'Larva com vestíbulo bucal curto, esôfago rabditoide (corpo, istmo e bulbo) e primórdio genital grande e evidente na metade do corpo.',
     est:[['Vestíbulo bucal','curto'],['Esôfago','rabditoide: corpo, istmo e bulbo'],['Primórdio genital','grande e evidente'],['Cauda','afilada']],
     rot:[['Vestíbulo bucal curto',.006,0],['Esôfago',.1,0],['Bulbo esofágico',.245,0],['Primórdio genital grande',.55,0],['Cauda',.95,0]],
-    par:[['Hábitat','Fêmeas partenogenéticas na mucosa do duodeno e do jejuno; os ovos eclodem ainda no intestino.'],['Transmissão','Penetração da larva filarioide pela pele. A autoinfecção interna mantém a infecção por décadas.'],['Doença','Dor epigástrica, diarreia, eosinofilia e lesões cutâneas migratórias. Em imunossuprimidos, sobretudo com corticoides ou HTLV-1, há hiperinfecção e disseminação, com alta mortalidade.'],['Diagnóstico','Baermann-Moraes ou Rugai com fezes frescas, cultura em placa de ágar e sorologia.']],
+    par:[['Hábitat','Fêmeas partenogenéticas na mucosa do duodeno e do jejuno; os ovos eclodem ainda no intestino.'],['Transmissão','Penetração da larva filarioide pela pele. A autoinfecção interna mantém a infecção por décadas.'],['Doença','Dor epigástrica, diarreia, eosinofilia e lesões cutâneas migratórias. Em imunossuprimidos, sobretudo com corticoides ou HTLV-1, há hiperinfecção e disseminação, com alta mortalidade.'],['Diagnóstico','Baermann-Moraes ou Rugai, Mattos e Brisola com fezes frescas, cultura em placa de ágar e sorologia.']],
     nota:'Nas fezes aparece a larva, e não o ovo. Compare com a larva de ancilostomídeo, a próxima lâmina.',
     q:'Por que pacientes que vão iniciar corticoide devem ser investigados para estrongiloidíase?'},
   {id:'ancL', d:'ancL', gr:'nema', mod:'nematoides', preps:['sal','lug'], mov:true, larva:true, n:'Larva rabditoide de ancilostomídeo', cur:'Larva de ancilostomídeo', m:'≈ 250–300 × 15–20 µm',
@@ -4540,10 +4591,69 @@ function montaRestaurar(){
       $('#bc-etapas').after(box); return;
     }
     const nav = $('nav.sumario', view); if(!nav || !acoes.length) return;
-    nav.append(botaoRest('Restaurar todas as respostas', 'Apagar todas as respostas deste módulo, inclusive a previsão e a revisão salvas neste aparelho', () => acoes.forEach(f => f()), 'Todas as respostas de ' + nome + ' foram restauradas.'));
+    nav.append(botaoRest('Restaurar o módulo', 'Apagar todas as respostas deste módulo, inclusive a previsão e a revisão salvas neste aparelho', () => acoes.forEach(f => f()), 'Todas as respostas de ' + nome + ' foram restauradas.'));
   });
 }
 montaRestaurar();
+
+/* ============ nomes científicos sempre em itálico ============
+   Gêneros e espécies em qualquer texto do site (inclusive o que é desenhado depois, como glossário, quizzes e gráficos)
+   ficam em itálico. "spp.", "ancilostomídeos" e nomes de doenças continuam em redondo. */
+const SP_GEN = 'Ascaris|Trichuris|Necator|Ancylostoma|Strongyloides|Enterobius|Toxocara|Taenia|Hymenolepis|Echinococcus|Schistosoma|Biomphalaria|Fasciola|Giardia|Entamoeba|Endolimax|Iodamoeba|Blastocystis|Cryptosporidium|Cyclospora|Cystoisospora|Balantidium|Dientamoeba|Chilomastix|Escherichia';
+const SP_EPI = 'lumbricoides|trichiura|americanus|duodenale|braziliense|caninum|stercoralis|vermicularis|solium|saginata|asiatica|nana|diminuta|mansoni|haematobium|japonicum|glabrata|straminea|tenagophila|duodenalis|lamblia|intestinalis|histolytica|dispar|moshkovskii|coli|bütschlii|butschlii|hominis|parvum|cayetanensis|belli|hepatica|granulosus|fragilis|mesnili';
+const SP_FIM = '(?![\\wÀ-ÿ])';
+const SP_RX = new RegExp(`(?:(?:${SP_GEN})(?:\\s(?:${SP_EPI})${SP_FIM})?${SP_FIM}|\\b[A-Z]\\.\\s?(?:${SP_EPI})${SP_FIM}|(?<=\\/)(?:${SP_EPI})${SP_FIM})`, 'g');
+const SP_SVG = 'http://www.w3.org/2000/svg';
+const SP_PULA = 'script,style,textarea,option,select,title,code,i,em,.sp-it,[font-style="italic"],[data-noit]';
+function italicoNo(tn){
+  const t = tn.data; if(!t || t.length < 4) return;
+  SP_RX.lastIndex = 0; if(!SP_RX.test(t)) return;
+  const el = tn.parentElement; if(!el || el.closest(SP_PULA)) return;
+  const svg = el.namespaceURI === SP_SVG, frag = document.createDocumentFragment(); let ult = 0;
+  t.replace(SP_RX, (m, ini) => {
+    if(ini > ult) frag.appendChild(document.createTextNode(t.slice(ult, ini)));
+    const it = svg ? document.createElementNS(SP_SVG, 'tspan') : document.createElement('i');
+    if(svg) it.setAttribute('font-style', 'italic'); it.setAttribute('class', 'sp-it'); it.textContent = m; frag.appendChild(it);
+    ult = ini + m.length; return m;
+  });
+  if(ult < t.length) frag.appendChild(document.createTextNode(t.slice(ult)));
+  tn.replaceWith(frag);
+}
+function italicoEm(raiz){
+  if(raiz.nodeType === 3){ italicoNo(raiz); return; }
+  if(raiz.nodeType !== 1 || raiz.closest(SP_PULA)) return;
+  const w = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT), nos = [];
+  while(w.nextNode()) nos.push(w.currentNode);
+  nos.forEach(italicoNo);
+}
+italicoEm(document.body);
+new MutationObserver(ms => ms.forEach(m => {
+  if(m.type === 'characterData'){ if(m.target.isConnected) italicoNo(m.target); }
+  else m.addedNodes.forEach(n => { if(n.isConnected) italicoEm(n); });
+})).observe(document.body, {childList:true, subtree:true, characterData:true});
+
+/* ============ sumário fixo: borda quando está preso e destaque da seção em que a pessoa está ============ */
+(function(){
+  const mnav = $('.mnav');
+  const mede = () => { if(mnav) document.documentElement.style.setProperty('--mnav', (mnav.offsetHeight || 0) + 'px'); };
+  mede(); addEventListener('resize', mede);
+  let pend = false;
+  function atualiza(){
+    pend = false;
+    const view = $('section[data-view]:not([hidden])'); if(!view) return;
+    const nav = $('nav.sumario', view); if(!nav) return;
+    const topo = parseFloat(getComputedStyle(nav).top) || 0, r = nav.getBoundingClientRect();
+    nav.classList.toggle('preso', r.top <= topo + 1 && scrollY > 0);
+    const links = $$('a[href^="#"]', nav), linha = r.bottom + 24; let atual = null;
+    links.forEach(a => { const alvo = document.getElementById(a.getAttribute('href').slice(1)); if(alvo && alvo.getBoundingClientRect().top <= linha) atual = a; });
+    links.forEach(a => { if(a === atual) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+    if(atual && nav.classList.contains('preso')){ const ar = atual.getBoundingClientRect(); if(ar.left < r.left || ar.right > r.right) nav.scrollTo({left: atual.offsetLeft - 12, behavior:'smooth'}); }
+  }
+  const agenda = () => { if(!pend){ pend = true; requestAnimationFrame(atualiza); } };
+  addEventListener('scroll', agenda, {passive:true}); addEventListener('resize', agenda); addEventListener('hashchange', agenda);
+  document.addEventListener('click', e => { if(e.target.closest('[data-ir], [data-nav]')) setTimeout(agenda, 60); });
+  agenda();
+})();
 $('#pr-voltar').onclick = () => { bcEtapa(2); $('#bc-passo2').scrollIntoView(); };
 $('#pr-pular').onclick = () => bcPrepara(pr.tec);
 (function(){ const h = (location.hash||'').replace('#',''); ir(VIEWS.includes(h) ? h : 'inicio'); })();
