@@ -523,6 +523,19 @@ html{scroll-padding-top:calc(var(--top) + 16px)}
 .lm-sl-foco input[type="range"]{height:28px}
 .lm-sl-foco input[type="range"]::-webkit-slider-thumb{width:24px; height:24px}
 @media (max-width:520px){ .lm-foco{grid-template-columns:minmax(0,1fr)} .lm-sl-foco input[type="range"]{height:34px} }
+
+/* restaurar respostas (por atividade e por módulo) */
+.sec-topo{display:flex; align-items:center; justify-content:space-between; gap:8px 12px; flex-wrap:wrap}
+.b-rest{display:inline-flex; align-items:center; gap:6px; background:var(--surface); border:1px solid var(--line); border-radius:999px; padding:4px 11px; font-size:.8rem; font-weight:600; color:var(--muted); cursor:pointer; white-space:nowrap; transition:border-color .15s, background .15s, color .15s}
+.b-rest svg{width:14px; height:14px; flex:none}
+.b-rest:hover{border-color:var(--t, var(--accent)); color:var(--ink)}
+.b-rest.confirma{border-color:var(--warn); background:var(--warn-soft); color:var(--ink)}
+.b-rest.feito{border-color:var(--ok); background:var(--ok-soft); color:var(--ink)}
+.sumario .b-rest, .rest-mod .b-rest{font-size:.85rem; padding:5px 12px}
+.sumario .b-rest{margin-left:auto}
+.rest-mod{display:flex; justify-content:flex-end; margin-top:12px}
+.sr-rest{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+@media print{ .b-rest{display:none} }
 </style>
 </head>
 <body>
@@ -1634,6 +1647,9 @@ function rng(seed){ let a = seed>>>0; return function(){ a |= 0; a = a + 0x6D2B7
 const fmt = (n, d=0) => Number(n).toLocaleString('pt-BR', {minimumFractionDigits:d, maximumFractionDigits:d});
 const shuffle = (arr, r=Math.random) => { const a = arr.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(r()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+/* estado inicial dos botões de alternância, guardado antes de qualquer interação (usado por "Restaurar respostas") */
+const ARIA0 = new Map(); $$('[aria-pressed]').forEach(b => ARIA0.set(b, b.getAttribute('aria-pressed')));
+const CTRL0 = new Set($$('main input, main select, main textarea, section input, section select, section textarea'));
 
 /* ============ glossário ============ */
 const GLOS = {
@@ -4444,6 +4460,90 @@ $('#b-inst').onclick = async () => { if(!appPrompt) return; appPrompt.prompt(); 
 try{ if('serviceWorker' in navigator && window.top === window && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(()=>{}); }catch(e){}
 
 init(); initMod01(); initBancada(); initMod3467(); initLaminario(); appResumo();
+
+/* ============ restaurar respostas: por atividade e por módulo ============ */
+const RESET = {
+  'f-ciclos': () => { cicSel = null; cicCol = {}; $('#cic-fb').innerHTML = ''; cicRender(); },
+  'f-formas': () => { formasRender(); $('#formas-fb').innerHTML = ''; },
+  'f-barreiras': () => { barOn.clear(); barRender(); },
+  'p-micro': () => { Object.assign(pm, {fila:[], i:0, prep:'lug', obj:100, z:2, foco:0, ac:0, tot:0}); pmNovo(); },
+  'p-pato': () => { ptPar = 'giardia'; ptI = 0; ptDesenha(); },
+  'n-micro': () => { Object.assign(mi, {fila:[], i:0, obj:40, foco:0, prep:'sal', acertos:0, total:0}); miNovo(); },
+  'n-pulmao': () => { pulSeq = []; $('#pul-fb').innerHTML = ''; pulRender(); },
+  'n-strongy': () => { rotaAt = 'direto'; stCond = 'imc'; cicloStr(); stRender(); },
+  'n-caso': () => { casoEt = 0; casoRender(); },
+  'c-ingerido': () => { ingI = 0; ingRender(); },
+  'c-proglote': () => { prog.ac = 0; prog.tot = 0; progNovo(); },
+  'c-hnana': () => { hnR = 'direto'; hnRender(); },
+  't-barreiras': () => { tbOn.clear(); tbRender(); },
+  't-granuloma': () => { grCond = 'normal'; grRender(); },
+  't-kk': () => ktRender(),
+  'i-polar': () => { polCen = 'helminto'; Object.assign(pol, POL_CEN.helminto); polRender(); },
+  'i-expulsao': () => { exI = 0; exRender(); },
+  'i-evasao': () => evRender(),
+  'e-agreg': () => { agSeed = 11; agRender(); },
+  'e-reinf': () => { rfSp = 'asc'; rfF = 12; rfRender(); },
+  'e-inpeg': () => jcRender(),
+  'd-qual': () => { qi = 0; qualRender(); },
+  'd-kk': () => { kk.modo = 'sch'; kkNovo(); calcOPG(); },
+  'd-seriadas': () => { serSeed = 3; seriadas(); },
+  'd-acuracia': () => acuracia()
+};
+const stDel = k => { try{ localStorage.removeItem('ef_'+k); }catch(e){} };
+/* devolve controles e botões de alternância da seção ao estado em que a página abriu */
+function restauraControles(sec){
+  $$('input, select, textarea', sec).forEach(el => {
+    if(!CTRL0.has(el)) return;
+    if(el.tagName === 'SELECT'){ const ops = Array.from(el.options); ops.forEach(o => o.selected = o.defaultSelected); if(!ops.some(o => o.defaultSelected) && ops.length) el.selectedIndex = 0; }
+    else if(el.type === 'checkbox' || el.type === 'radio') el.checked = el.defaultChecked;
+    else el.value = el.defaultValue;
+  });
+  $$('[aria-pressed]', sec).forEach(b => { if(ARIA0.has(b)) b.setAttribute('aria-pressed', ARIA0.get(b)); });
+}
+/* a função que restaura uma seção, ou null se ela não tem respostas */
+function resetDe(sec){
+  const pv = $('[data-prever]', sec), qz = $('[data-quiz]', sec), f = RESET[sec.id];
+  if(pv) return () => { const id = pv.dataset.prever; stDel('prev_'+id); montaPrever(pv); montaRecap(id); try{ appResumo(); }catch(e){} };
+  if(qz) return () => { stDel('quiz_'+qz.dataset.quiz); montaQuiz(qz); try{ appResumo(); }catch(e){} };
+  if(f) return () => { restauraControles(sec); f(); };
+  return null;
+}
+const ICO_REST = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>';
+const avisoRest = document.createElement('p'); avisoRest.className = 'sr-rest'; avisoRest.setAttribute('aria-live', 'polite'); document.body.appendChild(avisoRest);
+function botaoRest(rotulo, titulo, acao, msg){
+  const b = document.createElement('button'); b.type = 'button'; b.title = titulo; let t = null;
+  const pinta = (txt, cls) => { b.className = 'b-rest' + (cls ? ' ' + cls : ''); b.innerHTML = ICO_REST + '<span>' + txt + '</span>'; };
+  pinta(rotulo);
+  b.onclick = () => {
+    clearTimeout(t);
+    if(!b.classList.contains('confirma')){ pinta('Toque de novo para confirmar', 'confirma'); avisoRest.textContent = 'Toque de novo para confirmar: ' + titulo.toLowerCase() + '.'; t = setTimeout(() => pinta(rotulo), 4000); return; }
+    acao(); pinta('Respostas restauradas', 'feito'); avisoRest.textContent = msg; t = setTimeout(() => pinta(rotulo), 2500);
+  };
+  b.addEventListener('blur', () => { if(b.classList.contains('confirma')){ clearTimeout(t); pinta(rotulo); } });
+  return b;
+}
+function montaRestaurar(){
+  $$('section[data-view]').forEach(view => {
+    if(view.dataset.view === 'inicio' || view.dataset.view === 'laminario') return;
+    const acoes = [];
+    $$('section.secao', view).forEach(sec => {
+      const f = resetDe(sec); if(!f) return; acoes.push(f);
+      const h = $(':scope > header', sec), eb = h && $(':scope > .eyebrow', h); if(!eb) return;
+      const topo = document.createElement('div'); topo.className = 'sec-topo'; eb.replaceWith(topo);
+      topo.append(eb, botaoRest('Restaurar respostas', 'Apagar as respostas desta atividade e voltar ao início dela', f, 'Atividade restaurada.'));
+    });
+    const nome = (APP_NOME[view.dataset.view] || 'módulo');
+    if(view.dataset.view === 'bancada'){
+      const zera = () => { bc.tec = null; bc.amostra = null; bc.marcas = {}; bc.gab = false; $('#bc-gabarito').textContent = 'Ver gabarito na lâmina'; try{ bcFechaMenu(); }catch(e){} bcEtapa(1); };
+      const box = document.createElement('div'); box.className = 'rest-mod';
+      box.append(botaoRest('Recomeçar a bancada', 'Descartar a amostra, a varredura e o laudo em andamento', zera, 'Bancada reiniciada na etapa 1.'));
+      $('#bc-etapas').after(box); return;
+    }
+    const nav = $('nav.sumario', view); if(!nav || !acoes.length) return;
+    nav.append(botaoRest('Restaurar todas as respostas', 'Apagar todas as respostas deste módulo, inclusive a previsão e a revisão salvas neste aparelho', () => acoes.forEach(f => f()), 'Todas as respostas de ' + nome + ' foram restauradas.'));
+  });
+}
+montaRestaurar();
 $('#pr-voltar').onclick = () => { bcEtapa(2); $('#bc-passo2').scrollIntoView(); };
 $('#pr-pular').onclick = () => bcPrepara(pr.tec);
 (function(){ const h = (location.hash||'').replace('#',''); ir(VIEWS.includes(h) ? h : 'inicio'); })();
