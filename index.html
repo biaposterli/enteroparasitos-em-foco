@@ -555,6 +555,37 @@ html{scroll-padding-top:calc(var(--top) + 70px)}
 .regua{cursor:grab; touch-action:none; outline:none}
 .regua.arrastando{cursor:grabbing}
 .regua:focus-visible .regua-fundo{stroke:var(--accent); stroke-width:2.5}
+
+/* Laminário em tela cheia: só o campo, os controles e o botão de sair */
+html.lm-cheio, html.lm-cheio body{overflow:hidden}
+.lm-tela{position:fixed; inset:0; z-index:100; background:#070a09; color:#e4ebe6; display:flex; flex-direction:column; padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)}
+.lm-tela-bar{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 16px; border-bottom:1px solid #1f2925; flex:none}
+.lm-tela-lam{display:flex; align-items:center; gap:10px; min-width:0}
+.lm-tela-tit{display:flex; flex-direction:column; min-width:0; line-height:1.25}
+.lm-tela-tit b{font-size:1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.lm-tela-eb{font-family:var(--f-mono); font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:#93a39c}
+.lm-tela-nav{flex:none; width:36px; height:36px; border-radius:8px; background:#1d2622; color:#e4ebe6; border:1px solid #334039; cursor:pointer; font-size:1.05rem}
+.lm-tela-nav:hover, .lm-tela-esc:hover{border-color:#6fb3c2}
+.lm-tela-esc{flex:none; display:inline-flex; align-items:center; gap:8px; background:#1d2622; color:#e4ebe6; border:1px solid #334039; border-radius:10px; padding:6px 12px 6px 6px; cursor:pointer; font-weight:700; font-size:.88rem}
+.lm-tela-esc kbd{font-family:var(--f-mono); font-size:.78rem; background:#e4ebe6; color:#0b0f0d; border-radius:6px; padding:4px 8px; font-weight:800}
+.lm-tela-corpo{flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) 340px}
+.lm-tela-campo{min-width:0; min-height:0; display:flex; align-items:center; justify-content:center; padding:14px}
+.lm-tela-campo .lm-campo{width:100%; height:100%; max-width:none; background:transparent; padding:0; justify-content:center; align-items:center}
+.lm-tela-campo .lm-top{width:min(100%, calc(100dvh - 190px)); min-width:260px}
+.lm-tela-campo .lm-vis{width:min(100%, calc(100dvh - 190px)); max-width:none; min-width:260px; margin:0}
+.lm-tela-campo #lm-cheia-in{display:none}
+.lm-tela-ctl{min-height:0; overflow-y:auto; overscroll-behavior:contain; background:var(--surface); color:var(--ink); padding:16px; display:flex; flex-direction:column; gap:14px; border-left:1px solid #1f2925}
+.lm-tela-ctl .lm-foco{grid-template-columns:minmax(0,1fr)}
+.lm-tela-ctl .oc-row{flex-wrap:wrap}
+.lm-tela-ctl .lm-ctl{padding:12px}
+@media (min-width:901px) and (min-aspect-ratio:1/1){ .lm-tela-ctl .oc-read{grid-template-columns:repeat(2,minmax(0,1fr))} }
+@media (max-width:900px), (max-aspect-ratio:1/1){
+  .lm-tela-corpo{grid-template-columns:minmax(0,1fr); grid-template-rows:auto minmax(0,1fr)}
+  .lm-tela-campo{padding:8px 10px 6px}
+  .lm-tela-campo .lm-top, .lm-tela-campo .lm-vis{width:min(100%, 58dvh); min-width:0}
+  .lm-tela-ctl{border-left:0; border-top:1px solid #1f2925; border-radius:16px 16px 0 0; padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px))}
+}
+@media (max-width:520px){ .lm-tela-esc span{display:none} .lm-tela-esc{padding:6px} .lm-tela-bar{padding:8px 10px} }
 </style>
 </head>
 <body>
@@ -1003,7 +1034,7 @@ html{scroll-padding-top:calc(var(--top) + 70px)}
               <svg id="lm-svg" viewBox="0 0 400 400" role="img" tabindex="0" aria-label="Campo do microscópio. Arraste ou use as setas do teclado para mover a lâmina."></svg>
               <span class="scope-prep" id="lm-prep-tag"></span>
             </div>
-            <div class="lm-top"><span id="lm-pos"></span><button type="button" class="lm-cbtn" data-lm-c>⌖ Centralizar</button></div>
+            <div class="lm-top"><span id="lm-pos"></span><span class="row" style="gap:6px"><button type="button" class="lm-cbtn" data-lm-c>⌖ Centralizar</button><button type="button" class="lm-cbtn" id="lm-cheia-in" title="Ver só a lâmina e os controles, ocupando a tela inteira (atalho: F)">⛶ Tela cheia</button></span></div>
           </div>
           <div class="lm-foco" role="group" aria-label="Foco">
           <label class="lm-sl lm-sl-foco"><span class="row" style="justify-content:space-between"><span>Foco macrométrico</span><output class="mono" id="lm-mac-v"></output></span><input type="range" id="lm-mac" min="0" max="100" step="1"></label>
@@ -1048,6 +1079,20 @@ html{scroll-padding-top:calc(var(--top) + 70px)}
     </div>
     <p class="base"><b>Base:</b> medidas e características morfológicas de Neves, <i>Parasitologia Humana</i>; De Carli, <i>Parasitologia Clínica</i>; e CDC DPDx. Desenhos esquemáticos originais, na mesma escala (diâmetro de campo = 18 mm ÷ objetiva). Foco, luz e diafragma são simulações didáticas.</p>
   </section>
+  <div id="lm-tela" class="lm-tela" role="dialog" aria-modal="true" aria-labelledby="lm-tela-nome" hidden>
+    <div class="lm-tela-bar">
+      <div class="lm-tela-lam">
+        <button type="button" class="lm-tela-nav" id="lm-tela-ant" aria-label="Lâmina anterior" title="Lâmina anterior">←</button>
+        <span class="lm-tela-tit"><span class="lm-tela-eb">Laminário · <span id="lm-tela-num"></span></span><b id="lm-tela-nome"></b></span>
+        <button type="button" class="lm-tela-nav" id="lm-tela-prox" aria-label="Próxima lâmina" title="Próxima lâmina">→</button>
+      </div>
+      <button type="button" class="lm-tela-esc" id="lm-cheia-out" title="Sair da tela cheia (tecla Esc)"><kbd>ESC</kbd><span>Sair da tela cheia</span></button>
+    </div>
+    <div class="lm-tela-corpo">
+      <div class="lm-tela-campo" id="lm-tela-campo"></div>
+      <div class="lm-tela-ctl" id="lm-tela-ctl" aria-label="Controles da lâmina"></div>
+    </div>
+  </div>
 </section>
 
 <!-- ================= MÓDULO 3 ================= -->
@@ -2211,6 +2256,7 @@ function desenhaQ(id, prep, r){
 /* ============ navegação ============ */
 const VIEWS = ['inicio','fundamentos','protozoarios','nematoides','cestodeos','trematodeos','diagnostico','imunologia','epidemiologia','bancada','laminario'];
 function ir(v, ancora){
+  if(v !== 'laminario' && typeof lmSaiTela === 'function') try{ lmSaiTela(); }catch(e){}
   if(!VIEWS.includes(v)) v = 'inicio';
   $$('[data-view]').forEach(s=>{ s.hidden = s.dataset.view !== v; });
   $$('[data-nav]').forEach(b=>{ if(b.dataset.nav===v) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current'); });
@@ -4451,6 +4497,55 @@ function initLaminario(){
   $('#lm-prox').onclick = () => lmSeleciona((lm.i + 1) % LAMS.length, false);
   lmObjs(); lmSeleciona(lm.i, false);
 }
+/* ============ Laminário em tela cheia ============
+   Leva o campo e os controles para uma camada que ocupa a tela toda (e pede a tela cheia do navegador quando ele permite).
+   Os próprios elementos são movidos, então tudo continua funcionando e volta ao lugar ao sair. */
+const lmTela = {on:false, voltas:[], foco:null};
+function lmTelaPecas(){
+  const campo = $('#lm-campo');
+  return {campo:[$('.lm-campo', campo)], ctl:[$('.lm-foco', campo), ...$$(':scope > .oc-row', campo), $('#lm-read'), $('#lm-oleo'), $('.lm-ctl')]};
+}
+function lmTelaTitulo(){
+  if(!lmTela.on) return; const L = LAMS[lm.i];
+  $('#lm-tela-nome').innerHTML = L.n; $('#lm-tela-num').textContent = `lâmina ${lm.i+1} de ${LAMS.length}`;
+}
+function lmEntraTela(){
+  if(lmTela.on || !$('#lm-svg')) return;
+  if($('#v-laminario').hidden) ir('laminario');
+  const P = lmTelaPecas(), tela = $('#lm-tela'); lmTela.foco = document.activeElement; lmTela.voltas = [];
+  const leva = (el, dest) => { if(!el) return; const m = document.createComment('lm'); el.before(m); lmTela.voltas.push([m, el]); dest.appendChild(el); };
+  P.campo.forEach(el => leva(el, $('#lm-tela-campo'))); P.ctl.forEach(el => leva(el, $('#lm-tela-ctl')));
+  lmTela.on = true; tela.hidden = false; document.documentElement.classList.add('lm-cheio');
+  lmTelaTitulo(); lmDesenha();
+  try{ if(tela.requestFullscreen && document.fullscreenElement !== tela) tela.requestFullscreen({navigationUI:'hide'}).catch(()=>{}); }catch(e){}
+  setTimeout(() => { try{ $('#lm-svg').focus({preventScroll:true}); }catch(e){} }, 30);
+}
+function lmSaiTela(){
+  if(!lmTela.on) return;
+  lmTela.on = false;
+  lmTela.voltas.reverse().forEach(([m, el]) => { m.replaceWith(el); }); lmTela.voltas = [];
+  $('#lm-tela').hidden = true; document.documentElement.classList.remove('lm-cheio');
+  try{ if(document.fullscreenElement === $('#lm-tela')) document.exitFullscreen().catch(()=>{}); }catch(e){}
+  lmDesenha();
+  const f = $('#lm-cheia-in'); try{ (f || lmTela.foco).focus({preventScroll:true}); f && f.scrollIntoView({block:'center'}); }catch(e){}
+}
+$('#lm-cheia-in').onclick = lmEntraTela;
+$('#lm-cheia-out').onclick = lmSaiTela;
+$('#lm-tela-ant').onclick = () => { lmSeleciona((lm.i - 1 + LAMS.length) % LAMS.length, false); lmTelaTitulo(); };
+$('#lm-tela-prox').onclick = () => { lmSeleciona((lm.i + 1) % LAMS.length, false); lmTelaTitulo(); };
+/* Esc sai; se o navegador sair da tela cheia sozinho (Esc ou gesto), sai também. F entra, no Laminário */
+document.addEventListener('keydown', e => {
+  if(lmTela.on && e.key === 'Escape'){ e.preventDefault(); lmSaiTela(); return; }
+  if(!lmTela.on && (e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey && !e.altKey && !$('#v-laminario').hidden && !e.target.closest('input, textarea, select, [contenteditable]')){ e.preventDefault(); lmEntraTela(); }
+});
+document.addEventListener('fullscreenchange', () => { if(lmTela.on && document.fullscreenElement !== $('#lm-tela')) lmSaiTela(); });
+/* o foco do teclado fica dentro da tela cheia */
+$('#lm-tela').addEventListener('keydown', e => {
+  if(e.key !== 'Tab') return;
+  const f = $$('button, input, select, textarea, [tabindex="0"]', $('#lm-tela')).filter(x => !x.disabled && x.offsetParent !== null);
+  if(!f.length) return; const a = f[0], z = f[f.length-1];
+  if(e.shiftKey && document.activeElement === a){ e.preventDefault(); z.focus(); } else if(!e.shiftKey && document.activeElement === z){ e.preventDefault(); a.focus(); }
+});
 FERRAMENTAS.push({t:'Laminário: microscópio com todas as lâminas', v:'laminario', a:'lm-bancada', k:'lâmina microscópio objetiva foco charriot ovo cisto larva oocisto artefato pólen giardia ascaris trichuris schistosoma taenia hymenolepis strongyloides'});
 
 

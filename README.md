@@ -34,6 +34,7 @@ O site funciona como app: barra lateral com os módulos e o laboratório, painel
 ## Observações
 
 - Previsões e progresso dos alunos ficam salvos só no navegador de cada um (localStorage); nada é enviado a servidores.
+- No Laminário, o botão **⛶ Tela cheia** (ou a tecla F) mostra só a lâmina e os controles dela; **ESC** sai.
 - Cada atividade tem o botão **Restaurar respostas**, e cada módulo tem **Restaurar o módulo** no fim do sumário (na Bancada, **Recomeçar a bancada**). O botão pede um segundo toque para confirmar e apaga também a previsão e a revisão salvas daquele módulo. As anotações do Laminário não são apagadas.
 - Casos clínicos são fictícios. Tratamentos aparecem apenas em nível didático, sem doses.
 - Ilustrações são esquemas originais desenhados a partir das medidas de referência; simuladores são modelos didáticos.
